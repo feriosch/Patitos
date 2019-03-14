@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tecnicos</title>
+</head>
+<body>
+ <h1>Bienvenido</h1>
+    <div>
+        <section>
+
+            <form action="{{url_for('tecnico')}}" method="post" enctype="multipart/form-data">
+                <input type="text" name="tecnicoNombre">
+                <!--Aqui se tiene que meter la foto -->
+                <input type="file" name="tecnicoFoto">
+                <input type="date" name="tecnicoNacimiento">
+                <input type="text" name="tecnicoTelefono">
+
+                <button>Agregar Nuevo Tecnico</button>
+            </form>
+
+
+        </section>
+        <section>
+
+            <ul>
+                {% for tecnico in tecnicos %}
+                <div>
+                    <div>
+                        {{ tecnico['nombre'] }}
+                        {{ tecnico['fechaDeNacimiento'] }}
+                        {{ tecnico['telefono'] }}
+                        {{tecnico['estado']}}
+                        <img height="100px" src={{tecnico['foto']}}>
+                    </div>
+                    <form action="{{url_for('editarTecnico')}}" method="post" enctype="multipart/form-data">
+                             <input type="text" name="tecnicoNombre">
+                            <!--Aqui se tiene que meter la foto -->
+                            <input type="file" name="tecnicoFoto">
+                            <input type="date" name="tecnicoNacimiento">
+                            <input type="text" name="tecnicoTelefono">
+                            <button name="id" value={{tecnico['_id']}} >Editar</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </ul>
+        </section>
+        <section>
+
+        </section>
+    </div>
+</body>
+</html>

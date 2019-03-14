@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HomePage</title>
+</head>
+<body>
+    <h1>Bienvenido</h1>
+    <div>
+        <section>
+            <form action="{{url_for('materiales')}}" method="post">
+                <input type="text" name="materialNombre">
+                <input type="text" name="materialDescripcion">
+                <button name="tipoDeAccion" value=1>Agregar Nuevo Material</button>
+            </form>
+        </section>
+        <section>
+            {% if materialExiste %}
+            <h2>Este material ya existe, no seas pendejo</h2>
+            {% endif %}
+            <ul>
+                {% for material in materiales %}
+                <div>
+                    <div>
+                        {{ material['nombre'] }}
+                        {{ material['descripcion'] }}
+                        <form action="{{url_for('eliminarMaterial')}}" method="post">
+                            <button name="id" value={{material['_id']}}>Eliminar</button>
+                        </form>
+                        <form action="{{url_for('editarMaterial')}}" method="post">
+                            <input type="text" name="materialNombre">
+                            <input type="text" name="materialDescripcion">
+                            <button name="id" value={{material['_id']}} >Editar</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </ul>
+        </section>
+        <section>
+
+        </section>
+    </div>
+</body>
+</html>

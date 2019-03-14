@@ -22,11 +22,6 @@ def home_page():
     else:
         return render_template("index.html")
 
-
-@app.route('/tu',methods=['POST'])
-def checar():
-    return "HOLA K ASE OTRA VEZ"
-
 @app.route('/material/editar',methods=['GET','POST'])
 def editarMaterial():
     materialExiste = False
@@ -134,3 +129,22 @@ def desactivarTecnico():
     id = ObjectId(id)
     mongo.db.tecnicos.update_one({'_id': id},{"$set":{'estado':'Desactivado'}})
     return redirect(url_for('tecnico'))
+
+@app.route('/inventarios',methods=['GET','POST'])
+def inventario():
+    if request.method == 'POST':
+
+        return redirect(url_for('inventario'))
+    else:
+        pipeline = [{'$lookup': {
+            'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'patatita'}
+        }, {'$lookup': {
+            'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as': 'tomatito'}
+        }
+        ]
+        arrTemp = []
+        for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
+            arrTemp.append(doc)
+        diccionarioTecnicos = mongo.db.tecnico.find({})
+        return render_template("inventarios.html", diccRela=arrTemp,tecnicos=diccionarioTecnicos)
+

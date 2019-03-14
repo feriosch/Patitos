@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventarios</title>
+</head>
+<body>
+    {% for tecnico in tecnicos %}
+    <div> {{tecnico['nombre']}}</div>
+        {% for relacion in diccRela %}
+            {% if relacion['patatita'][0]['_id'] == tecnico['_id'] %}
+            <div>{{ relacion['patatita'][0]['nombre']}}</div>
+            <div>{{ relacion['cantidad']}}</div>
+            <div>Hola</div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+</body>
+</html>

@@ -127,7 +127,7 @@ def editarTecnico():
 def desactivarTecnico():
     id = request.form.get("id")
     id = ObjectId(id)
-    mongo.db.tecnicos.update_one({'_id': id},{"$set":{'estado':'Desactivado'}})
+    mongo.db.tecnico.update_one({'_id': id},{"$set":{'estado':'Desactivado'}})
     return redirect(url_for('tecnico'))
 
 @app.route('/inventarios',methods=['GET','POST'])
@@ -146,5 +146,6 @@ def inventario():
         for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
             arrTemp.append(doc)
         diccionarioTecnicos = mongo.db.tecnico.find({})
-        return render_template("inventarios.html", diccRela=arrTemp,tecnicos=diccionarioTecnicos)
+        diccionarioMateriales = mongo.db.material.find({})
+        return render_template("inventarios.html", diccRela=arrTemp,tecnicos=diccionarioTecnicos,materiales=diccionarioMateriales)
 

@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request, redirect, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import dropbox
@@ -99,8 +99,7 @@ def tecnico():
         mongo.db.tecnico.insert_one({'_id':id,'nombre':tecnicoNombre,'fechaDeNacimiento':tecnicoNacimiento,
                                      'telefono':tecnicoTelefono,'foto':url,'estado':'Activo'})
 
-        diccionarioTecnicos = mongo.db.tecnico.find({})
-        return render_template("tecnico.html",tecnicos=diccionarioTecnicos)
+        return redirect(url_for('tecnico'))
     else:
         diccionarioTecnicos = mongo.db.tecnico.find({})
         return render_template("tecnico.html", tecnicos=diccionarioTecnicos)
@@ -127,6 +126,11 @@ def editarTecnico():
                                     {"$set": {'nombre':tecnicoNombre,'fechaDeNacimiento':tecnicoNacimiento,
                                     'telefono':tecnicoTelefono,'foto':url,'estado':'Activo'}})
 
-    diccionarioTecnicos = mongo.db.tecnico.find({})
-    return render_template("tecnico.html", tecnicos=diccionarioTecnicos)
+    return redirect(url_for('tecnico'))
 
+@app.route('/tecnico/desactivar',methods=['GET','POST'])
+def desactivarTecnico():
+    id = request.form.get("id")
+    id = ObjectId(id)
+    mongo.db.tecnicos.update_one({'_id': id},{"$set":{'estado':'Desactivado'}})
+    return redirect(url_for('tecnico'))

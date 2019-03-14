@@ -42,6 +42,9 @@
                             <input type="text" name="tecnicoTelefono">
                             <button name="id" value={{tecnico['_id']}} >Editar</button>
                     </form>
+                    <form action="{{url_for('desactivarTecnico')}}" method="post">
+                            <button name="id" value={{tecnico['_id']}}>Desactivar</button>
+                    </form>
                 </div>
                 {% endfor %}
             </ul>

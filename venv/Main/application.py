@@ -6,7 +6,7 @@ import dropbox
 dbx = dropbox.Dropbox("uLQxcVq_gSAAAAAAAAAADX50ce1j-fy3qtTAb9ricooFDS1GFb5zv7sk_nnI4DMR")
 
 app = Flask(__name__)
-app.config["MONGO_URI"] =  "mongodb://localhost:27017/test"
+app.config["MONGO_URI"] =  "mongodb+srv://Master:CiscoCLass@ssei-bwmef.mongodb.net/test?retryWrites=true"
 mongo = PyMongo(app)
 
 @app.route('/',methods=['GET','POST'])

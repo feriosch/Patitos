@@ -5,21 +5,23 @@
     <title>Inventarios</title>
 </head>
 <body>
+    {{ materiales }}
     {% for tecnico in tecnicos %}
     <div> {{tecnico['nombre']}}</div>
     <ul>
         {% for relacion in diccRela %}
             {% if relacion['patatita'][0]['_id'] == tecnico['_id'] %}
-            <li>{{ relacion['patatita'][0]['nombre']}} --- {{ relacion['cantidad']}}</li>
+            <li>{{ relacion['tomatito'][0]['nombre']}} --- {{ relacion['cantidad']}}</li>
             {% endif %}
         {% endfor %}
-        <div>Agregar Material</div>
-        <select>
-            {% for material in materiales %}
-                <option value={{material['nombre']}}>{{material['nombre']}}</option>
-            {% endfor %}
-        </select>
     </ul>
+    {{ materiales }}
+     <div>Agregar Material</div>
+        <select>
+                {% for material in materiales %}
+                    <option value="{{ material['nombre'] }}">{{ material['nombre'] }}</option>
+                {% endfor %}
+        </select>
     {% endfor %}
 
 </body>

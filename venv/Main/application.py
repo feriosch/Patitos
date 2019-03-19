@@ -18,7 +18,7 @@ def home_page():
         if(usuarioPrueba!=None):
             return render_template("home.html")
         else:
-            return "Que pendejo eres"
+            return "Not found"
     else:
         return render_template("index.html")
 

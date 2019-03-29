@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <form action="{{url_for('home_page')}}" method="post">
+        <input type="text" name="usuario">
+        <input type="password" name="contrasena">
+        <button>Login </button>
+    </form>
+</body>
+<script>
+    function validateForm() {
+        var x = document.forms["myForm"]["fname"].value;
+    if (x == "") {
+    alert("Name must be filled out");
+    return false;
+  }
+}
+</script>
+</html>

@@ -142,10 +142,30 @@ def inventario():
             'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as': 'tomatito'}
         }
         ]
+
         arrTemp = []
         for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
             arrTemp.append(doc)
+        print(arrTemp)
         diccionarioTecnicos = mongo.db.tecnico.find({})
         diccionarioMateriales = mongo.db.material.find({})
-        return render_template("inventarios.html", diccRela=arrTemp,tecnicos=diccionarioTecnicos,materiales=diccionarioMateriales)
+        diccionarioMaterialesArray = []
+        for element in diccionarioMateriales:
+            diccionarioMaterialesArray.append([element["nombre"],str(element["_id"])])
+        print(diccionarioMaterialesArray)
+
+        return render_template("inventarios.html", diccRela=arrTemp,tecnicos=diccionarioTecnicos,materiales=diccionarioMaterialesArray)
+
+@app.route('/inventarios/agregarInventario',methods=['GET','POST'])
+def agregarInventario():
+    if request.method == 'POST':
+        tecnico_id = request.form.get("tecnico_id")
+        tecnico_id = ObjectId(tecnico_id)
+        material_id = request.form.get("material_id")
+        print(material_id)
+        material_id = ObjectId(material_id)
+        print(material_id)
+        cantidad = int(request.form.get("cantidad"))
+        mongo.db.materialesTecnico.insert_one({'material_ID':material_id,'tecnico_ID':tecnico_id,'cantidad':cantidad})
+        return redirect(url_for('inventario'))
 

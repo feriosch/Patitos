@@ -15,13 +15,18 @@
             {% endif %}
         {% endfor %}
     </ul>
-    {{ materiales }}
      <div>Agregar Material</div>
-        <select>
+
+    <form action="{{url_for('agregarInventario')}}" method="post">
+        <select name="material_id">
                 {% for material in materiales %}
-                    <option value="{{ material['nombre'] }}">{{ material['nombre'] }}</option>
+                    <option  value='{{ material[1] }}'>{{ material[0] }}</option>
                 {% endfor %}
         </select>
+        <input type="number" name="cantidad">
+        <button name="tecnico_id" value={{tecnico['_id']}}>Agregar Material a Tecnico</button>
+    </form>
+
     {% endfor %}
 
 </body>

@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style_login.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript" src="../static/js/jquery-1.12.1.min.js"></script>
 
     </head>
 <body>
@@ -12,13 +13,11 @@
         <h1>Inicia Sesión</h1>
         <form action="{{url_for('home_page')}}" method="post" name="login_form" onsubmit="return validateForm()">
             <p>ID </p>
-            <span>
             <input type="text" name="usuario" placeholder="Ingresa tu ID de Empleado">
-                  <span class="popuptext" id="usuario_vacio" >Tienes que ingresar un nombre de usuario vacio.</span>
-              
-            </span>
+                  <span class="popuptext" id="usuario_vacio" >Tienes que ingresar un nombre de usuario.</span>
             <p>Contraseña</p>
             <input type="password" name="contrasena" placeholder="Ingresa tu contraseña">
+                 <span class="popuptext" id="contrasena_vacia" >Tienes que ingresar una contraseña.</span>
             <input type="submit" name="" value="Login" >
 
         </form>
@@ -29,11 +28,19 @@
 <script type="text/javascript" >
     function validateForm() {
       var x = document.forms["login_form"]["usuario"].value;
+      var y = document.forms["login_form"]["contrasena"].value;
         if (x == "") {
-            var popup = document.getElementById("usuario_vacio");
-            popup.classList.toggle("show");
+            $("#usuario_vacio").css('visibility','visible').hide().fadeIn(900);
+            $("#usuario_vacio").fadeOut(1500);
             return false;
         }
+
+        if (y == ""){
+            $("#contrasena_vacia").css('visibility','visible').hide().fadeIn(900);
+            $("#contrasena_vacia").fadeOut(1500);
+            return false;
+        }
+
     }
     </script>
     

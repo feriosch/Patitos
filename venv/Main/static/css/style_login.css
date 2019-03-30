@@ -97,19 +97,14 @@ h1{
     position: relative;
     top: -40px;
     left: 500px;
-    color: red;
-    visibility: hidden;
-    
+    color: blue;
 }
 .popuptext.show
 {
-    visibility: visible;
     position: relative;
     top: -40px;
     left: 500px;
     color: red;
-    opacity: 1;
-    transition: visibility 0s 2s, opacity 2s linear;
 }
 
 

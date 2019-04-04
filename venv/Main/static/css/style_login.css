@@ -94,10 +94,10 @@ h1{
 
 .popuptext
 {
+    visibility: hidden;
     position: relative;
     top: -40px;
     left: 500px;
-    color: blue;
 }
 .popuptext.show
 {

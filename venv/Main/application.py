@@ -19,6 +19,7 @@ def home_page():
             return render_template("home.html")
         else:
             return "Not found"
+
     else:
         return render_template("index.html")
 
@@ -85,7 +86,7 @@ def tecnico():
         id = ObjectId()
         idString = str(id)
         route = '/FotosTecnicos/'+idString+'.jpg'
-        dbx.files_upload(tecnicoFoto.read(),route)
+        dbx.files_upload(tecnicoFoto.read(), route)
         link = dbx.sharing_create_shared_link(route).url
         url = list(link)
         url[-1] = '1'
@@ -166,6 +167,47 @@ def agregarInventario():
         material_id = ObjectId(material_id)
         print(material_id)
         cantidad = int(request.form.get("cantidad"))
-        mongo.db.materialesTecnico.insert_one({'material_ID':material_id,'tecnico_ID':tecnico_id,'cantidad':cantidad})
+
+        relExistente = mongo.db.materialesTecnico.find_one({'material_ID':material_id, 'tecnico_ID':tecnico_id})
+        if(relExistente == None):
+            mongo.db.materialesTecnico.insert_one({'material_ID':material_id,'tecnico_ID':tecnico_id,'cantidad':cantidad})
+        else:
+            mongo.db.materialesTecnico.update_one({'_id':relExistente['_id']},{"$set":{'cantidad':cantidad+relExistente
+            ['cantidad']}})
         return redirect(url_for('inventario'))
 
+@app.route('/claves',methods=['GET','POST'])
+def claves():
+    if request.method == 'POST':
+        claveID = request.form.get("claveID")
+        claveConcepto = request.form.get('claveConcepto')
+        claveUnidad = request.form.get("claveUnidad")
+        clavePrecioUnitario = request.form.get("clavePrecioUnitario")
+        clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
+        claveDescripcion = request.form.get("claveDescripcion")
+
+        mongo.db.clave.insert_one({'_id': claveID, 'concepto': claveConcepto, 'unidad': claveUnidad,
+                                    'precioUnitario': clavePrecioUnitario, 'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
+                                   'descripcion': claveDescripcion})
+
+        return redirect(url_for('claves'))
+    else:
+        diccionarioClaves = mongo.db.clave.find({})
+        return render_template("clave.html", claves=diccionarioClaves)
+
+@app.route('/claves/editar',methods=['GET','POST'])
+def editarClave():
+    id = request.form.get("id")
+    claveConcepto = request.form.get('claveConcepto')
+    claveUnidad = request.form.get("claveUnidad")
+    clavePrecioUnitario = request.form.get("clavePrecioUnitario")
+    clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
+    claveDescripcion = request.form.get("claveDescripcion")
+
+    mongo.db.clave.update_one({'_id': id},
+                                    {"$set": {'concepto':claveConcepto,'unidad':claveUnidad,
+                                    'precioUnitario':clavePrecioUnitario,
+                                    'precioUnitarioTecnico':clavePrecioUnitarioTecnico,
+                                    'descripcion':claveDescripcion}})
+
+    return redirect(url_for('claves'))

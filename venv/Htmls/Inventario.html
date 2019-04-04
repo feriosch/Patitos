@@ -72,15 +72,17 @@
                               <th scope="col"style="width:3rem;">ID</th>
                               <th scope="col"style="width:30rem;">Material</th>
                               <th scope="col"style="width:20rem;">Cantidad</th>
-                              <th scope="col"style="width:23rem;">swsd</th>
+                              <th scope="col"style="width:23rem;"></th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
                               <th scope="row">1</th>
                               <td>Tornillos Cruz</td>
-                              <td>40<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#edit" style="margin-left:5rem;">-</button>
-								  <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#edit" >+</button></td>
+                              <td><button class="btn" type="button" id="menos" onclick="javascript: contadormenos()">-</button>
+									<input id="cantidad" type="text" style="text-align: center;" value="0">
+									<button class="btn" type="button" id="mas" onclick="javascript: contadormas()">+</button>
+							  </td>
                               <td><button type="button" class="btn btn-dark" data-toggle="modal" data-target="#tec" style="width:10rem;">Asignar Tecnico</button></td>
 
                             </tr>
@@ -96,6 +98,29 @@
 
    		</div>
 
+			<script language="javascript">
+				var i = 0;
+				function contadormas(){
+					i = i + 1;
+					var cant = document.getElementById("cantidad");
+					cant.value = i;
+					if(cant.value == 0){
+							i=0;
+							cant.value="0";
+					}
+				}
+				function contadormenos(){
+					if(i>=1){
+						i = i - 1;
+						var cant = document.getElementById("cantidad");
+						cant.value = i;
+						if(cant.value == 0){
+							i=0;
+							cant.value="0";
+						}
+					}
+				}
+			</script>
 	</body>
 
 

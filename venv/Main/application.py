@@ -246,3 +246,22 @@ def editarSucursal():
                                                          'coordenadaY': sucursalCoordenadaY}})
     return redirect(url_for('sucursales'))
 
+@app.route('/servicios',methods=['GET','POST'])
+def servicios():
+    if request.method == 'POST':
+        servicioSucursal = request.form.get("servicioSucursal")
+        servicioSolicitante = request.form.get("servicioSolicitante")
+        servicioPrioridad = request.form.get('servicioPrioridad')
+        servicioTipoDeMantenimiento = request.form.get("servicioTipoDeMantenimiento")
+        servicioTecnico = request.form.get("servicioTecnico")
+        id = ObjectId()
+
+        mongo.db.servicio.insert_one({'_id': id, 'servicio': servicioSucursal, 'solicitante': servicioSolicitante,
+                                      'prioridad': servicioPrioridad, 'tipoDeMantenimiento': servicioTipoDeMantenimiento,
+                                      'tecnico': servicioTecnico})
+        return redirect(url_for('servicios'))
+    else:
+        diccionarioServicios = mongo.db.servicio.find({})
+        return render_template("servicio.html", servicios=diccionarioServicios)
+
+

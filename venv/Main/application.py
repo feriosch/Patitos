@@ -211,3 +211,38 @@ def editarClave():
                                     'descripcion':claveDescripcion}})
 
     return redirect(url_for('claves'))
+
+@app.route('/sucursales',methods=['GET','POST'])
+def sucursales():
+    if request.method == 'POST':
+        sucursalNombre = request.form.get("sucursalNombre")
+        sucursalNucleo = request.form.get("sucursalNucleo")
+        sucursalDireccion = request.form.get('sucursalDireccion')
+        sucursalCoordenadaX = request.form.get("sucursalCoordenadaX")
+        sucursalCoordenadaY = request.form.get("sucursalCoordenadaY")
+        id = ObjectId()
+
+        mongo.db.sucursal.insert_one({'_id': id, 'nombre': sucursalNombre, 'nucleo': sucursalNucleo,
+                                      'direccion': sucursalDireccion, 'coordenadaX': sucursalCoordenadaX,
+                                      'coordenadaY': sucursalCoordenadaY})
+        return redirect(url_for('sucursales'))
+    else:
+        diccionarioSucursales = mongo.db.sucursal.find({})
+        return render_template("sucursal.html", sucursales=diccionarioSucursales)
+
+@app.route('/sucursal/editar',methods=['GET','POST'])
+def editarSucursal():
+    id = request.form.get("id")
+    id = ObjectId(id)
+    sucursalNombre = request.form.get("sucursalNombre")
+    sucursalNucleo = request.form.get("sucursalNucleo")
+    sucursalDireccion = request.form.get('sucursalDireccion')
+    sucursalCoordenadaX = request.form.get("sucursalCoordenadaX")
+    sucursalCoordenadaY = request.form.get("sucursalCoordenadaY")
+
+    mongo.db.sucursal.update_one({'_id': id}, {"$set": {'nombre': sucursalNombre, 'nucleo': sucursalNucleo,
+                                                         'direccion': sucursalDireccion,
+                                                         'coordenadaX': sucursalCoordenadaX,
+                                                         'coordenadaY': sucursalCoordenadaY}})
+    return redirect(url_for('sucursales'))
+

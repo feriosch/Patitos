@@ -28,8 +28,8 @@
                             <button name="id" value={{material['_id']}}>Eliminar</button>
                         </form>
                         <form action="{{url_for('editarMaterial')}}" method="post">
-                            <input type="text" name="materialNombre">
-                            <input type="text" name="materialDescripcion">
+                            <input type="text" name="materialNombre" value="{{ material['nombre'] }}">
+                            <input type="text" name="materialDescripcion" value="{{ material['descripcion'] }}">
                             <button name="id" value={{material['_id']}} >Editar</button>
                         </form>
                     </div>

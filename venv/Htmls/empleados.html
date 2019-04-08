@@ -104,7 +104,14 @@
 							       </div>
 							       <div class="modal-body">
 							         <form action="" method="post">
-
+										 <label for="nombre">Nombre:</label>
+										 <input id="Nombre" type="text" name="Nombre" placeholder="Nombre y Apellido" required /><br>
+										 <label for="email">Fecha de Nacimiento</label>
+										 <input id="email" type="date" name="email" placeholder="dd/mm/yy" required /><br>
+										 <label for="telefono">Teléfono</label>
+										 <input type='text' name='telefono' id='telefono'><br>
+										 <label for="imagen">Imágenes</label>
+										 <input name="archivo1" type="file" id="archivo1">
 
 
 							       </div>
@@ -118,7 +125,7 @@
 
 
 
-			 	<div class="modal fade" id="empleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+			 	<div class="modal fade" id="empleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="width:50rem;margin-left:25%;">
 							    <div class="modal-dialog" role="document" style="margin-left: 15rem;">
 							      <div class="modal-content" style="width:100rem; ">
 							        <div class="modal-header" style="padding-bottom:0;">
@@ -129,13 +136,30 @@
 							          </button>
 							        </div>
 							        <div class="modal-body">
+										<img src="img/ejem.jpg" style="width:10rem;">
+										<div class=".col-md-4 .ml-auto"><b>Nombre:</b> Jorge Escamilla</div>
 
+										<div class="col-md-9 .ml-auto" style="padding:0;"> <b>Fecha de Nacimiento:</b> 03/06/1985 </div>
+										<div class="col-md-9 .ml-auto" style="padding:0;"><b>Telefono:</b> +52 1 5545762715</div>
+
+										<div class=".col-md-4 .ml-auto"> <b>Añadir materiales:</b></div>
+										<form action="">
+											<select name="ing">
+											  <option value="">Tornillos Cruz</option>
+											  <option value="">Tornillos Planos</option>
+											  <option value="">Material 3</option>
+											  <option value="">Material 4</option>
+											</select>
+											<button class="btn" type="button" id="menos" onclick="javascript: contadormenos()">-</button>
+											<input id="cantidad" type="text" style="text-align: center;" value="0">
+											<button class="btn" type="button" id="mas" onclick="javascript: contadormas()">+</button>
+											<input type="submit" class="btn btn-primary" value="Guardar">
+
+										  </form>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
 							        </div>
-							        <div class="modal-footer">
-							          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-							          <button type="button" class="btn btn-primary">Save changes</button>
-							        </div>
+
 							      </div>
 							    </div>
 							</div>
@@ -144,6 +168,31 @@
    		</div>
 
    		</div>
+
+			<script language="javascript">
+				var i = 0;
+				function contadormas(){
+					i = i + 1;
+					var cant = document.getElementById("cantidad");
+					cant.value = i;
+					if(cant.value == 0){
+							i=0;
+							cant.value="0";
+					}
+				}
+				function contadormenos(){
+
+						i = i - 1;
+						var cant = document.getElementById("cantidad");
+						cant.value = i;
+						if(cant.value == 0){
+							i=0;
+							cant.value="0";
+
+					}
+				}
+
+			</script>
 
 	</body>
 

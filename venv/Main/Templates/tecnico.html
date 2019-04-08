@@ -35,11 +35,11 @@
                         <img height="100px" src={{tecnico['foto']}}>
                     </div>
                     <form action="{{url_for('editarTecnico')}}" method="post" enctype="multipart/form-data">
-                             <input type="text" name="tecnicoNombre">
+                             <input type="text" name="tecnicoNombre" value="{{ tecnico['nombre'] }}">
                             <!--Aqui se tiene que meter la foto -->
                             <input type="file" name="tecnicoFoto">
-                            <input type="date" name="tecnicoNacimiento">
-                            <input type="text" name="tecnicoTelefono">
+                            <input type="date" name="tecnicoNacimiento" value="{{ tecnico['fechaDeNacimiento'] }}">
+                            <input type="text" name="tecnicoTelefono" value="{{ tecnico['telefono'] }}">
                             <button name="id" value={{tecnico['_id']}} >Editar</button>
                     </form>
                     <form action="{{url_for('desactivarTecnico')}}" method="post">

@@ -211,3 +211,57 @@ def editarClave():
                                     'descripcion':claveDescripcion}})
 
     return redirect(url_for('claves'))
+
+@app.route('/sucursales',methods=['GET','POST'])
+def sucursales():
+    if request.method == 'POST':
+        sucursalNombre = request.form.get("sucursalNombre")
+        sucursalNucleo = request.form.get("sucursalNucleo")
+        sucursalDireccion = request.form.get('sucursalDireccion')
+        sucursalCoordenadaX = request.form.get("sucursalCoordenadaX")
+        sucursalCoordenadaY = request.form.get("sucursalCoordenadaY")
+        id = ObjectId()
+
+        mongo.db.sucursal.insert_one({'_id': id, 'nombre': sucursalNombre, 'nucleo': sucursalNucleo,
+                                      'direccion': sucursalDireccion, 'coordenadaX': sucursalCoordenadaX,
+                                      'coordenadaY': sucursalCoordenadaY})
+        return redirect(url_for('sucursales'))
+    else:
+        diccionarioSucursales = mongo.db.sucursal.find({})
+        return render_template("sucursal.html", sucursales=diccionarioSucursales)
+
+@app.route('/sucursal/editar',methods=['GET','POST'])
+def editarSucursal():
+    id = request.form.get("id")
+    id = ObjectId(id)
+    sucursalNombre = request.form.get("sucursalNombre")
+    sucursalNucleo = request.form.get("sucursalNucleo")
+    sucursalDireccion = request.form.get('sucursalDireccion')
+    sucursalCoordenadaX = request.form.get("sucursalCoordenadaX")
+    sucursalCoordenadaY = request.form.get("sucursalCoordenadaY")
+
+    mongo.db.sucursal.update_one({'_id': id}, {"$set": {'nombre': sucursalNombre, 'nucleo': sucursalNucleo,
+                                                         'direccion': sucursalDireccion,
+                                                         'coordenadaX': sucursalCoordenadaX,
+                                                         'coordenadaY': sucursalCoordenadaY}})
+    return redirect(url_for('sucursales'))
+
+@app.route('/servicios',methods=['GET','POST'])
+def servicios():
+    if request.method == 'POST':
+        servicioSucursal = request.form.get("servicioSucursal")
+        servicioSolicitante = request.form.get("servicioSolicitante")
+        servicioPrioridad = request.form.get('servicioPrioridad')
+        servicioTipoDeMantenimiento = request.form.get("servicioTipoDeMantenimiento")
+        servicioTecnico = request.form.get("servicioTecnico")
+        id = ObjectId()
+
+        mongo.db.servicio.insert_one({'_id': id, 'servicio': servicioSucursal, 'solicitante': servicioSolicitante,
+                                      'prioridad': servicioPrioridad, 'tipoDeMantenimiento': servicioTipoDeMantenimiento,
+                                      'tecnico': servicioTecnico})
+        return redirect(url_for('servicios'))
+    else:
+        diccionarioServicios = mongo.db.servicio.find({})
+        return render_template("servicio.html", servicios=diccionarioServicios)
+
+

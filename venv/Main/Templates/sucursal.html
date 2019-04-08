@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sucursales</title>
+</head>
+<body>
+ <a href="{{url_for('home_page')}}">Home</a>
+    <div>
+        <section>
+
+            <form action="{{url_for('sucursales')}}" method="post" >
+                <input type="text" name="sucursalNombre" placeholder="Nombre de la sucursal">
+                <input type="text" name="sucursalNucleo" placeholder="Nucleo de la sucursal">
+                <input type="text" name="sucursalDireccion" placeholder="Direccion">
+                <input type="number" step="0.01" name="sucursalCoordenadaX" placeholder="Coordenada X">
+                <input type="number" step="0.01" name="sucursalCoordenadaY" placeholder="Coordenada Y">
+
+                <button>Agregar Nueva Sucursal</button>
+            </form>
+
+
+        </section>
+        <section>
+
+            <ul>
+                {% for sucursal in sucursales %}
+                <div>
+                    <div>
+                        {{ sucursal['nombre'] }}
+                        {{ sucursal['nucleo'] }}
+                        {{ sucursal['direccion'] }}
+                        {{ sucursal['coordenadaX']}}
+                        {{ sucursal['coordenadaY']}}
+                    </div>
+                    <form action="{{url_for('editarSucursal')}}" method="post">
+                        <input type="text" name="sucursalNombre" placeholder="Nombre de la sucursal" value="{{ sucursal['nombre'] }}">
+                        <input type="text" name="sucursalNucleo" placeholder="Nucleo de la sucursal" value="{{ sucursal['nucleo'] }}">
+                        <input type="text" name="sucursalDireccion" placeholder="Direccion" value="{{ sucursal['direccion'] }}">
+                        <input type="number" step="0.01" name="sucursalCoordenadaX" placeholder="Coordenada X" value="{{ sucursal['coordenadaX'] }}">
+                        <input type="number" step="0.01" name="sucursalCoordenadaY" placeholder="Coordenada Y" value="{{ sucursal['coordenadaY'] }}">
+                        <button name="id" value={{sucursal['_id']}} >Editar Sucursal</button>
+                    </form>
+
+                </div>
+                {% endfor %}
+            </ul>
+        </section>
+        <section>
+
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="locale" content="US">
+    <meta name="language" content="en">
+    <meta name="country" content="US">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Servicios</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style_login.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <a href="{{url_for('home_page')}}">Home</a>
+
+    <div id="content">
+        <div align="right"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nueva_orden">Nuevo</button>	</div>
+
+    <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                {% for servicio in servicios %}
+                <div class="card" style="width: 20rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ servicio['_id'] }}</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ servicio['sucursal'] }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden">Detalles</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </nav>
+
+           <!-- Modales-->
+        <div class="modal fade" id="nueva_orden" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Nueva orden</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post">
+                            <h6>Sucursal </h6>
+                            <input type="text" name="servicioSucursal" placeholder="Ingresa la sucursal" style="width:27rem;">
+                            <h6>Solicitante </h6>
+                            <input type="text" name="servicioSolicitante" placeholder="Ingresa nombre del solicitante"  style="width:27rem;">
+                            <h6>Tipo de trabajo </h6>
+                            <input type="text" name="Trabajo" placeholder="Tipo de trabajo"  style="width:27rem;">
+                            <h6>Prioridad </h6>
+                            <input type="radio" name="servicioPrioridad" value="alta"> Alta<br>
+                            <input type="radio" name="servicioPrioridad" value="media"> Media<br>
+                            <input type="radio" name="servicioPrioridad" value="baja"> Baja
+                            <h6>Tipo de mantenimiento </h6>
+                            <input type="text" name="servicioTipoDeMantenimiento" placeholder="Ingresa tipo de mantenimiento"  style="width:27rem;">
+                            <h6>Asignación a técnico </h6>
+                            <input type="text" name="servicioTecnico" placeholder="Asigne a un técnico"  style="width:27rem;">
+                    </div>
+
+                    <div class="modal-footer">
+                        <input type="submit" name="" value="Añadir" >
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--<div class="modal fade" id="orden" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document" >
+                <div class="modal-content" >
+                    <div class="modal-header" style="padding-bottom:0;">
+                        <h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">x</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+
+                        <div class="container-fluid">
+                            <div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> 2186249</div>
+                            <div class="col-md-9 .ml-auto" style="padding:0;"> <b>Sucursal:</b> Villa Coapa </div>
+                            <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante:</b> Jorge de Jesus Cruz</div>
+
+                            <div class=".col-md-4 .ml-auto"> <b>Tipo de trabajo:</b> Cerrajeria </div>
+                            <div class=".col-md-4 .ml-auto"><b>Prioridad:</b> Alta</div>
+                            <div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento:</b> Correctivo</div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary">Editar</button>
+                        <button type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+</body>
+</html>

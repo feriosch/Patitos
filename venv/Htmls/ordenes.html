@@ -120,7 +120,12 @@
 									    <h6>Tipo de mantenimiento </h6>
 									    <input type="text" name="" placeholder="Ingresa tipo de mantenimiento"  style="width:27rem;">
 										<h6>Asignación a técnico </h6>
-									    <input type="text" name="" placeholder="Asigne a un técnico"  style="width:27rem;">
+
+										 <select>
+											 <option>Paco1</option>
+											 <option>Paco2</option>
+											 <option>Paco3</option>
+										 </select>
 
 
 
@@ -159,32 +164,46 @@
 
 														  <form>
 																<select name="estado">
-																	<option>En proceso</option>
-																	<option>Tardío</option>
-																	<option>No tomado</option>
-
+																	<option value="0">En proceso</option>
+																	<option value="1">Tardío</option>
+																	<option value="2">No tomado</option>
 																</select>
+
 
 														  </form>
 
-				    									</div>
-
-
+													  </div>
 											        </div>
 											        <div class="modal-footer">
-											          <button type="button" class="btn btn-secondary">Editar</button>
-											          <button type="button" class="btn btn-primary">Guardar</button>
+											          <input type="submit" class="btn btn-primary" value="Guardar" onclick="javascript: gu()">
 											        </div>
 											      </div>
-							    </div>
+							   				 </div>
 
 
-							 </div>
+				 </div>
 
 
    		</div>
 
    		</div>
+
+		<script language="javascript">
+
+				function gu(){
+					var op = document.getElementById("estado").value;
+					if (op == 0){
+
+					}
+					else if(op==1){
+
+					}
+
+					else if(op==2){
+
+					}
+				}
+			</script>
 
 	</body>
 

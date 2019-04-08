@@ -71,19 +71,32 @@
                             <tr>
                               <th scope="col"style="width:3rem;">ID</th>
                               <th scope="col"style="width:30rem;">Material</th>
-                              <th scope="col"style="width:20rem;">Cantidad</th>
-                              <th scope="col"style="width:23rem;"></th>
+								<th scope="col"style="width:30rem;">Total</th>
+                              <th scope="col"style="width:25rem;">Cantidad a agregar</th>
+
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
                               <th scope="row">1</th>
                               <td>Tornillos Cruz</td>
+								<td><input id="total" type="text" style="text-align: center;" value="40"></td>
                               <td><button class="btn" type="button" id="menos" onclick="javascript: contadormenos()">-</button>
 									<input id="cantidad" type="text" style="text-align: center;" value="0">
 									<button class="btn" type="button" id="mas" onclick="javascript: contadormas()">+</button>
+								  	<input type="submit" value="Agregar" onclick="javascript: agregar()">
 							  </td>
-                              <td><button type="button" class="btn btn-dark" data-toggle="modal" data-target="#tec" style="width:10rem;">Asignar Tecnico</button></td>
+                              <td>
+								  <!--form action="">
+									<select name="ing">
+									  <option value="">Tec1</option>
+									  <option value="">Tec2</option>
+									  <option value="">Tec3</option>
+									  <option value="">Tec4</option>
+									</select>
+									<input type="submit" value="Agregar">
+								  </form-->
+							  </td>
 
                             </tr>
 
@@ -110,15 +123,22 @@
 					}
 				}
 				function contadormenos(){
-					if(i>=1){
+
 						i = i - 1;
 						var cant = document.getElementById("cantidad");
 						cant.value = i;
 						if(cant.value == 0){
 							i=0;
 							cant.value="0";
-						}
+
 					}
+				}
+				function agregar(){
+					var t = document.getElementById("total").value;
+					var tot = document.getElementById("total");
+					var cant = document.getElementById("cantidad").value;
+					var suma = parseInt(t) + parseInt(cant);
+					tot.value = suma;
 				}
 			</script>
 	</body>

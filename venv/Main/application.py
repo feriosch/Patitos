@@ -2,6 +2,7 @@ from flask import Flask,render_template,request, redirect, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import dropbox
+import datetime
 
 dbx = dropbox.Dropbox("uLQxcVq_gSAAAAAAAAAADX50ce1j-fy3qtTAb9ricooFDS1GFb5zv7sk_nnI4DMR")
 
@@ -255,25 +256,41 @@ def servicios():
         servicioPrioridad = request.form.get('servicioPrioridad')
         servicioTipoDeMantenimiento = request.form.get("servicioTipoDeMantenimiento")
         servicioTecnicoNombre = request.form.get("servicioTecnico")
-        servicioFechaDeCreacion = request.form.get("servicioFechaDeCreacion")
+        servicioFechaDeVencimiento = request.form.get("servicioFechaDeVencimiento")
 
-        servicioSucursalId = mongo.db.sucursal.find_one({'nombre': servicioSucursalNombre})
-        servicioSucursalId = servicioSucursalId.get('_id')
+        servicioSucursalId = request.form.get("servicioSucursal")
+        servicioSucursalId = ObjectId(servicioSucursalId)
 
-        servicioTecnicoId = mongo.db.tecnico.find_one({'nombre': servicioTecnicoNombre})
-        servicioTecnicoId = servicioTecnicoId.get('_id')
-        id = ObjectId()
+        servicioTecnicoId = request.form.get("servicioTecnico")
+        servicioTecnicoId = ObjectId(servicioTecnicoId)
+
+        id = servicioTicket
 
         mongo.db.servicio.insert_one({'_id': id, 'sucursal_ID': servicioSucursalId, 'presupuesto_ID': None, 'tecnico_ID': servicioTecnicoId,
                                       'ticket': servicioTicket, 'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
                                       'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None, 'autorizacion':None,
                                       'plano':None, 'estatusInterno': 'Pendiente', 'estatusExterno': 'Pendiente',
-                                      'fechaDeCreacion': servicioFechaDeCreacion })
+                                      'fechaDeCreacion': datetime.datetime.now(), 'fechaDeVencimiento': servicioFechaDeVencimiento })
         return redirect(url_for('servicios'))
     else:
         diccionarioServicios = mongo.db.servicio.find({})
         diccionarioSucursales = mongo.db.sucursal.find({})
         diccionarioTecnicos = mongo.db.tecnico.find({})
-        return render_template("servicio.html", servicios=diccionarioServicios, sucursales=diccionarioSucursales, tecnicos=diccionarioTecnicos)
+
+        pipeline = [{'$lookup': {
+            'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
+        }, {'$lookup': {
+            'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
+        }
+        ]
+
+        arrTemp = []
+        for doc in (mongo.db.servicio.aggregate(pipeline)):
+            arrTemp.append(doc)
+        print(arrTemp)
+
+
+
+        return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursales, tecnicos=diccionarioTecnicos)
 
 

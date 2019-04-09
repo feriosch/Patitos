@@ -249,19 +249,31 @@ def editarSucursal():
 @app.route('/servicios',methods=['GET','POST'])
 def servicios():
     if request.method == 'POST':
-        servicioSucursal = request.form.get("servicioSucursal")
+        servicioSucursalNombre = request.form.get("servicioSucursal")
         servicioSolicitante = request.form.get("servicioSolicitante")
+        servicioTicket = request.form.get("servicioTicket")
         servicioPrioridad = request.form.get('servicioPrioridad')
         servicioTipoDeMantenimiento = request.form.get("servicioTipoDeMantenimiento")
-        servicioTecnico = request.form.get("servicioTecnico")
+        servicioTecnicoNombre = request.form.get("servicioTecnico")
+        servicioFechaDeCreacion = request.form.get("servicioFechaDeCreacion")
+
+        servicioSucursalId = mongo.db.sucursal.find_one({'nombre': servicioSucursalNombre})
+        servicioSucursalId = servicioSucursalId.get('_id')
+
+        servicioTecnicoId = mongo.db.tecnico.find_one({'nombre': servicioTecnicoNombre})
+        servicioTecnicoId = servicioTecnicoId.get('_id')
         id = ObjectId()
 
-        mongo.db.servicio.insert_one({'_id': id, 'servicio': servicioSucursal, 'solicitante': servicioSolicitante,
-                                      'prioridad': servicioPrioridad, 'tipoDeMantenimiento': servicioTipoDeMantenimiento,
-                                      'tecnico': servicioTecnico})
+        mongo.db.servicio.insert_one({'_id': id, 'sucursal_ID': servicioSucursalId, 'presupuesto_ID': None, 'tecnico_ID': servicioTecnicoId,
+                                      'ticket': servicioTicket, 'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
+                                      'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None, 'autorizacion':None,
+                                      'plano':None, 'estatusInterno': 'Pendiente', 'estatusExterno': 'Pendiente',
+                                      'fechaDeCreacion': servicioFechaDeCreacion })
         return redirect(url_for('servicios'))
     else:
         diccionarioServicios = mongo.db.servicio.find({})
-        return render_template("servicio.html", servicios=diccionarioServicios)
+        diccionarioSucursales = mongo.db.sucursal.find({})
+        diccionarioTecnicos = mongo.db.tecnico.find({})
+        return render_template("servicio.html", servicios=diccionarioServicios, sucursales=diccionarioSucursales, tecnicos=diccionarioTecnicos)
 
 

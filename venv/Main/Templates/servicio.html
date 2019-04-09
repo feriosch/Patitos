@@ -27,137 +27,139 @@
 </head>
 
 <body>
-    <a href="{{url_for('home_page')}}">Home</a>
-
-    <div id="content">
-        <div align="right"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nueva_orden">Nuevo</button>	</div>
-
-    <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
-
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            {% for servicio in servicios %}
-            <div class="container-fluid">
-
-
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ servicio['_id'] }}</h4>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ servicio['sucursal'] }}</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
-                    </div>
-                </div>
-
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="img/icon.png" ></h3>
             </div>
 
-            <div class="modal fade" id="confirm-delete-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                <div class="modal-dialog" role="document" >
-                    <div class="modal-content" >
-                        <div class="modal-header" style="padding-bottom:0;">
-                            <h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">x</span>
-                            </button>
-                        </div>
-
-                        <div class="modal-body">
-
-
-                            <div class="container-fluid">
-                                <div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> 2186249</div>
-                                <div class="col-md-9 .ml-auto" style="padding:0;"> <b>Sucursal:</b>{{ servicio['sucursal'] }}</div>
-                                <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante:</b>{{ servicio['solicitante'] }}</div>
-
-                                <div class=".col-md-4 .ml-auto"> <b>Tipo de trabajo:</b>{{ servicio['tipoDeMantenimiento'] }}</div>
-                                <div class=".col-md-4 .ml-auto"><b>Prioridad:</b>{{ servicio['prioridad'] }}</div>
-                                <div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento:</b>{{ servicio['tipoDeMantenimiento'] }}</div>
-
-                            </div>
-
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary">Editar</button>
-                            <button type="button" class="btn btn-primary">Guardar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#">Ordenes</a>
+                </li>
+                <li>
+                    <a href="{{url_for('home_page')}}">Home</a>
+                </li>
+                <li><a href="login.html">Salir</a></li>
+            </ul>
         </nav>
 
-           <!-- Modales-->
-        <div class="modal fade" id="nueva_orden" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Nueva orden</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">
-                            <h6>Sucursal </h6>
-                            <input type="text" name="servicioSucursal" placeholder="Ingresa la sucursal" style="width:27rem;">
-                            <h6>Solicitante </h6>
-                            <input type="text" name="servicioSolicitante" placeholder="Ingresa nombre del solicitante"  style="width:27rem;">
-                            <h6>Tipo de trabajo </h6>
-                            <input type="text" name="Trabajo" placeholder="Tipo de trabajo"  style="width:27rem;">
-                            <h6>Prioridad </h6>
-                            <input type="radio" name="servicioPrioridad" value="alta"> Alta<br>
-                            <input type="radio" name="servicioPrioridad" value="media"> Media<br>
-                            <input type="radio" name="servicioPrioridad" value="baja"> Baja
-                            <h6>Tipo de mantenimiento </h6>
-                            <input type="text" name="servicioTipoDeMantenimiento" placeholder="Ingresa tipo de mantenimiento"  style="width:27rem;">
-                            <h6>Asignación a técnico </h6>
-                            <input type="text" name="servicioTecnico" placeholder="Asigne a un técnico"  style="width:27rem;">
+        <div id="content">
+            <div align="right"> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nueva_orden">Nuevo</button>	</div>
 
-                            <div class="modal-footer">
-                                <input type="submit" name="" value="Añadir" >
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
 
-        {% for servicio in servicios %}
-        <div class="modal fade" id="{{ servicio['_id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-            <div class="modal-dialog" role="document" >
-                <div class="modal-content" >
-                    <div class="modal-header" style="padding-bottom:0;">
-                        <h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">x</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                {% for servicio in servicios %}
+                <div class="container-fluid">
 
 
-                        <div class="container-fluid">
-                            <div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> 2186249</div>
-                            <div class="col-md-9 .ml-auto" style="padding:0;"> <b>Sucursal:</b> servicio['sucursal'] </div>
-                            <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante:</b> servicio['solicitante'] </div>
-
-                            <div class=".col-md-4 .ml-auto"> <b>Tipo de trabajo:</b> servicio['tipoDeMantenimiento']  </div>
-                            <div class=".col-md-4 .ml-auto"><b>Prioridad:</b> servicio['prioridad'] </div>
-                            <div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento:</b> servicio['tipoDeMantenimiento'] </div>
-
+                    <div class="card" style="width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ servicio['ticket'] }}</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ servicio['sucursal'] }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
                         </div>
-
-
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary">Editar</button>
-                        <button type="button" class="btn btn-primary">Guardar</button>
+
+                </div>
+
+                <div class="modal fade" id="confirm-delete-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document" >
+                        <div class="modal-content" >
+                            <div class="modal-header" style="padding-bottom:0;">
+                                <h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">x</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+
+
+                                <div class="container-fluid">
+                                    <div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> {{ servicio['ticket'] }}</div>
+                                    <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante: </b>{{ servicio['solicitante'] }}</div>
+
+                                    <div class=".col-md-4 .ml-auto"><b>ID(Sucursal): </b>{{ servicio['sucursal_ID'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>ID(Tecnico): </b>{{ servicio['tecnico_ID'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>ID(Presupuesto): </b>{{ servicio['presupuesto_ID'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Prioridad: </b>{{ servicio['prioridad'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento: </b>{{ servicio['tipoDeMantenimiento'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Pagina De Internet:  </b>{{ servicio['paginaDeInternet'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Autorizacion:  </b>{{ servicio['autorizacion'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Plano:  </b>{{ servicio['plano'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Estatus Interno:  </b>{{ servicio['estatusInterno'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Estatus Externo:  </b>{{ servicio['estatusExterno'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Fecha de Creacion:  </b>{{ servicio['fechaDeCreacion'] }}</div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary">Editar</button>
+                                <button type="button" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </nav>
+
+            <!-- Modales-->
+            <div class="modal fade" id="nueva_orden" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Nueva orden</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post">
+                                <h6>Sucursal </h6>
+
+
+                                <select name="servicioSucursal">
+                                    {% for sucursal in sucursales %}
+                                    <option>{{sucursal['nombre']}}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <h6>Solicitante </h6>
+                                <input type="text" name="servicioSolicitante" placeholder="Ingresa nombre del solicitante"  style="width:27rem;">
+                                <h6>No. Ticket </h6>
+                                <input type="text" name="servicioTicket" placeholder="Ingresa el No. de Ticket"  style="width:27rem;">
+                                <h6>Prioridad </h6>
+                                <input type="radio" name="servicioPrioridad" value="alta"> Alta<br>
+                                <input type="radio" name="servicioPrioridad" value="media"> Media<br>
+                                <input type="radio" name="servicioPrioridad" value="baja"> Baja
+                                <h6>Tipo de mantenimiento </h6>
+                                <input type="text" name="servicioTipoDeMantenimiento" placeholder="Ingresa tipo de mantenimiento"  style="width:27rem;">
+                                <h6>Asignación a técnico </h6>
+
+                                <select name="servicioTecnico">
+                                    {% for tecnico in tecnicos %}
+                                    <option>{{tecnico['nombre']}}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <input type="date" name="servicioFechaDeCreacion">
+
+                                <div class="modal-footer">
+                                    <input type="submit" name="" value="Añadir" >
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
 
+        </div>
     </div>
 
 </body>

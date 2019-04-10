@@ -66,7 +66,7 @@
 
 
 
-		 <div id="content">
+		 	<div id="content">
 				<div align="right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nueva_orden">Nuevo</button>		</div>
 
 
@@ -83,9 +83,11 @@
 									<h4 class="card-title">Orden de servicio</h4>
 									<h6 class="card-subtitle mb-2 text-muted">Sucursal: Villa Coapa</h6>
 									<h6 class="card-subtitle mb-2 text-muted">Solicitante: Jorge de Jesus Cruz </h6>
-									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden">
+
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden" data-backdrop="static" data-keyboard="false">
 									  Detalles
 									</button>
+
 									<span class="badge badge-secondary" id="pendiente" >Pendiente</span>
 									  <span class="badge badge-success" id="terminado" >Terminado</span>
 									  <span class="badge badge-warning" id="proceso" >En proceso</span>
@@ -148,52 +150,50 @@
 							</div>
 
 		         <div class="modal fade" id="orden" value="1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-											    <div class="modal-dialog" role="document" >
-											      <div class="modal-content" >
-											        <div class="modal-header" style="padding-bottom:0;">
+						<div class="modal-dialog" role="document" >
+						  <div class="modal-content" >
+							<div class="modal-header" style="padding-bottom:0;">
 
-														<h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
+								<h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
 
-											          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											            <span aria-hidden="true">x</span>
-											          </button>
-											        </div>
-											        <div class="modal-body">
-
-
-											          <div class="container-fluid">
-															<div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> 2186249</div>
-													        <div class="col-md-9 .ml-auto" style="padding:0;"> <b>Sucursal:</b> Villa Coapa </div>
-													        <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante:</b> Jorge de Jesus Cruz</div>
-
-															<div class=".col-md-4 .ml-auto"> <b>Tipo de trabajo:</b> Cerrajeria </div>
-															<div class=".col-md-4 .ml-auto"><b>Prioridad:</b> Alta</div>
-															<div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento:</b> Correctivo</div>
-
-														  <form>
-																<select name="estado" id="estado">
-																	<option value="proceso">En proceso</option>
-																	<option value="tardio">Tardío</option>
-																	<option value="pendiente">Pendiente</option>
-																	<option value="terminado">Terminado</option>
-																</select>
+							  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">x</span>
+							  </button>
+							</div>
+							<div class="modal-body">
 
 
-														  </form>
+							  <div class="container-fluid">
+									<div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> 2186249</div>
+									<div class="col-md-9 .ml-auto" style="padding:0;"> <b>Sucursal:</b> Villa Coapa </div>
+									<div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante:</b> Jorge de Jesus Cruz</div>
 
-													  </div>
-											        </div>
-											        <div class="modal-footer">
-											          <input type="submit" class="btn btn-primary" value="Guardar" onclick="javascript: hs()" data-dismiss="modal" aria-label="Close">
-											        </div>
-											      </div>
-							   				 </div>
+									<div class=".col-md-4 .ml-auto"> <b>Tipo de trabajo:</b> Cerrajeria </div>
+									<div class=".col-md-4 .ml-auto"><b>Prioridad:</b> Alta</div>
+									<div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento:</b> Correctivo</div>
+
+								  <form>
+										<select name="estado" id="estado">
+											<option value="proceso">En proceso</option>
+											<option value="tardio">Tardío</option>
+											<option value="pendiente">Pendiente</option>
+											<option value="terminado">Terminado</option>
+										</select>
+
+
+								  </form>
+
+							  </div>
+							</div>
+							<div class="modal-footer">
+							  <input type="submit" class="btn btn-primary" value="Guardar" onclick="javascript: hs()" data-dismiss="modal" aria-label="Close">
+							</div>
+						  </div>
+					 </div>
 
 
 				 </div>
-
-
-   		</div>
+   			</div>
 
    		</div>
 
@@ -235,9 +235,6 @@
 						break;
 					}
 				}
-
-
-
 
 			</script>
 

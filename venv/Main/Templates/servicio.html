@@ -57,7 +57,9 @@
 
                     <div class="card" style="width: 20rem;">
                         <div class="card-body">
-                            <h4 class="card-title">{{ servicio['ticket'] }}</h4>
+                            <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
+                            <h4 class="card-title">Numero de Ticket: {{ servicio['ticket'] }}</h4>
+                            <h4 class="card-title">Fecha de Vencimiento: {{ servicio['fechaDeVencimiento'] }}</h4>
                             <h6 class="card-subtitle mb-2 text-muted">{{ servicio['sucursal'] }}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
@@ -79,12 +81,12 @@
                             <div class="modal-body">
 
 
-                                <div class="container-fluid">
+                                <div class="container-fluid"  id="{{ servicio['ticket'] }}">
                                     <div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> {{ servicio['ticket'] }}</div>
                                     <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante: </b>{{ servicio['solicitante'] }}</div>
 
-                                    <div class=".col-md-4 .ml-auto"><b>ID(Sucursal): </b>{{ servicio['sucursal_ID'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>ID(Tecnico): </b>{{ servicio['tecnico_ID'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>ID(Sucursal): </b>{{ servicio['valsSucursal'][0]['nombre'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>ID(Tecnico): </b>{{ servicio['valsTecnico'][0]['nombre'] }}</div>
                                     <div class=".col-md-4 .ml-auto"><b>ID(Presupuesto): </b>{{ servicio['presupuesto_ID'] }}</div>
                                     <div class=".col-md-4 .ml-auto"><b>Prioridad: </b>{{ servicio['prioridad'] }}</div>
                                     <div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento: </b>{{ servicio['tipoDeMantenimiento'] }}</div>
@@ -93,14 +95,14 @@
                                     <div class=".col-md-4 .ml-auto"><b>Plano:  </b>{{ servicio['plano'] }}</div>
                                     <div class=".col-md-4 .ml-auto"><b>Estatus Interno:  </b>{{ servicio['estatusInterno'] }}</div>
                                     <div class=".col-md-4 .ml-auto"><b>Estatus Externo:  </b>{{ servicio['estatusExterno'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Fecha de Creacion:  </b>{{ servicio['fechaDeCreacion'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Fecha de Vencimiento:  </b>{{ servicio['fechaDeVencimiento'] }}</div>
 
                                 </div>
 
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary">Editar</button>
+                                <button type="button" class="btn btn-secondary" onclick="editDisplay({{ servicio['ticket'] }})">Editar</button>
                                 <button type="button" class="btn btn-primary">Guardar</button>
                             </div>
                         </div>
@@ -126,7 +128,7 @@
 
                                 <select name="servicioSucursal">
                                     {% for sucursal in sucursales %}
-                                    <option>{{sucursal['nombre']}}</option>
+                                    <option value="{{ sucursal['_id'] }}">{{sucursal['nombre']}}</option>
                                     {% endfor %}
                                 </select>
 
@@ -144,11 +146,13 @@
 
                                 <select name="servicioTecnico">
                                     {% for tecnico in tecnicos %}
-                                    <option>{{tecnico['nombre']}}</option>
+                                    <option value="{{ tecnico['_id'] }}">{{tecnico['nombre']}}</option>
                                     {% endfor %}
                                 </select>
 
-                                <input type="date" name="servicioFechaDeCreacion">
+                                <h6>Fecha de Vencimiento</h6>
+                                <input type="date" name="servicioFechaDeVencimiento">
+
 
                                 <div class="modal-footer">
                                     <input type="submit" name="" value="Añadir" >
@@ -163,4 +167,16 @@
     </div>
 
 </body>
+
+<script type="text/javascript" >
+    function editDisplay(id) {
+        var cuadrito = document.getElementById(id);
+        
+        //var a = document.createElement("form");
+        //a.setAttribute("method","post");
+        //a.setAttribute("action","action="{{url_for('tecnico')}}"");
+
+
+    }
+    </script>
 </html>

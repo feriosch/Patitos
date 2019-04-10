@@ -75,7 +75,7 @@
 
 <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
 
-		        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+		        <nav class="navbar navbar-expand-md navbar-light bg-light">
 		            <div class="container-fluid">
 						<div class="card" style="width: 20rem;">
 							  <div class="card-body">
@@ -83,14 +83,110 @@
 							    <h6 class="card-subtitle mb-2 text-muted">Sucursal: Villa Coapa</h6>
 							    <h6 class="card-subtitle mb-2 text-muted">Solicitante: Jorge de Jesus Cruz </h6>
 							    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden">
-								  Detalles</button>
+								  Detalles
+								</button>
+								<span class="badge badge-secondary" id="pendiente" >Pendiente</span>
+								  <span class="badge badge-success" id="terminado" >Terminado</span>
+								  <span class="badge badge-warning" id="proceso" >En proceso</span>
+								  <span class="badge badge-danger" id="tardio" >Tardío</span>
 							  </div>
 
-						 </div>
+                        </div>
+		            </div>
 
+
+                    <div class="container-fluid">
+						<div class="card" style="width: 20rem;">
+							  <div class="card-body">
+							    <h4 class="card-title">Orden de servicio</h4>
+							    <h6 class="card-subtitle mb-2 text-muted">Sucursal: Villa Coapa</h6>
+							    <h6 class="card-subtitle mb-2 text-muted">Solicitante: Jorge de Jesus Cruz </h6>
+							    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden">
+								  Detalles
+								</button>
+								<span class="badge badge-secondary" id="pendiente" >Pendiente</span>
+								  <span class="badge badge-success" id="terminado" >Terminado</span>
+								  <span class="badge badge-warning" id="proceso" >En proceso</span>
+								  <span class="badge badge-danger" id="tardio" >Tardío</span>
+							  </div>
+
+                        </div>
+		            </div>
+
+                    <div class="container-fluid">
+						<div class="card" style="width: 20rem;">
+							  <div class="card-body">
+							    <h4 class="card-title">Orden de servicio</h4>
+							    <h6 class="card-subtitle mb-2 text-muted">Sucursal: Villa Coapa</h6>
+							    <h6 class="card-subtitle mb-2 text-muted">Solicitante: Jorge de Jesus Cruz </h6>
+							    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden">
+								  Detalles
+								</button>
+								<span class="badge badge-secondary" id="pendiente" >Pendiente</span>
+								  <span class="badge badge-success" id="terminado" >Terminado</span>
+								  <span class="badge badge-warning" id="proceso" >En proceso</span>
+								  <span class="badge badge-danger" id="tardio" >Tardío</span>
+							  </div>
+
+                        </div>
+		            </div>
+
+                    <div class="container-fluid">
+						<div class="card" style="width: 20rem;">
+							  <div class="card-body">
+							    <h4 class="card-title">Orden de servicio</h4>
+							    <h6 class="card-subtitle mb-2 text-muted">Sucursal: Villa Coapa</h6>
+							    <h6 class="card-subtitle mb-2 text-muted">Solicitante: Jorge de Jesus Cruz </h6>
+							    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden">
+								  Detalles
+								</button>
+								<span class="badge badge-secondary" id="pendiente" >Pendiente</span>
+								  <span class="badge badge-success" id="terminado" >Terminado</span>
+								  <span class="badge badge-warning" id="proceso" >En proceso</span>
+								  <span class="badge badge-danger" id="tardio" >Tardío</span>
+							  </div>
+
+                        </div>
+		            </div>
+
+                    <div class="container-fluid">
+						<div class="card" style="width: 20rem;">
+							  <div class="card-body">
+							    <h4 class="card-title">Orden de servicio</h4>
+							    <h6 class="card-subtitle mb-2 text-muted">Sucursal: Villa Coapa</h6>
+							    <h6 class="card-subtitle mb-2 text-muted">Solicitante: Jorge de Jesus Cruz </h6>
+							    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden">
+								  Detalles
+								</button>
+								<span class="badge badge-secondary" id="pendiente" >Pendiente</span>
+								  <span class="badge badge-success" id="terminado" >Terminado</span>
+								  <span class="badge badge-warning" id="proceso" >En proceso</span>
+								  <span class="badge badge-danger" id="tardio" >Tardío</span>
+							  </div>
+
+                        </div>
+		            </div>
+
+                    <div class="container-fluid">
+						<div class="card" style="width: 20rem;">
+							  <div class="card-body">
+							    <h4 class="card-title">Orden de servicio</h4>
+							    <h6 class="card-subtitle mb-2 text-muted">Sucursal: Villa Coapa</h6>
+							    <h6 class="card-subtitle mb-2 text-muted">Solicitante: Jorge de Jesus Cruz </h6>
+							    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orden">
+								  Detalles
+								</button>
+								<span class="badge badge-secondary" id="pendiente" >Pendiente</span>
+								  <span class="badge badge-success" id="terminado" >Terminado</span>
+								  <span class="badge badge-warning" id="proceso" >En proceso</span>
+								  <span class="badge badge-danger" id="tardio" >Tardío</span>
+							  </div>
+
+                        </div>
 		            </div>
 
 		        </nav>
+
 
 		       <!-- Modales-->
 
@@ -163,10 +259,11 @@
 															<div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento:</b> Correctivo</div>
 
 														  <form>
-																<select name="estado">
-																	<option value="0">En proceso</option>
-																	<option value="1">Tardío</option>
-																	<option value="2">No tomado</option>
+																<select name="estado" id="estado">
+																	<option value="proceso">En proceso</option>
+																	<option value="tardio">Tardío</option>
+																	<option value="pendiente">Pendiente</option>
+																	<option value="terminado">Terminado</option>
 																</select>
 
 
@@ -175,7 +272,7 @@
 													  </div>
 											        </div>
 											        <div class="modal-footer">
-											          <input type="submit" class="btn btn-primary" value="Guardar" onclick="javascript: gu()">
+											          <input type="submit" class="btn btn-primary" value="Guardar" onclick="javascript: hs()" data-dismiss="modal" aria-label="Close">
 											        </div>
 											      </div>
 							   				 </div>
@@ -188,21 +285,48 @@
 
    		</div>
 
+
+
 		<script language="javascript">
 
-				function gu(){
-					var op = document.getElementById("estado").value;
-					if (op == 0){
-
-					}
-					else if(op==1){
-
-					}
-
-					else if(op==2){
-
+                $( document ).ready(function() {
+                    $("#proceso").hide();
+                    $("#tardio").hide();
+                    $("#pendiente").show();
+                    $("#terminado").hide();
+                });
+				function hs() {
+					switch ($("#estado").val()) {
+						case 'proceso':
+							$("#proceso").show();
+							$("#tardio").hide();
+							$("#pendiente").hide();
+							$("#terminado").hide();
+						break;
+						case 'tardio':
+							$("#proceso").hide();
+							$("#tardio").show();
+							$("#pendiente").hide();
+							$("#terminado").hide();
+						break;
+						case 'pendiente':
+							$("#proceso").hide();
+							$("#tardio").hide();
+							$("#pendiente").show();
+							$("#terminado").hide();
+						break;
+						case 'terminado':
+							$("#proceso").hide();
+							$("#tardio").hide();
+							$("#pendiente").hide();
+							$("#terminado").show();
+						break;
 					}
 				}
+
+
+
+
 			</script>
 
 	</body>

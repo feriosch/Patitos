@@ -1,18 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Tecnicos</title>
+    <meta charset="utf-8">
+		<meta name="locale" content="US">
+		<meta name="language" content="en">
+		<meta name="country" content="US">
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>
+			CETEC
+		</title>
+
+
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 </head>
 <body>
- <h1>Bienvenido</h1>
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="img/icon.png" ></h3>
+        </div>
+        <ul class="list-unstyled components">
+            <li>
+                <a href="{{url_for('servicios')}}">Ordenes</a>
+            </li>
+            <li >
+                <a href="reporte.html">Reportes</a>
+            </li>
+            <li class="active">
+                <a href="{{url_for('tecnico')}}">Empleados</a>
+            </li>
+            <li>
+                <a href="{{url_for('materiales')}}">Inventario</a>
+            </li>
+            <li>
+                <a href="{{url_for('claves')}}">Conceptos</a>
+            </li>
+            <li>
+                <a href="empresa.html">Empresas</a>
+            </li>
+            <li><a href="login.html">Salir</a></li>
+            <li><a href="{{url_for('inventario')}}">Inventarios</a></li>
+            <li><a href="{{url_for('sucursales')}}">Sucursales</a></li>
+        </ul>
+    </nav>
+
+
+    <div id="content">
+        <div align="right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevo_tec">Nuevo</button>		</div>
+        <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <div class="row">
+                    {% for tecnico in tecnicos %}
+                    <div class="card" style="width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ tecnico['nombre'] }}</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">Técnico</h6>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm-delete-{{tecnico._id}}"
+                                    data-backdrop="static" data-keyboard="false" value={{tecnico['_id']}}>Detalles</button>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="confirm-delete-{{tecnico._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+                         aria-hidden="true">
+                        <div class="modal-dialog" role="document" >
+                            <div class="modal-content">
+                                <form action="{{url_for('tecnico')}}" method="post" enctype="multipart/form-data">
+                                    <div class="modal-header" style="padding-bottom:0;">
+                                        <h3 align="center">{{ tecnico['nombre'] }}</h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                                onclick="closeTecnicoDetails({{ tecnico['_id'] }})">
+                                            <span aria-hidden="true">x</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="{{ tecnico['_id'] }}">
+                                        <input name="tecnicoID" value="{{ tecnico['_id'] }}" type="hidden">
+                                        <img src={{tecnico['foto']}} style="width:10rem;">
+                                        <div class=".col-md-4 .ml-auto"><b>Nombre: </b>
+                                            <span class="etiquetaTexto">{{ tecnico['nombre'] }}</span>
+                                            <input type="text" class="editInput" name="tecnicoNombre" value="{{ tecnico['nombre'] }}">
+                                        </div>
+                                        <div class="col-md-9 .ml-auto" style="padding:0;"> <b>Fecha de Nacimiento: </b>
+                                            <span class="etiquetaTexto">{{ tecnico['fechaDeNacimiento'] }}</span>
+                                            <input type="date" class="editInput" name="tecnicoFechaDeNacimiento"
+                                                   value="{{ tecnico['fechaDeNacimiento'] }}">
+                                        </div>
+                                        <div class="col-md-9 .ml-auto" style="padding:0;"><b>Telefono: </b>
+                                            <span class="etiquetaTexto">{{ tecnico['telefono'] }}</span>
+                                            <input type="text" class="editInput" name="tecnicoTelefono" value="{{ tecnico['telefono'] }}">
+                                        </div>
+                                        <!--REVISAR-->
+                                        <div class="col-md-9 .ml-auto editInput" style="padding:0;"><b>Seleccionar nueva Foto: </b>
+                                            <input type="file" class="editInput" name="tecnicoFoto" value="{{ tecnico['foto'] }}">
+                                        </div>
+                                        <!--<div class=".col-md-4 .ml-auto"> <b>Añadir materiales:</b></div>
+                                        <form action="">
+                                            <select name="ing">
+                                                <option value="">Tornillos Cruz</option>
+                                                <option value="">Tornillos Planos</option>
+                                                <option value="">Material 3</option>
+                                                <option value="">Material 4</option>
+                                            </select>
+                                            <button class="btn" type="button" id="menos" onclick="javascript: contadormenos()">-</button>
+                                            <input id="cantidad" type="text" style="text-align: center;" value="0">
+                                            <button class="btn" type="button" id="mas" onclick="javascript: contadormas()">+</button>
+                                            <input type="submit" class="btn btn-primary" value="Guardar">
+                                        </form>-->
+                                        <button type="button" class="btn btn-secondary etiquetaTexto" onclick="editDisplay('{{tecnico['_id']}}')" >Editar</button>
+                                        <button type="submit" name="btn" class="btn btn-primary editInput" value="Guardar"
+                                                data-value="{{ tecnico['_id'] }}">Guardar</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </nav>
+
+
+        <!-- NUEVO TECNICO-->
+
+        <div class="modal fade" id="nuevo_tec" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Nuevo empleado</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{url_for('tecnico')}}" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <label for="nombre">Nombre: </label>
+                            <input id="Nombre" type="text" name="tecnicoNombre" placeholder="Nombre y Apellido" required /><br>
+                            <label for="email">Fecha de Nacimiento: </label>
+                            <input id="email" type="date" name="tecnicoFechaDeNacimiento" placeholder="dd/mm/yy" required /><br>
+                            <label for="telefono">Teléfono: </label>
+                            <input type='text' name='tecnicoTelefono' id='telefono' required><br>
+                            <label for="imagen">Imágen</label>
+                            <input name="tecnicoFoto" type="file" id="archivo1">
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" name="btn" value="Anadir" >
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!--<h1>Bienvenido</h1>
  <a href="{{url_for('home_page')}}">Home</a>
     <div>
         <section>
 
             <form action="{{url_for('tecnico')}}" method="post" enctype="multipart/form-data">
                 <input type="text" name="tecnicoNombre">
-                <!--Aqui se tiene que meter la foto -->
                 <input type="file" name="tecnicoFoto">
                 <input type="date" name="tecnicoNacimiento">
                 <input type="text" name="tecnicoTelefono">
@@ -36,7 +199,6 @@
                     </div>
                     <form action="{{url_for('editarTecnico')}}" method="post" enctype="multipart/form-data">
                              <input type="text" name="tecnicoNombre" value="{{ tecnico['nombre'] }}">
-                            <!--Aqui se tiene que meter la foto -->
                             <input type="file" name="tecnicoFoto">
                             <input type="date" name="tecnicoNacimiento" value="{{ tecnico['fechaDeNacimiento'] }}">
                             <input type="text" name="tecnicoTelefono" value="{{ tecnico['telefono'] }}">
@@ -52,6 +214,68 @@
         <section>
 
         </section>
-    </div>
+    </div>-->
 </body>
+
+<style>
+        .editInput{
+            display: none;
+        }
+</style>
+
+<!--<script language="javascript">
+	var i = 0;
+	function contadormas(){
+		i = i + 1;
+		var cant = document.getElementById("cantidad");
+		cant.value = i;
+		if(cant.value == 0){
+			i=0;
+			cant.value="0";
+		}
+	}
+	function contadormenos(){
+		i = i - 1;
+		var cant = document.getElementById("cantidad");
+		cant.value = i;
+		if(cant.value == 0){
+			i=0;
+			cant.value="0";
+		}
+	}
+</script>-->
+<script type="text/javascript" >
+    $('.modal fade').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+    
+    function editDisplay(id) {
+        console.log("Soy un perrito bonito");
+        var cuadrito = document.getElementById(id);
+        
+        var all = cuadrito.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = cuadrito.getElementsByClassName('etiquetaTexto');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+
+    }
+
+    function closeTecnicoDetails(id) {
+        var cuadrito = document.getElementById(id);
+
+        var all = cuadrito.getElementsByClassName('etiquetaTexto');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = cuadrito.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+    }
+</script>
 </html>

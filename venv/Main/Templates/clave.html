@@ -1,11 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Claves</title>
+		<meta charset="utf-8">
+		<meta name="locale" content="US">
+		<meta name="language" content="en">
+		<meta name="country" content="US">
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>
+			CETEC
+		</title>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
 </head>
 <body>
- <a href="{{url_for('home_page')}}">Home</a>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="img/icon.png" ></h3>
+            </div>
+
+            <ul class="list-unstyled components">
+
+                <li>
+                    <a href="{{url_for('servicios')}}">Ordenes</a>
+
+                </li>
+                <li>
+                    <a href="reporte.html">Reportes</a>
+                </li>
+                <li>
+                    <a href="{{url_for('tecnico')}}">Tecnicos</a>
+
+                </li>
+                <li>
+                    <a href="{{url_for('materiales')}}">Inventario</a>
+                </li>
+                <li class="active">
+                    <a href="{{url_for('claves')}}">Conceptos</a>
+                </li>
+                <li>
+                    <a href="empresa.html">Empresas</a>
+                </li>
+                <li><a href="login.html">Salir</a></li>
+                <li><a href="{{url_for('inventario')}}">Inventarios</a></li>
+                <li><a href="{{url_for('sucursales')}}">Sucursales</a></li>
+            </ul>
+        </nav>
+
+
+
+        <div id="content">
+            <div align="right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevo_con">Nuevo</button>		</div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <table class="table">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th scope="col"style="width:3rem;">ID</th>
+                          <th scope="col"style="width:30rem;">Clave</th>
+                          <th scope="col"style="width:30rem;">Concepto</th>
+                            <th scope="col"style="width:30rem;">Descripcion</th>
+                          <th scope="col"style="width:30rem;">Unidad</th>
+                          <th scope="col"style="width:25rem;">Precio unitario</th>
+                          <th scope="col"style="width:25rem;">Precio unitario Tecnico</th>
+                            <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for clave in claves %}
+                          <form action="{{url_for('claves')}}" method="post">
+                      <div  color="blue">
+                        <tr id="{{ clave['_id'] }}">
+                            
+                          <th scope="col"style="width:3rem;">{{clave['_id']}}<input name="claveId" value="{{ clave['_id'] }}" type="hidden"></th>
+                              <th scope="col"style="width:30rem;"><input name="claveCodigo" class="editInput" value="{{ clave['codigo'] }}" required>
+                              <span class="etiquetaTexto">{{ clave['codigo'] }}</span> </th>
+                              <th scope="col"style="width:30rem;"><input name="claveConcepto" class="editInput" value="{{ clave['concepto'] }}" required>
+                              <span class="etiquetaTexto">{{ clave['concepto'] }}</span> </th>
+								<th scope="col"style="width:30rem;"><input name="claveDescripcion" class="editInput" value="{{ clave['descripcion'] }}" required>
+                                    <span class="etiquetaTexto">{{ clave['descripcion'] }}</span> </th>
+                              <th scope="col"style="width:30rem;"> <input name="claveUnidad" class="editInput" value="{{ clave['unidad'] }}" required>
+                                  <span class="etiquetaTexto">{{ clave['unidad'] }}</span> </th>
+                              <th scope="col"style="width:25rem;"> <input name="clavePrecioUnitario" class="editInput" value="{{ clave['precioUnitario'] }}" required>
+                                  <span class="etiquetaTexto">{{ clave['precioUnitario'] }}</span></th>
+                              <th scope="col"style="width:25rem;"><input name="clavePrecioUnitarioTecnico" class="editInput" value="{{ clave['precioUnitarioTecnico'] }}" required>
+                                  <span class="etiquetaTexto">{{ clave['precioUnitarioTecnico'] }}</span></th>
+                            <th><button type="button" name="btn" class="btn btn-primary etiquetaTexto" value="Editar"
+                                        onclick="editDisplay({{ clave['_id'] }})">Editar</button> <button type="submit" name="btn" class="btn btn-primary editInput" value="Guardar"
+                                       style="display:none;">Guardar</button></th>
+
+                  
+
+                        </tr>
+                      </div>
+                          </form>
+                      {% endfor %}
+
+                      </tbody>
+                    </table>
+                </div>
+            </nav>
+
+            <!-- NUEVA CLAVE-->
+            <div class="modal fade" id="nuevo_con" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+               <div class="modal-dialog" role="document">
+                 <div class="modal-content">
+                   <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Concepto</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                     </button>
+                   </div>
+
+                     <form action="{{url_for('claves')}}" method="post">
+                   <div class="modal-body">
+
+                         <label>ID:</label>
+                         <input id="ID" type="text" placeholder="ID" name="claveID" required /><br>
+                         <label>Clave:</label>
+                         <input id="Clave" type="text"  placeholder="Clave" name="claveCodigo" required /><br>
+                         <label>Concepto:</label>
+                         <input id="Concepto" type="text"  placeholder="Concepto" name="claveConcepto" required /><br>
+                         <label>Descripcion:</label>
+                         <input id="descr" type="text"  placeholder="Descripción" name="claveDescripcion"required /><br>
+                         <label>Unidad:</label>
+                         <input id="Unidad" type="text"  placeholder="Unidad" name="claveUnidad" required /><br>
+                         <label>Precio Unitario:</label>
+                         <input id="precioU" type="number" step="0.01"  placeholder="Precio Unitario" name="clavePrecioUnitario" required /><br>
+                         <label>Precio Unitario Tecnico:</label>
+                         <input id="precioUTec" type="number" step="0.01" placeholder="Precio Unitario Tecnico"
+                                name="clavePrecioUnitarioTecnico"required /><br>
+
+                   </div>
+                   <div class="modal-footer">
+
+                     <input type="submit" name="btn" value="Anadir" >
+                   </div>
+                     </form>
+                 </div>
+               </div>
+            </div>
+
+        </div>
+    </div>
+
+ <!--<a href="{{url_for('home_page')}}">Home</a>
     <div>
         <section>
 
@@ -50,6 +202,47 @@
         <section>
 
         </section>
-    </div>
+    </div>-->
 </body>
+    <style>
+        .editInput{
+            display: none;
+        }
+
+    </style>
+
+<script type="text/javascript" >
+
+    function editDisplay(id) {
+        /*var cuadrito = document.getElementById(id);
+        console.log(id);
+        console.log(cuadrito);*/
+
+        var all = id.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = id.getElementsByClassName('etiquetaTexto');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+       
+        //Console.log("Hola");
+    }
+
+    function closeClaveDetails(id) {
+        //var cuadrito = document.getElementById(id);
+
+        var all = id.getElementsByClassName('etiquetaTexto');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = id.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+    }
+
+
+    </script>
 </html>

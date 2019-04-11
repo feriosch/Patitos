@@ -180,18 +180,36 @@ def agregarInventario():
 @app.route('/claves',methods=['GET','POST'])
 def claves():
     if request.method == 'POST':
-        claveID = request.form.get("claveID")
-        claveConcepto = request.form.get('claveConcepto')
-        claveUnidad = request.form.get("claveUnidad")
-        clavePrecioUnitario = request.form.get("clavePrecioUnitario")
-        clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
-        claveDescripcion = request.form.get("claveDescripcion")
+        if request.form["btn"]=="Anadir":
+            claveID = request.form.get("claveID")
+            claveCodigo = request.form.get("claveCodigo")
+            claveConcepto = request.form.get('claveConcepto')
+            claveUnidad = request.form.get("claveUnidad")
+            clavePrecioUnitario = request.form.get("clavePrecioUnitario")
+            clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
+            claveDescripcion = request.form.get("claveDescripcion")
+            mongo.db.clave.insert_one({'_id': claveID, 'codigo': claveCodigo, 'concepto': claveConcepto, 'unidad': claveUnidad,
+                                        'precioUnitario': clavePrecioUnitario, 'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
+                                       'descripcion': claveDescripcion})
+            return redirect(url_for('claves'))
 
-        mongo.db.clave.insert_one({'_id': claveID, 'concepto': claveConcepto, 'unidad': claveUnidad,
-                                    'precioUnitario': clavePrecioUnitario, 'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
-                                   'descripcion': claveDescripcion})
+        elif request.form["btn"]=="Guardar":
+            claveID = request.form.get("claveId")
+            claveCodigo = request.form.get("claveCodigo")
+            claveConcepto = request.form.get('claveConcepto')
+            claveUnidad = request.form.get("claveUnidad")
+            clavePrecioUnitario = request.form.get("clavePrecioUnitario")
+            clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
+            claveDescripcion = request.form.get("claveDescripcion")
 
-        return redirect(url_for('claves'))
+            print(claveID)
+            print("Hola")
+            mongo.db.clave.update_one({'_id': claveID},
+                                      {"$set": {'codigo': claveCodigo, 'concepto': claveConcepto, 'unidad': claveUnidad,
+                                                'precioUnitario': clavePrecioUnitario,
+                                                'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
+                                                'descripcion': claveDescripcion}})
+            return redirect(url_for('claves'))
     else:
         diccionarioClaves = mongo.db.clave.find({})
         return render_template("clave.html", claves=diccionarioClaves)
@@ -296,6 +314,7 @@ def servicios():
                                                          'sucursal_ID': servicioSucursalId, "tecnico_ID": servicioTecnicoId}})
             return redirect(url_for('servicios'))
     else:
+        #NOTA: Tenemos que llamar los servicios por orden inverso
         diccionarioServicios = mongo.db.servicio.find({})
         diccionarioSucursales = mongo.db.sucursal.find({})
         diccionarioTecnicos = mongo.db.tecnico.find({})

@@ -69,38 +69,69 @@
                         <div class="card" style="width: 20rem;">
 							  <div class="card-body">
 							    <h4 class="card-title">Banamex
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#empresa" style="margin-left:5rem;" data-backdrop="static" data-keyboard="false">
+
+                                </h4>
+								  <button type="button" class="btn btn-primary" id="show"  onclick="javascript: show()">
                                         Detalles
                                     </button>
-                                </h4>
+									<button type="button" class="btn btn-primary" id="hide" onclick="javascript: hide()">
+                                        Cerrar Tabla
+                                    </button>
 							  </div>
                         </div>
 		            </div>
 		        </nav>
 
 
-                 <div class="modal fade" id="empresa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                   <div class="modal-dialog" role="document">
-                     <div class="modal-content">
-                       <div class="modal-header">
-                         <h5 class="modal-title" id="exampleModalLongTitle">Banamex</h5>
-                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                           <span aria-hidden="true">&times;</span>
-                         </button>
-                       </div>
-                       <div class="modal-body">
+                   <table class="table" id="tableCon">
+					  <thead class="thead-dark">
+						<tr>
+						  <th scope="col"style="width:35rem;">Núcleo Centro</th>
+						  <th scope="col"style="width:35rem;">Núcleo Santa Fe</th>
+							<th scope="col"style="width:35rem;">Núcleo Pico de Verapaz</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						  <th scope="row"></th>
+						  <td></td>
+							<td> </td>
+						  <td>
+						  </td>
+						  <td>
 
-                       </div>
-                       <div class="modal-footer">
-                            <input type="submit" class="btn btn-primary" value="Cerrar" data-dismiss="modal" aria-label="Close">
+						  </td>
+						</tr>
 
-                       </div>
-                     </div>
-                   </div>
-                </div>
+					  </tbody>
+				   </table>
+
 
    		    </div>
    		</div>
+
+	<script>
+		 $( document ).ready(function() {
+			$("#hide").hide();
+			$("#tableCon").hide();
+		});
+		function hide() {
+
+					$("#show").show();
+					$("#hide").hide();
+					$("#tableCon").hide();
+
+		}
+		function show() {
+
+					$("#hide").show();
+					$("#tableCon").show();
+					$("#show").hide();
+
+		}
+
+
+	</script>
 
 	</body>
 

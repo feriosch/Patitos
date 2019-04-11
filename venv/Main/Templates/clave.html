@@ -35,26 +35,28 @@
             <ul class="list-unstyled components">
 
                 <li>
-                    <a href="ordenes.html">Ordenes</a>
+                    <a href="{{url_for('servicios')}}">Ordenes</a>
 
                 </li>
                 <li>
                     <a href="reporte.html">Reportes</a>
                 </li>
                 <li>
-                    <a href="empleados.html">Empleados</a>
+                    <a href="{{url_for('tecnico')}}">Tecnicos</a>
 
                 </li>
                 <li>
-                    <a href="Inventario.html">Inventario</a>
+                    <a href="{{url_for('materiales')}}">Inventario</a>
                 </li>
                 <li class="active">
-                    <a href="conceptos.html">Conceptos</a>
+                    <a href="{{url_for('claves')}}">Conceptos</a>
                 </li>
                 <li>
                     <a href="empresa.html">Empresas</a>
                 </li>
                 <li><a href="login.html">Salir</a></li>
+                <li><a href="{{url_for('inventario')}}">Inventarios</a></li>
+                <li><a href="{{url_for('sucursales')}}">Sucursales</a></li>
             </ul>
         </nav>
 
@@ -70,6 +72,7 @@
                           <th scope="col"style="width:3rem;">ID</th>
                           <th scope="col"style="width:30rem;">Clave</th>
                           <th scope="col"style="width:30rem;">Concepto</th>
+                            <th scope="col"style="width:30rem;">Descripcion</th>
                           <th scope="col"style="width:30rem;">Unidad</th>
                           <th scope="col"style="width:25rem;">Precio unitario</th>
                           <th scope="col"style="width:25rem;">Precio unitario Tecnico</th>
@@ -78,15 +81,32 @@
                       </thead>
                       <tbody>
                       {% for clave in claves %}
-                        <tr>
-                          <th scope="row">{{clave['_id']}}</th>
-                          <th>{{clave['codigo']}}</th>
-                          <th>{{clave['concepto']}}</th>
-                          <th>{{clave['unidad']}}</th>
-                          <th>{{clave['precioUnitario']}}</th>
-                          <th>{{clave['precioUnitarioTecnico']}}</th>
-                            <th><button type="button" name="btn" class="btn btn-primary" value="Editar">Editar</button> </th>
+                          <form action="{{url_for('claves')}}" method="post">
+                      <div  color="blue">
+                        <tr id="{{ clave['_id'] }}">
+                            
+                          <th scope="col"style="width:3rem;">{{clave['_id']}}<input name="claveId" value="{{ clave['_id'] }}" type="hidden"></th>
+                              <th scope="col"style="width:30rem;"><input name="claveCodigo" class="editInput" value="{{ clave['codigo'] }}" required>
+                              <span class="etiquetaTexto">{{ clave['codigo'] }}</span> </th>
+                              <th scope="col"style="width:30rem;"><input name="claveConcepto" class="editInput" value="{{ clave['concepto'] }}" required>
+                              <span class="etiquetaTexto">{{ clave['concepto'] }}</span> </th>
+								<th scope="col"style="width:30rem;"><input name="claveDescripcion" class="editInput" value="{{ clave['descripcion'] }}" required>
+                                    <span class="etiquetaTexto">{{ clave['descripcion'] }}</span> </th>
+                              <th scope="col"style="width:30rem;"> <input name="claveUnidad" class="editInput" value="{{ clave['unidad'] }}" required>
+                                  <span class="etiquetaTexto">{{ clave['unidad'] }}</span> </th>
+                              <th scope="col"style="width:25rem;"> <input name="clavePrecioUnitario" class="editInput" value="{{ clave['precioUnitario'] }}" required>
+                                  <span class="etiquetaTexto">{{ clave['precioUnitario'] }}</span></th>
+                              <th scope="col"style="width:25rem;"><input name="clavePrecioUnitarioTecnico" class="editInput" value="{{ clave['precioUnitarioTecnico'] }}" required>
+                                  <span class="etiquetaTexto">{{ clave['precioUnitarioTecnico'] }}</span></th>
+                            <th><button type="button" name="btn" class="btn btn-primary etiquetaTexto" value="Editar"
+                                        onclick="editDisplay({{ clave['_id'] }})">Editar</button> <button type="submit" name="btn" class="btn btn-primary editInput" value="Guardar"
+                                       style="display:none;">Guardar</button></th>
+
+                  
+
                         </tr>
+                      </div>
+                          </form>
                       {% endfor %}
 
                       </tbody>
@@ -114,6 +134,8 @@
                          <input id="Clave" type="text"  placeholder="Clave" name="claveCodigo" required /><br>
                          <label>Concepto:</label>
                          <input id="Concepto" type="text"  placeholder="Concepto" name="claveConcepto" required /><br>
+                         <label>Descripcion:</label>
+                         <input id="descr" type="text"  placeholder="Descripción" name="claveDescripcion"required /><br>
                          <label>Unidad:</label>
                          <input id="Unidad" type="text"  placeholder="Unidad" name="claveUnidad" required /><br>
                          <label>Precio Unitario:</label>
@@ -182,4 +204,45 @@
         </section>
     </div>-->
 </body>
+    <style>
+        .editInput{
+            display: none;
+        }
+
+    </style>
+
+<script type="text/javascript" >
+
+    function editDisplay(id) {
+        /*var cuadrito = document.getElementById(id);
+        console.log(id);
+        console.log(cuadrito);*/
+
+        var all = id.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = id.getElementsByClassName('etiquetaTexto');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+       
+        //Console.log("Hola");
+    }
+
+    function closeClaveDetails(id) {
+        //var cuadrito = document.getElementById(id);
+
+        var all = id.getElementsByClassName('etiquetaTexto');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = id.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+    }
+
+
+    </script>
 </html>

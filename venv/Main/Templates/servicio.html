@@ -12,7 +12,6 @@
     <title>Servicios</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -31,7 +30,7 @@
         <!-- Sidebar -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="img/icon.png" ></h3>
+                <h3 style="font-weight: 510 !important;"><b>CETEC</b><img id="logo" src="{{ url_for('static', filename='img/icon.png') }}" ></h3>
             </div>
 
             <ul class="list-unstyled components">
@@ -51,29 +50,31 @@
         <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                {% for servicio in servicios %}
+
+
                 <div class="container-fluid">
-
-
-                    <div class="card" style="width: 20rem;">
-                        <div class="card-body">
-                            <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
-                            <h4 class="card-title">Numero de Ticket: {{ servicio['ticket'] }}</h4>
-                            <h4 class="card-title">Fecha de Vencimiento: {{ servicio['fechaDeVencimiento'] }}</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ servicio['sucursal'] }}</h6>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
+                    <div class="row">
+                    {% for servicio in servicios %}
+                        <div class="card" style="width: 20rem;">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
+                                <h4 class="card-title">Numero de Ticket: {{ servicio['ticket'] }}</h4>
+                                <h4 class="card-title">Fecha de Vencimiento: {{ servicio['fechaDeVencimiento'] }}</h4>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ servicio['sucursal'] }}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
+                                <button type="button" class="btn btn-primary" data-backdrop="static" data-keyboard="false" data-toggle="modal" 
+                                        data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
+                            </div>
                         </div>
-                    </div>
 
-                </div>
-
-                <div class="modal fade" id="confirm-delete-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <!--AQUI-->
+                        <div class="modal fade" id="confirm-delete-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                     <div class="modal-dialog" role="document" >
                         <div class="modal-content" >
+                            <form action="{{url_for('servicios')}}" method="post">
                             <div class="modal-header" style="padding-bottom:0;">
                                 <h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeOrderDetails({{ servicio['ticket'] }})">
                                     <span aria-hidden="true">x</span>
                                 </button>
                             </div>
@@ -82,20 +83,68 @@
 
 
                                 <div class="container-fluid"  id="{{ servicio['ticket'] }}">
-                                    <div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> {{ servicio['ticket'] }}</div>
-                                    <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante: </b>{{ servicio['solicitante'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> <input name="idticket" value="{{ servicio['ticket'] }}" type="hidden">{{ servicio['ticket'] }}</div>
+                                    <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante: </b><span class="miMamaMeMima">{{ servicio['solicitante'] }}</span> 
+                                        <input type="text" class="editInput" name="servicioSolicitante"
+                                               value="{{ servicio['solicitante'] }}">
+                                    </div>
 
-                                    <div class=".col-md-4 .ml-auto"><b>ID(Sucursal): </b>{{ servicio['valsSucursal'][0]['nombre'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>ID(Tecnico): </b>{{ servicio['valsTecnico'][0]['nombre'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Sucursal: </b><span class="miMamaMeMima">{{ servicio['valsSucursal'][0]['nombre'] }}</span>
+                                        <select name="servicioSucursal" class="editInput" value="{{ servicio['valsSucursal'][0]['nombre'] }}">
+                                            {% for sucursal in sucursales %}
+                                                {% if sucursal[1] == servicio['valsSucursal'][0]['_id'] %}
+                                                    <option selected value="{{ sucursal[1] }}">{{sucursal[0]}}</option>
+                                                {% else %}
+                                                    <option value="{{ sucursal[1] }}">{{sucursal[0]}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>ID(Tecnico): </b><span class="miMamaMeMima">{{ servicio['valsTecnico'][0]['nombre'] }}</span>
+                                       <select name="servicioTecnico" class="editInput" value="{{ servicio['valsTecnico'][0]['nombre'] }}">
+                                            {% for tecnico in tecnicos %}
+                                                {% if tecnico[1] == servicio['valsTecnico'][0]['_id'] %}
+                                                    <option selected value="{{ tecnico[1] }}">{{tecnico[0]}}</option>
+                                                {% else %}
+                                                    <option value="{{ tecnico[1] }}">{{tecnico[0]}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                     <div class=".col-md-4 .ml-auto"><b>ID(Presupuesto): </b>{{ servicio['presupuesto_ID'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Prioridad: </b>{{ servicio['prioridad'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento: </b>{{ servicio['tipoDeMantenimiento'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Pagina De Internet:  </b>{{ servicio['paginaDeInternet'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Autorizacion:  </b>{{ servicio['autorizacion'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Plano:  </b>{{ servicio['plano'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Estatus Interno:  </b>{{ servicio['estatusInterno'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Estatus Externo:  </b>{{ servicio['estatusExterno'] }}</div>
-                                    <div class=".col-md-4 .ml-auto"><b>Fecha de Vencimiento:  </b>{{ servicio['fechaDeVencimiento'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Prioridad: </b><span class="miMamaMeMima">{{ servicio['prioridad'] }}</span>
+                                        <select name="servicioPrioridad" class="editInput" value="{{ servicio['prioridad'] }}">
+                                            <option selected value="alta">alta</option>
+                                            <option value="media">media</option>
+                                            <option value="baja">baja</option>
+                                        </select>
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento: </b>{{ servicio['tipoDeMantenimiento'] }}
+                                        <input type="text" class="editInput" name="servicioTipoDeMantenimiento"
+                                               value="{{ servicio['tipoDeMantenimiento'] }}">
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Pagina De Internet:  </b>{{ servicio['paginaDeInternet'] }}
+                                        <input type="file" class="editInput" name="servicioTipoDeMantenimiento">
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Autorizacion:  </b>{{ servicio['autorizacion'] }}
+                                        <input type="file" class="editInput" name="servicioAutorizacion">
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Plano:  </b>{{ servicio['plano'] }}
+                                        <input type="file" class="editInput" name="servicioPlano">
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Estatus Interno:  </b>{{ servicio['estatusInterno'] }}
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Estatus Externo:  </b><span class="miMamaMeMima">{{ servicio['estatusExterno'] }}</span>
+                                        <select name="servicioEstatusExterno" class="editInput" value="{{ servicio['estatusExterno'] }}">
+                                            <option selected value="valor1">valor1</option>
+                                            <option value="valor2">valor2</option>
+                                            <option value="valor3">valor3</option>
+                                        </select>
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Fecha de Vencimiento:  </b><span class="miMamaMeMima">{{ servicio['fechaDeVencimiento'] }}</span>
+                                        <input type="date" class="editInput" name="servicioFechaDeVencimiento"
+                                               value="{{ servicio['fechaDeVencimiento'] }}">
+                                    </div>
 
                                 </div>
 
@@ -103,12 +152,19 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" onclick="editDisplay({{ servicio['ticket'] }})">Editar</button>
-                                <button type="button" class="btn btn-primary">Guardar</button>
+                                <button type="submit" name="btn" class="btn btn-primary" value="Guardar" data-value="{{servicio['_id']}}">Guardar</button>
                             </div>
+
+                            </form>
                         </div>
+
                     </div>
                 </div>
                 {% endfor %}
+                </div>
+                </div>
+
+
             </nav>
 
             <!-- Modales-->
@@ -122,13 +178,13 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="" method="post">
+                            <form action="{{url_for('servicios')}}" method="post">
                                 <h6>Sucursal </h6>
 
 
                                 <select name="servicioSucursal">
                                     {% for sucursal in sucursales %}
-                                    <option value="{{ sucursal['_id'] }}">{{sucursal['nombre']}}</option>
+                                    <option value="{{ sucursal[1] }}">{{sucursal[0]}}</option>
                                     {% endfor %}
                                 </select>
 
@@ -146,7 +202,7 @@
 
                                 <select name="servicioTecnico">
                                     {% for tecnico in tecnicos %}
-                                    <option value="{{ tecnico['_id'] }}">{{tecnico['nombre']}}</option>
+                                    <option value="{{ tecnico[1] }}">{{tecnico[0]}}</option>
                                     {% endfor %}
                                 </select>
 
@@ -155,7 +211,7 @@
 
 
                                 <div class="modal-footer">
-                                    <input type="submit" name="" value="Añadir" >
+                                    <input type="submit" name="btn" value="Anadir" >
                                 </div>
                             </form>
                         </div>
@@ -168,15 +224,48 @@
 
 </body>
 
+    <style>
+        .editInput{
+            display: none;
+        }
+    
+    </style>
+
 <script type="text/javascript" >
+    $('.modal fade').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
     function editDisplay(id) {
         var cuadrito = document.getElementById(id);
         
+        var all = cuadrito.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = cuadrito.getElementsByClassName('miMamaMeMima');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+        //cuadrito.innerHTML= "";
         //var a = document.createElement("form");
         //a.setAttribute("method","post");
         //a.setAttribute("action","action="{{url_for('tecnico')}}"");
-
-
     }
+    
+    function closeOrderDetails(id) {
+        var cuadrito = document.getElementById(id);
+        
+        var all = cuadrito.getElementsByClassName('miMamaMeMima');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = cuadrito.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+    }
+        
+    
     </script>
 </html>

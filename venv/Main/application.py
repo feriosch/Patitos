@@ -250,28 +250,51 @@ def editarSucursal():
 @app.route('/servicios',methods=['GET','POST'])
 def servicios():
     if request.method == 'POST':
-        servicioSucursalNombre = request.form.get("servicioSucursal")
-        servicioSolicitante = request.form.get("servicioSolicitante")
-        servicioTicket = request.form.get("servicioTicket")
-        servicioPrioridad = request.form.get('servicioPrioridad')
-        servicioTipoDeMantenimiento = request.form.get("servicioTipoDeMantenimiento")
-        servicioTecnicoNombre = request.form.get("servicioTecnico")
-        servicioFechaDeVencimiento = request.form.get("servicioFechaDeVencimiento")
+        if request.form["btn"]=="Anadir":
+            servicioSucursalNombre = request.form.get("servicioSucursal")
+            servicioSolicitante = request.form.get("servicioSolicitante")
+            servicioTicket = request.form.get("servicioTicket")
 
-        servicioSucursalId = request.form.get("servicioSucursal")
-        servicioSucursalId = ObjectId(servicioSucursalId)
+            servicioTicket= int(servicioTicket)
+            servicioTicket= str(servicioTicket)
+            servicioPrioridad = request.form.get('servicioPrioridad')
+            servicioTipoDeMantenimiento = request.form.get("servicioTipoDeMantenimiento")
+            servicioTecnicoNombre = request.form.get("servicioTecnico")
+            servicioFechaDeVencimiento = request.form.get("servicioFechaDeVencimiento")
 
-        servicioTecnicoId = request.form.get("servicioTecnico")
-        servicioTecnicoId = ObjectId(servicioTecnicoId)
+            servicioSucursalId = request.form.get("servicioSucursal")
+            servicioSucursalId = ObjectId(servicioSucursalId)
 
-        id = servicioTicket
+            servicioTecnicoId = request.form.get("servicioTecnico")
+            servicioTecnicoId = ObjectId(servicioTecnicoId)
 
-        mongo.db.servicio.insert_one({'_id': id, 'sucursal_ID': servicioSucursalId, 'presupuesto_ID': None, 'tecnico_ID': servicioTecnicoId,
-                                      'ticket': servicioTicket, 'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
-                                      'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None, 'autorizacion':None,
-                                      'plano':None, 'estatusInterno': 'Pendiente', 'estatusExterno': 'Pendiente',
-                                      'fechaDeCreacion': datetime.datetime.now(), 'fechaDeVencimiento': servicioFechaDeVencimiento })
-        return redirect(url_for('servicios'))
+            id = servicioTicket
+
+            mongo.db.servicio.insert_one({'_id': id, 'sucursal_ID': servicioSucursalId, 'presupuesto_ID': None, 'tecnico_ID': servicioTecnicoId,
+                                          'ticket': servicioTicket, 'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
+                                          'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None, 'autorizacion':None,
+                                          'plano':None, 'estatusInterno': 'Pendiente', 'estatusExterno': 'Pendiente',
+                                          'fechaDeCreacion': datetime.datetime.now(), 'fechaDeVencimiento': servicioFechaDeVencimiento })
+            return redirect(url_for('servicios'))
+        elif request.form["btn"]=="Guardar":
+            servicioSolicitante = request.form.get("servicioSolicitante")
+            servicioPrioridad = request.form.get("servicioPrioridad")
+            servicioTipoDeMantenimiento = request.form.get("servicioTipoDeMantenimiento")
+            servicioFechaDeVencimiento = request.form.get("servicioFechaDeVencimiento")
+            servicioSucursalId = request.form.get("servicioSucursal")
+            servicioSucursalId = ObjectId(servicioSucursalId)
+            servicioTecnicoId = request.form.get("servicioTecnico")
+            servicioTecnicoId = ObjectId(servicioTecnicoId)
+            servicioEstatusExterno = request.form.get("servicioEstatusExterno")
+
+            servicioId = request.form.get("idticket")
+
+            print(servicioId,servicioSolicitante,servicioPrioridad,servicioTipoDeMantenimiento,servicioFechaDeVencimiento,servicioSucursalId,servicioTecnicoId)
+            mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
+                                                         'tipoDeMantenimiento': servicioTipoDeMantenimiento,
+                                                         'fechaDeVencimiento': servicioFechaDeVencimiento, 'estatusExterno': servicioEstatusExterno,
+                                                         'sucursal_ID': servicioSucursalId, "tecnico_ID": servicioTecnicoId}})
+            return redirect(url_for('servicios'))
     else:
         diccionarioServicios = mongo.db.servicio.find({})
         diccionarioSucursales = mongo.db.sucursal.find({})
@@ -287,10 +310,17 @@ def servicios():
         arrTemp = []
         for doc in (mongo.db.servicio.aggregate(pipeline)):
             arrTemp.append(doc)
-        print(arrTemp)
+
+        diccionarioSucursalesArray = []
+        for element in diccionarioSucursales:
+            diccionarioSucursalesArray.append([element["nombre"], element["_id"]])
+
+        diccionarioTecnicosArray = []
+        for element in diccionarioTecnicos:
+            diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
 
 
-
-        return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursales, tecnicos=diccionarioTecnicos)
+        return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                               tecnicos=diccionarioTecnicosArray)
 
 

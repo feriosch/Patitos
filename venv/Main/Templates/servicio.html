@@ -71,7 +71,7 @@
                         <div class="modal fade" id="confirm-delete-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                     <div class="modal-dialog" role="document" >
                         <div class="modal-content" >
-                            <form action="{{url_for('servicios')}}" method="post">
+                            <form action="{{url_for('servicios')}}" method="post"  enctype="multipart/form-data">
                             <div class="modal-header" style="padding-bottom:0;">
                                 <h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeOrderDetails({{ servicio['ticket'] }})">
@@ -123,8 +123,8 @@
                                         <input type="text" class="editInput" name="servicioTipoDeMantenimiento"
                                                value="{{ servicio['tipoDeMantenimiento'] }}">
                                     </div>
-                                    <div class=".col-md-4 .ml-auto"><b>Pagina De Internet:  </b>{{ servicio['paginaDeInternet'] }}
-                                        <input type="file" class="editInput" name="servicioTipoDeMantenimiento">
+                                    <div class=".col-md-4 .ml-auto"><b>Pagina De Internet:  </b><a href="view/{{ servicio['paginaDeInternet'] }}" target="_blank">Ver</a>
+                                        <input type="file" class="editInput" name="servicioPaginaDeInternet">
                                     </div>
                                     <div class=".col-md-4 .ml-auto"><b>Autorizacion:  </b>{{ servicio['autorizacion'] }}
                                         <input type="file" class="editInput" name="servicioAutorizacion">

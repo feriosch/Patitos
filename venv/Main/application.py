@@ -24,6 +24,10 @@ def home_page():
     else:
         return render_template("index.html")
 
+@app.route('/view/<imagen>')
+def visualizarImagenes(imagen):
+    return render_template("visual.html",imagen)
+
 @app.route('/material/editar',methods=['GET','POST'])
 def editarMaterial():
     materialExiste = False
@@ -78,25 +82,61 @@ def eliminarMaterial():
 @app.route('/tecnico',methods=['GET','POST'])
 def tecnico():
     if request.method == 'POST':
-        tecnicoNombre = request.form.get("tecnicoNombre")
-        tecnicoFoto = request.files['tecnicoFoto']
-        tecnicoNacimiento = request.form.get("tecnicoNacimiento")
-        tecnicoTelefono = request.form.get("tecnicoTelefono")
+        if request.form["btn"] == "Anadir":
+            tecnicoNombre = request.form.get("tecnicoNombre")
+            tecnicoFoto = request.files['tecnicoFoto']
+            tecnicoNacimiento = request.form.get("tecnicoNacimiento")
+            tecnicoTelefono = request.form.get("tecnicoTelefono")
 
-        #Aqui se tiene que subir la foto a Dropbox
-        id = ObjectId()
-        idString = str(id)
-        route = '/FotosTecnicos/'+idString+'.jpg'
-        dbx.files_upload(tecnicoFoto.read(), route)
-        link = dbx.sharing_create_shared_link(route).url
-        url = list(link)
-        url[-1] = '1'
-        url = ''.join(url)
+            #Aqui se tiene que subir la foto a Dropbox
+            id = ObjectId()
+            idString = str(id)
+            route = '/FotosTecnicos/'+idString+'.jpg'
+            dbx.files_upload(tecnicoFoto.read(), route)
+            link = dbx.sharing_create_shared_link(route).url
+            url = list(link)
+            url[-1] = '1'
+            url = ''.join(url)
 
-        mongo.db.tecnico.insert_one({'_id':id,'nombre':tecnicoNombre,'fechaDeNacimiento':tecnicoNacimiento,
+            mongo.db.tecnico.insert_one({'_id':id,'nombre':tecnicoNombre,'fechaDeNacimiento':tecnicoNacimiento,
                                      'telefono':tecnicoTelefono,'foto':url,'estado':'Activo'})
 
-        return redirect(url_for('tecnico'))
+            return redirect(url_for('tecnico'))
+        elif request.form["btn"]=="Guardar":
+            conFoto = True
+
+            tecnicoNombre = request.form.get("tecnicoNombre")
+            tecnicoNacimiento = request.form.get("tecnicoFechaDeNacimiento")
+            tecnicoTelefono = request.form.get("tecnicoTelefono")
+            id = request.form.get("tecnicoID")
+
+            try:
+                tecnicoFoto = request.files['tecnicoFoto']
+            except:
+                conFoto = False
+
+
+            if(conFoto):
+                route = '/FotosTecnicos/' + id + '.jpg'
+                dbx.files_upload(tecnicoFoto.read(), route, mode=dropbox.files.WriteMode.overwrite)
+                link = dbx.sharing_create_shared_link(route).url
+                url = list(link)
+                url[-1] = '1'
+                url = ''.join(url)
+
+                id = ObjectId(id)
+
+                mongo.db.tecnico.update_one({'_id': id},
+                                            {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
+                                                      'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'}})
+            else:
+                print("MENSA")
+                id = ObjectId(id)
+
+                mongo.db.tecnico.update_one({'_id': id},
+                                            {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
+                                                      'telefono': tecnicoTelefono,  'estado': 'Activo'}})
+            return redirect(url_for('tecnico'))
     else:
         diccionarioTecnicos = mongo.db.tecnico.find({})
         return render_template("tecnico.html", tecnicos=diccionarioTecnicos)
@@ -295,6 +335,10 @@ def servicios():
                                           'fechaDeCreacion': datetime.datetime.now(), 'fechaDeVencimiento': servicioFechaDeVencimiento })
             return redirect(url_for('servicios'))
         elif request.form["btn"]=="Guardar":
+            conFotoInternet = True
+            conFotoAutorizacion = True
+            conFotoPlano = True
+
             servicioSolicitante = request.form.get("servicioSolicitante")
             servicioPrioridad = request.form.get("servicioPrioridad")
             servicioTipoDeMantenimiento = request.form.get("servicioTipoDeMantenimiento")
@@ -306,6 +350,48 @@ def servicios():
             servicioEstatusExterno = request.form.get("servicioEstatusExterno")
 
             servicioId = request.form.get("idticket")
+
+            try:
+                servicioPagaDeInternet = request.files['servicioPaginaDeInternet']
+            except:
+                conFotoInternet = False
+
+            try:
+                servicioAutorizacion = request.files['servicioAutorizacion']
+            except:
+                conFotoAutorizacion = False
+
+            try:
+                servicioPlano = request.files['servicioPlano']
+            except:
+                conFotoPlano = False
+
+            if(conFotoInternet):
+                route = '/FotosServicios/PaginasDeInternet/' + servicioId + 'paginaInternet.jpg'
+                dbx.files_upload(servicioPagaDeInternet.read(), route)
+                link = dbx.sharing_create_shared_link(route).url
+                url = list(link)
+                url[-1] = '1'
+                url = ''.join(url)
+
+                mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'paginaDeInternet': url}})
+            if(conFotoAutorizacion):
+                route = '/FotosServicios/Autorizaciones/' + servicioId + 'autorizacion.jpg'
+                dbx.files_upload(servicioAutorizacion.read(), route)
+                link = dbx.sharing_create_shared_link(route).url
+                url = list(link)
+                url[-1] = '1'
+                url = ''.join(url)
+                mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'autorizacion': url}})
+            if(conFotoPlano):
+                route = '/FotosServicios/Planos/' + servicioId + 'plano.jpg'
+                dbx.files_upload(servicioPlano.read(), route)
+                link = dbx.sharing_create_shared_link(route).url
+                url = list(link)
+                url[-1] = '1'
+                url = ''.join(url)
+                mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'plano': url}})
+
 
             print(servicioId,servicioSolicitante,servicioPrioridad,servicioTipoDeMantenimiento,servicioFechaDeVencimiento,servicioSucursalId,servicioTecnicoId)
             mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,

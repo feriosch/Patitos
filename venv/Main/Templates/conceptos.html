@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="locale" content="US">
+		<meta name="language" content="en">
+		<meta name="country" content="US">
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>
+			CETEC
+		</title>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+	</head>
+
+	<body>
+
+		<div class="wrapper">
+		    <!-- Sidebar -->
+		    <nav id="sidebar">
+		        <div class="sidebar-header">
+		            <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="img/icon.png" ></h3>
+		        </div>
+
+		        <ul class="list-unstyled components">
+
+		            <li>
+		                <a href="ordenes.html">Ordenes</a>
+
+		            </li>
+		            <li>
+		                <a href="reporte.html">Reportes</a>
+		            </li>
+		            <li>
+		                <a href="empleados.html">Empleados</a>
+
+		            </li>
+		            <li>
+		                <a href="Inventario.html">Inventario</a>
+		            </li>
+		            <li class="active">
+		                <a href="conceptos.html">Conceptos</a>
+		            </li>
+		            <li>
+						<a href="empresa.html">Empresas</a>
+		            </li>
+					<li><a href="login.html">Salir</a></li>
+		        </ul>
+		    </nav>
+
+
+
+		    <div id="content">
+				<div align="right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevo_con">Nuevo</button>		</div>
+		        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+		            <div class="container-fluid">
+                        <table class="table">
+                          <thead class="thead-dark">
+                            <tr>
+                              <th scope="col"style="width:3rem;">ID</th>
+                              <th scope="col"style="width:30rem;">Clave</th>
+                              <th scope="col"style="width:30rem;">Concepto</th>
+                              <th scope="col"style="width:30rem;">Unidad</th>
+                              <th scope="col"style="width:25rem;">Precio unitario</th>
+                              <th scope="col"style="width:25rem;">Precio unitario Tecnico</th>
+								<th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">L1</th>
+                              <th>CET-001</th>
+                              <th>Abrir candado de combinación de laptop</th>
+                              <th>PZA</th>
+                              <th>$ 200,00</th>
+                              <th>$ 150,00</th>
+								<th><button type="button" class="btn btn-primary">Editar</button> </th>
+
+							  </td>
+                            </tr>
+                            <tr>
+                              <th scope="row">L266</th>
+                              <th>CET-314</th>
+                              <th>Adaptación de bisagra hidraulica</th>
+                              <th>PZA</th>
+                              <th>$ 500,00</th>
+                              <th>$ 400,00</th>
+								<th><button type="button" class="btn btn-primary">Editar</button> </th>
+							  </td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+		            </div>
+		        </nav>
+
+				<div class="modal fade" id="nuevo_con" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				   <div class="modal-dialog" role="document">
+					 <div class="modal-content">
+					   <div class="modal-header">
+						 <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Concepto</h5>
+						 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						   <span aria-hidden="true">&times;</span>
+						 </button>
+					   </div>
+					   <div class="modal-body">
+						 <form action="" method="post">
+							 <label>ID:</label>
+							 <input id="ID" type="text"  placeholder="ID" required /><br>
+							 <label>Clave:</label>
+							 <input id="Clave" type="text"  placeholder="Clave" required /><br>
+							 <label>Concepto:</label>
+							 <input id="Concepto" type="text"  placeholder="Concepto" required /><br>
+							 <label>Unidad:</label>
+							 <input id="Unidad" type="text"  placeholder="Unidad" required /><br>
+							 <label>Precio Unitario:</label>
+							 <input id="precioU" type="text"  placeholder="Precio Unitario" required /><br>
+							 <label>Precio Unitario Tecnico:</label>
+							 <input id="precioUTec" type="text" name="Nombre" placeholder="Precio Unitario Tecnico" required /><br>
+
+					   </div>
+					   <div class="modal-footer">
+
+						 <input type="submit" name="" value="Añadir" >
+					   </div></form>
+					 </div>
+				   </div>
+				</div>
+
+   		    </div>
+   		</div>
+
+	</body>
+
+
+
+</html>

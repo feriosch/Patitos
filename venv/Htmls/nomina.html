@@ -50,7 +50,7 @@
 					<li>
 		                <a href="Materiales Tecnico.html">Materiales Tecnico</a>
 		            </li>
-		            <li class="active">
+		            <li>
 		                <a href="Inventario.html">Inventario</a>
 		            </li>
 		            <li>
@@ -59,7 +59,7 @@
 		            <li>
 						<a href="empresa.html">Empresas</a>
 		            </li>
-					<li>
+                    <li class="active">
 						<a href="nomina.html">Nomina</a>
 		            </li>
                     <li><a href="login.html">Salir</a></li>
@@ -69,7 +69,7 @@
 
 
 		 <div id="content">
-				<div align="right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevo_inv">Nuevo</button>		</div>
+
 		        <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
 
@@ -79,25 +79,19 @@
                         <table class="table">
                           <thead class="thead-dark">
                             <tr>
-                              <th scope="col"style="width:3rem;">ID</th>
-                              <th scope="col"style="width:30rem;">Material</th>
-								<th scope="col"style="width:30rem;">Total</th>
-                              <th scope="col"style="width:25rem;">Cantidad a agregar</th>
+                              <th scope="col"style="width:30rem;">Nombre</th>
+                              <th scope="col"style="width:30rem;">Total Mes</th>
+								<th scope="col"style="width:10rem;"></th>
 
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
-                              <th scope="row">1</th>
-                              <td>Tornillos Cruz</td>
-								<td><input id="total" type="text" style="text-align: center;" value="40"></td>
-                              <td><button class="btn" type="button" id="menos" onclick="javascript: contadormenos()">-</button>
-									<input id="cantidad" type="text" style="text-align: center;" value="0">
-									<button class="btn" type="button" id="mas" onclick="javascript: contadormas()">+</button>
-								  	<input type="submit" value="Agregar" onclick="javascript: agregar()">
-							  </td>
-                              <td>
+                              <th scope="row">Jorge Escamilla</th>
+                              <td>$ 3,000</td>
 
+                              <td>
+								  	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#det">Detalle</button>
 							  </td>
 
                             </tr>
@@ -109,28 +103,44 @@
 
 
 		        </nav>
-				<div class="modal fade" id="nuevo_inv" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				<div class="modal fade" id="det" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 				   <div class="modal-dialog" role="document">
 					 <div class="modal-content">
 					   <div class="modal-header">
-						 <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Material</h5>
+						 <h5 class="modal-title" id="exampleModalLongTitle">Detalle</h5>
 						 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						   <span aria-hidden="true">&times;</span>
 						 </button>
 					   </div>
 					   <div class="modal-body">
-						 <form action="" method="post">
-							 <label>Material</label>
-							 <input id="material" type="text"  placeholder="Nombre Material" required /><br>
-							 <label>Toral:</label>
-							 <input id="tot" type="text"  placeholder="Total de material" required /><br>
+
+                            <!--id orde, sucursal, monto aportado-->
+                           <table class="table">
+                          <thead class="thead-dark">
+                            <tr>
+                              <th scope="col"style="width:30rem;">ID orden</th>
+                              <th scope="col"style="width:30rem;">Sucursal</th>
+								<th scope="col"style="width:10rem;">Monto</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">1</th>
+                              <td>EDIF. ATENAS 106</td>
+                              <td>$ 3,000 </td>
+
+                            </tr>
+
+                          </tbody>
+                        </table>
 
 
 					   </div>
 					   <div class="modal-footer">
 
 						 <input type="submit" name="" value="Añadir" >
-					   </div></form>
+					   </div>
 					 </div>
 				   </div>
 				</div>
@@ -138,34 +148,7 @@
    		</div>
 
 			<script language="javascript">
-				var i = 0;
-				function contadormas(){
-					i = i + 1;
-					var cant = document.getElementById("cantidad");
-					cant.value = i;
-					if(cant.value == 0){
-							i=0;
-							cant.value="0";
-					}
-				}
-				function contadormenos(){
 
-						i = i - 1;
-						var cant = document.getElementById("cantidad");
-						cant.value = i;
-						if(cant.value == 0){
-							i=0;
-							cant.value="0";
-
-					}
-				}
-				function agregar(){
-					var t = document.getElementById("total").value;
-					var tot = document.getElementById("total");
-					var cant = document.getElementById("cantidad").value;
-					var suma = parseInt(t) + parseInt(cant);
-					tot.value = suma;
-				}
 			</script>
 	</body>
 

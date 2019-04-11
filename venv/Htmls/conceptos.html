@@ -64,6 +64,7 @@
 
 
 		    <div id="content">
+				<div align="right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevo_con">Nuevo</button>		</div>
 		        <nav class="navbar navbar-expand-lg navbar-light bg-light">
 		            <div class="container-fluid">
                         <table class="table">
@@ -105,6 +106,40 @@
                         </table>
 		            </div>
 		        </nav>
+
+				<div class="modal fade" id="nuevo_con" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				   <div class="modal-dialog" role="document">
+					 <div class="modal-content">
+					   <div class="modal-header">
+						 <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Concepto</h5>
+						 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						   <span aria-hidden="true">&times;</span>
+						 </button>
+					   </div>
+					   <div class="modal-body">
+						 <form action="" method="post">
+							 <label>ID:</label>
+							 <input id="ID" type="text"  placeholder="ID" required /><br>
+							 <label>Clave:</label>
+							 <input id="Clave" type="text"  placeholder="Clave" required /><br>
+							 <label>Concepto:</label>
+							 <input id="Concepto" type="text"  placeholder="Concepto" required /><br>
+							 <label>Unidad:</label>
+							 <input id="Unidad" type="text"  placeholder="Unidad" required /><br>
+							 <label>Precio Unitario:</label>
+							 <input id="precioU" type="text"  placeholder="Precio Unitario" required /><br>
+							 <label>Precio Unitario Tecnico:</label>
+							 <input id="precioUTec" type="text" name="Nombre" placeholder="Precio Unitario Tecnico" required /><br>
+
+					   </div>
+					   <div class="modal-footer">
+
+						 <input type="submit" name="" value="Añadir" >
+					   </div></form>
+					 </div>
+				   </div>
+				</div>
+
    		    </div>
    		</div>
 

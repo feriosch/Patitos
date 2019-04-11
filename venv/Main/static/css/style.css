@@ -137,5 +137,9 @@ width: 5rem;
     font-weight: 500;
     line-height: 1.2;
     color: inherit;
-    
+}
+
+.container-fluid .col-md-4 .ml-auto .editInput{
+    border: none;
+}
     

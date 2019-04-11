@@ -296,6 +296,7 @@ def servicios():
                                                          'sucursal_ID': servicioSucursalId, "tecnico_ID": servicioTecnicoId}})
             return redirect(url_for('servicios'))
     else:
+        #NOTA: Tenemos que llamar los servicios por orden inverso
         diccionarioServicios = mongo.db.servicio.find({})
         diccionarioSucursales = mongo.db.sucursal.find({})
         diccionarioTecnicos = mongo.db.tecnico.find({})

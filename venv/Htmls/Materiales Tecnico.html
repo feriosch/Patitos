@@ -49,6 +49,9 @@
 		                <a href="empleados.html">Empleados</a>
 
 		            </li>
+                    <li>
+		                <a href="Materiales Tecnico.html">Materiales Tecnico</a>
+		            </li>
 		            <li>
 		                <a href="Inventario.html">Inventario</a>
 		            </li>
@@ -106,7 +109,9 @@
 												  <option value="">Material 3</option>
 												  <option value="">Material 4</option>
 												</select>
-
+												<button class="btn" type="button" id="menos" onclick="javascript: contadormenos()">-</button>
+												<input id="cantidad" type="text" style="text-align: center;" value="0">
+												<button class="btn" type="button" id="mas" onclick="javascript: contadormas()">+</button>
 												<input type="submit" class="btn btn-primary" value="Guardar">
 
 											  </form>
@@ -162,7 +167,27 @@
 			</div>
 
 			<script language="javascript">
+				var i = 0;
+				function contadormas(){
+					i = i + 1;
+					var cant = document.getElementById("cantidad");
+					cant.value = i;
+					if(cant.value == 0){
+							i=0;
+							cant.value="0";
+					}
+				}
+				function contadormenos(){
 
+						i = i - 1;
+						var cant = document.getElementById("cantidad");
+						cant.value = i;
+						if(cant.value == 0){
+							i=0;
+							cant.value="0";
+
+					}
+				}
 
 			</script>
 

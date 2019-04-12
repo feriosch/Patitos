@@ -428,4 +428,15 @@ def servicios():
         return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
                                tecnicos=diccionarioTecnicosArray)
 
+@app.route('/empresa',methods=['GET','POST'])
+def empresas():
+    return render_template("empresa.html")
+
+@app.route('/reporte',methods=['GET','POST'])
+def reportes():
+    return render_template("reporte.html")
+
+@app.route('/nomina',methods=['GET','POST'])
+def nominas():
+    return render_template("nomina.html")
 

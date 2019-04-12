@@ -35,12 +35,32 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="#">Ordenes</a>
+                    <a href="{{url_for('servicios')}}">Ordenes</a>
                 </li>
                 <li>
-                    <a href="{{url_for('home_page')}}">Home</a>
+                    <a href="{{url_for('reportes')}}">Reportes</a>
                 </li>
-                <li><a href="login.html">Salir</a></li>
+                <li>
+                    <a href="{{url_for('tecnico')}}">Tecnicos</a>
+
+                </li>
+                <li>
+                    <a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
+                </li>
+                <li>
+                    <a href="{{url_for('materiales')}}">Materiales</a>
+                </li>
+                <li>
+                    <a href="{{url_for('claves')}}">Conceptos</a>
+                </li>
+                 <li>
+                    <a href="{{url_for('empresas')}}">Empresas</a>
+                </li>
+                <li>
+                    <a href="{{url_for('nominas')}}">Nomina</a>
+                </li>
+                <li><a href="{{url_for('home_page')}}">Salir</a></li>
+
             </ul>
         </nav>
 

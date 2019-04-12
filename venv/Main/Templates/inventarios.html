@@ -29,38 +29,37 @@
     <!-- Sidebar -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="img/icon.png" ></h3>
+            <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="{{ url_for('static', filename='img/icon.png') }}" ></h3>
         </div>
 
         <ul class="list-unstyled components">
 
             <li>
-                <a href="ordenes.html">Ordenes</a>
-
+                <a href="{{url_for('servicios')}}">Ordenes</a>
             </li>
-            <li >
-                <a href="reporte.html">Reportes</a>
+            <li>
+               <a href="{{url_for('reportes')}}">Reportes</a>
             </li>
-            <li >
-                <a href="empleados.html">Empleados</a>
+            <li>
+                <a href="{{url_for('tecnico')}}">Tecnicos</a>
 
             </li>
             <li class="active">
-                <a href="Materiales Tecnico.html">Materiales Tecnico</a>
+                <a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
             </li>
             <li>
-                <a href="Inventario.html">Inventario</a>
+                <a href="{{url_for('materiales')}}">Materiales</a>
             </li>
             <li>
-                <a href="conceptos.html">Conceptos</a>
+                <a href="{{url_for('claves')}}">Conceptos</a>
             </li>
-            <li>
-                <a href="empresa.html">Empresas</a>
-            </li>
-            <li>
-                <a href="nomina.html">Nomina</a>
-            </li>
-            <li><a href="login.html">Salir</a></li>
+             <li>
+                    <a href="{{url_for('empresas')}}">Empresas</a>
+                </li>
+                <li>
+                    <a href="{{url_for('nominas')}}">Nomina</a>
+                </li>
+            <li><a href="{{url_for('home_page')}}">Salir</a></li>
         </ul>
     </nav>
 

@@ -1,0 +1,1 @@
+Tecnico.html 127: Boton Desactivar -> color rojo

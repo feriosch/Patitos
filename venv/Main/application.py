@@ -10,13 +10,14 @@ app = Flask(__name__)
 app.config["MONGO_URI"] =  "mongodb+srv://Master:CiscoCLass@ssei-bwmef.mongodb.net/test?retryWrites=true"
 mongo = PyMongo(app)
 
-@app.route('/',methods=['GET','POST'])
+
+@app.route('/', methods=['GET','POST'])
 def home_page():
     if request.method == 'POST':
         usuario = request.form.get("usuario")
         contrasena = request.form.get("contrasena")
         usuarioPrueba = mongo.db.usuarios.find_one({'nombre':usuario,'contrasena':contrasena})
-        if(usuarioPrueba!=None):
+        if usuarioPrueba is not None:
             return render_template("home.html")
         else:
             return "Not found"
@@ -24,19 +25,20 @@ def home_page():
     else:
         return render_template("index.html")
 
+
 @app.route('/view/<imagen>')
 def visualizarImagenes(imagen):
-    return render_template("visual.html",imagen)
+    return render_template("visual.html", imagen)
 
-@app.route('/material/editar',methods=['GET','POST'])
+
+@app.route('/material/editar', methods=['GET','POST'])
 def editarMaterial():
-    materialExiste = False
     materialNombre = request.form.get("materialNombre")
     materialDescripcion = request.form.get("materialDescripcion")
     flag = mongo.db.material.find_one({'nombre': materialNombre})
     id = request.form.get("id")
     id = ObjectId(id)
-    if flag == None:
+    if flag is None:
         print(type(id))
         mongo.db.material.update_one({'_id': id},
                                      {"$set": {'nombre': materialNombre, 'descripcion': materialDescripcion}})
@@ -54,22 +56,32 @@ def editarMaterial():
 
 @app.route('/material',methods=['GET','POST'])
 def materiales():
-    materialExiste = False
     if request.method == 'POST':
-        materialNombre = request.form.get("materialNombre")
-        materialDescripcion = request.form.get("materialDescripcion")
-        flag = mongo.db.material.find_one({'nombre': materialNombre})
+        if request.form["btn"] == "Anadir":
+            materialNombre = request.form.get("materialNombre")
+            materialDescripcion = request.form.get("materialDescripcion")
+            flag = mongo.db.material.find_one({'nombre': materialNombre})
 
-        if flag == None:
-            mongo.db.material.insert_one({'nombre':materialNombre,'descripcion':materialDescripcion})
-        else:
+            if flag is None:
+                mongo.db.material.insert_one({'nombre': materialNombre, 'descripcion': materialDescripcion})
+            else:
+                diccionarioMateriales = mongo.db.material.find({})
+                return render_template("material.html", materiales=diccionarioMateriales, materialExiste=True)
             diccionarioMateriales = mongo.db.material.find({})
-            return render_template("material.html", materiales=diccionarioMateriales, materialExiste=True)
-        diccionarioMateriales = mongo.db.material.find({})
-        return render_template("material.html",materiales=diccionarioMateriales)
+            return render_template("material.html", materiales=diccionarioMateriales)
+
+        elif request.form["btn"] == "Guardar":
+            materialNombre = request.form.get("materialNombre")
+            materialDescripcion = request.form.get("materialDescripcion")
+            id = request.form.get("materialID")
+            id = ObjectId(id)
+            mongo.db.material.update_one({'_id': id}, {"$set": {'nombre': materialNombre,
+                                                                'descripcion': materialDescripcion}})
+            return redirect(url_for('materiales'))
     else:
         diccionarioMateriales = mongo.db.material.find({})
         return render_template("material.html",materiales=diccionarioMateriales)
+
 
 @app.route('/material/eliminar',methods=['GET','POST'])
 def eliminarMaterial():
@@ -88,7 +100,7 @@ def tecnico():
             tecnicoNacimiento = request.form.get("tecnicoNacimiento")
             tecnicoTelefono = request.form.get("tecnicoTelefono")
 
-            #Aqui se tiene que subir la foto a Dropbox
+            # Aqui se tiene que subir la foto a Dropbox
             id = ObjectId()
             idString = str(id)
             route = '/FotosTecnicos/'+idString+'.jpg'
@@ -98,11 +110,11 @@ def tecnico():
             url[-1] = '1'
             url = ''.join(url)
 
-            mongo.db.tecnico.insert_one({'_id':id,'nombre':tecnicoNombre,'fechaDeNacimiento':tecnicoNacimiento,
-                                     'telefono':tecnicoTelefono,'foto':url,'estado':'Activo'})
+            mongo.db.tecnico.insert_one({'_id': id, 'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
+                                         'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'})
 
             return redirect(url_for('tecnico'))
-        elif request.form["btn"]=="Guardar":
+        elif request.form["btn"] == "Guardar":
             conFoto = True
 
             tecnicoNombre = request.form.get("tecnicoNombre")
@@ -115,8 +127,7 @@ def tecnico():
             except:
                 conFoto = False
 
-
-            if(conFoto):
+            if conFoto:
                 route = '/FotosTecnicos/' + id + '.jpg'
                 dbx.files_upload(tecnicoFoto.read(), route, mode=dropbox.files.WriteMode.overwrite)
                 link = dbx.sharing_create_shared_link(route).url
@@ -130,24 +141,34 @@ def tecnico():
                                             {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
                                                       'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'}})
             else:
-                print("MENSA")
                 id = ObjectId(id)
 
                 mongo.db.tecnico.update_one({'_id': id},
                                             {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
                                                       'telefono': tecnicoTelefono,  'estado': 'Activo'}})
             return redirect(url_for('tecnico'))
+        elif request.form["btn"] == "Desactivar":
+            id = request.form.get("tecnicoID")
+            id = ObjectId(id)
+            mongo.db.tecnico.update_one({'_id': id}, {"$set": {'estado': 'Inactivo'}})
+            return redirect(url_for('tecnico'))
+        elif request.form["btn"] == "Reactivar":
+            id = request.form.get("tecnicoID")
+            id = ObjectId(id)
+            mongo.db.tecnico.update_one({'_id': id},
+                                        {"$set": {'estado': 'Activo'}})
+            return redirect(url_for('tecnico'))
     else:
         diccionarioTecnicos = mongo.db.tecnico.find({})
         return render_template("tecnico.html", tecnicos=diccionarioTecnicos)
 
-@app.route('/tecnico/editar',methods=['GET','POST'])
+
+@app.route('/tecnico/editar', methods=['GET', 'POST'])
 def editarTecnico():
     tecnicoNombre = request.form.get("tecnicoNombre")
     tecnicoFoto = request.files['tecnicoFoto']
     tecnicoNacimiento = request.form.get("tecnicoNacimiento")
     tecnicoTelefono = request.form.get("tecnicoTelefono")
-
     id = request.form.get("id")
 
     route = '/FotosTecnicos/' + id + '.jpg'
@@ -158,19 +179,18 @@ def editarTecnico():
     url = ''.join(url)
 
     id = ObjectId(id)
-
-    mongo.db.tecnico.update_one({'_id': id},
-                                    {"$set": {'nombre':tecnicoNombre,'fechaDeNacimiento':tecnicoNacimiento,
-                                    'telefono':tecnicoTelefono,'foto':url,'estado':'Activo'}})
-
+    mongo.db.tecnico.update_one({'_id': id}, {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
+                                                       'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'}})
     return redirect(url_for('tecnico'))
 
-@app.route('/tecnico/desactivar',methods=['GET','POST'])
+
+@app.route('/tecnico/desactivar', methods=['GET', 'POST'])
 def desactivarTecnico():
     id = request.form.get("id")
     id = ObjectId(id)
-    mongo.db.tecnico.update_one({'_id': id},{"$set":{'estado':'Desactivado'}})
+    mongo.db.tecnico.update_one({'_id': id}, {"$set": {'estado': 'Desactivado'}})
     return redirect(url_for('tecnico'))
+
 
 @app.route('/inventarios',methods=['GET','POST'])
 def inventario():
@@ -182,23 +202,23 @@ def inventario():
             'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'patatita'}
         }, {'$lookup': {
             'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as': 'tomatito'}
-        }
+            }
         ]
-
         arrTemp = []
         for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
             arrTemp.append(doc)
-        print(arrTemp)
-        diccionarioTecnicos = mongo.db.tecnico.find({})
+        diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
         diccionarioMateriales = mongo.db.material.find({})
         diccionarioMaterialesArray = []
         for element in diccionarioMateriales:
             diccionarioMaterialesArray.append([element["nombre"],str(element["_id"])])
         print(diccionarioMaterialesArray)
 
-        return render_template("inventarios.html", diccRela=arrTemp,tecnicos=diccionarioTecnicos,materiales=diccionarioMaterialesArray)
+        return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
+                               materiales=diccionarioMaterialesArray)
 
-@app.route('/inventarios/agregarInventario',methods=['GET','POST'])
+
+@app.route('/inventarios/agregarInventario',methods=['GET', 'POST'])
 def agregarInventario():
     if request.method == 'POST':
         tecnico_id = request.form.get("tecnico_id")
@@ -209,18 +229,20 @@ def agregarInventario():
         print(material_id)
         cantidad = int(request.form.get("cantidad"))
 
-        relExistente = mongo.db.materialesTecnico.find_one({'material_ID':material_id, 'tecnico_ID':tecnico_id})
-        if(relExistente == None):
-            mongo.db.materialesTecnico.insert_one({'material_ID':material_id,'tecnico_ID':tecnico_id,'cantidad':cantidad})
+        relExistente = mongo.db.materialesTecnico.find_one({'material_ID': material_id, 'tecnico_ID': tecnico_id})
+        if relExistente is None:
+            mongo.db.materialesTecnico.insert_one({'material_ID': material_id, 'tecnico_ID': tecnico_id,
+                                                   'cantidad': cantidad})
         else:
-            mongo.db.materialesTecnico.update_one({'_id':relExistente['_id']},{"$set":{'cantidad':cantidad+relExistente
-            ['cantidad']}})
+            mongo.db.materialesTecnico.update_one({'_id': relExistente['_id']},
+                                                  {"$set": {'cantidad': cantidad+relExistente['cantidad']}})
         return redirect(url_for('inventario'))
 
-@app.route('/claves',methods=['GET','POST'])
+
+@app.route('/claves', methods=['GET', 'POST'])
 def claves():
     if request.method == 'POST':
-        if request.form["btn"]=="Anadir":
+        if request.form["btn"] == "Anadir":
             claveID = request.form.get("claveID")
             claveCodigo = request.form.get("claveCodigo")
             claveConcepto = request.form.get('claveConcepto')
@@ -228,12 +250,13 @@ def claves():
             clavePrecioUnitario = request.form.get("clavePrecioUnitario")
             clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
             claveDescripcion = request.form.get("claveDescripcion")
-            mongo.db.clave.insert_one({'_id': claveID, 'codigo': claveCodigo, 'concepto': claveConcepto, 'unidad': claveUnidad,
-                                        'precioUnitario': clavePrecioUnitario, 'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
+            mongo.db.clave.insert_one({'_id': claveID, 'codigo': claveCodigo, 'concepto': claveConcepto,
+                                       'unidad': claveUnidad, 'precioUnitario': clavePrecioUnitario,
+                                       'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
                                        'descripcion': claveDescripcion})
             return redirect(url_for('claves'))
 
-        elif request.form["btn"]=="Guardar":
+        elif request.form["btn"] == "Guardar":
             claveID = request.form.get("claveId")
             claveCodigo = request.form.get("claveCodigo")
             claveConcepto = request.form.get('claveConcepto')
@@ -242,8 +265,6 @@ def claves():
             clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
             claveDescripcion = request.form.get("claveDescripcion")
 
-            print(claveID)
-            print("Hola")
             mongo.db.clave.update_one({'_id': claveID},
                                       {"$set": {'codigo': claveCodigo, 'concepto': claveConcepto, 'unidad': claveUnidad,
                                                 'precioUnitario': clavePrecioUnitario,
@@ -254,7 +275,8 @@ def claves():
         diccionarioClaves = mongo.db.clave.find({})
         return render_template("clave.html", claves=diccionarioClaves)
 
-@app.route('/claves/editar',methods=['GET','POST'])
+
+@app.route('/claves/editar', methods=['GET', 'POST'])
 def editarClave():
     id = request.form.get("id")
     claveConcepto = request.form.get('claveConcepto')
@@ -263,11 +285,10 @@ def editarClave():
     clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
     claveDescripcion = request.form.get("claveDescripcion")
 
-    mongo.db.clave.update_one({'_id': id},
-                                    {"$set": {'concepto':claveConcepto,'unidad':claveUnidad,
-                                    'precioUnitario':clavePrecioUnitario,
-                                    'precioUnitarioTecnico':clavePrecioUnitarioTecnico,
-                                    'descripcion':claveDescripcion}})
+    mongo.db.clave.update_one({'_id': id}, {"$set": {'concepto': claveConcepto,'unidad': claveUnidad,
+                                                     'precioUnitario': clavePrecioUnitario,
+                                                     'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
+                                                     'descripcion': claveDescripcion}})
 
     return redirect(url_for('claves'))
 
@@ -300,12 +321,13 @@ def editarSucursal():
     sucursalCoordenadaY = request.form.get("sucursalCoordenadaY")
 
     mongo.db.sucursal.update_one({'_id': id}, {"$set": {'nombre': sucursalNombre, 'nucleo': sucursalNucleo,
-                                                         'direccion': sucursalDireccion,
-                                                         'coordenadaX': sucursalCoordenadaX,
-                                                         'coordenadaY': sucursalCoordenadaY}})
+                                                        'direccion': sucursalDireccion,
+                                                        'coordenadaX': sucursalCoordenadaX,
+                                                        'coordenadaY': sucursalCoordenadaY}})
     return redirect(url_for('sucursales'))
 
-@app.route('/servicios',methods=['GET','POST'])
+
+@app.route('/servicios', methods=['GET', 'POST'])
 def servicios():
     if request.method == 'POST':
         if request.form["btn"]=="Anadir":
@@ -328,11 +350,13 @@ def servicios():
 
             id = servicioTicket
 
-            mongo.db.servicio.insert_one({'_id': id, 'sucursal_ID': servicioSucursalId, 'presupuesto_ID': None, 'tecnico_ID': servicioTecnicoId,
-                                          'ticket': servicioTicket, 'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
-                                          'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None, 'autorizacion':None,
-                                          'plano':None, 'estatusInterno': 'Pendiente', 'estatusExterno': 'Pendiente',
-                                          'fechaDeCreacion': datetime.datetime.now(), 'fechaDeVencimiento': servicioFechaDeVencimiento })
+            mongo.db.servicio.insert_one({'_id': id, 'sucursal_ID': servicioSucursalId, 'presupuesto_ID': None,
+                                          'tecnico_ID': servicioTecnicoId, 'ticket': servicioTicket,
+                                          'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
+                                          'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None,
+                                          'autorizacion': None, 'plano': None, 'estatusInterno': 'Pendiente',
+                                          'estatusExterno': 'Pendiente', 'fechaDeCreacion': datetime.datetime.now(),
+                                          'fechaDeVencimiento': servicioFechaDeVencimiento})
             return redirect(url_for('servicios'))
         elif request.form["btn"]=="Guardar":
             conFotoInternet = True
@@ -366,50 +390,49 @@ def servicios():
             except:
                 conFotoPlano = False
 
-            if(conFotoInternet):
+            if conFotoInternet:
                 route = '/FotosServicios/PaginasDeInternet/' + servicioId + 'paginaInternet.jpg'
-                dbx.files_upload(servicioPagaDeInternet.read(), route)
+                dbx.files_upload(servicioPagaDeInternet.read(), route,mode=dropbox.files.WriteMode.overwrite)
                 link = dbx.sharing_create_shared_link(route).url
                 url = list(link)
                 url[-1] = '1'
                 url = ''.join(url)
-
                 mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'paginaDeInternet': url}})
-            if(conFotoAutorizacion):
+            if conFotoAutorizacion:
                 route = '/FotosServicios/Autorizaciones/' + servicioId + 'autorizacion.jpg'
-                dbx.files_upload(servicioAutorizacion.read(), route)
+                dbx.files_upload(servicioAutorizacion.read(), route,mode=dropbox.files.WriteMode.overwrite)
                 link = dbx.sharing_create_shared_link(route).url
                 url = list(link)
                 url[-1] = '1'
                 url = ''.join(url)
                 mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'autorizacion': url}})
-            if(conFotoPlano):
+            if conFotoPlano:
                 route = '/FotosServicios/Planos/' + servicioId + 'plano.jpg'
-                dbx.files_upload(servicioPlano.read(), route)
+                dbx.files_upload(servicioPlano.read(), route,mode=dropbox.files.WriteMode.overwrite)
                 link = dbx.sharing_create_shared_link(route).url
                 url = list(link)
                 url[-1] = '1'
                 url = ''.join(url)
                 mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'plano': url}})
 
-
-            print(servicioId,servicioSolicitante,servicioPrioridad,servicioTipoDeMantenimiento,servicioFechaDeVencimiento,servicioSucursalId,servicioTecnicoId)
-            mongo.db.servicio.update_one({'_id': servicioId}, {"$set": {'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
-                                                         'tipoDeMantenimiento': servicioTipoDeMantenimiento,
-                                                         'fechaDeVencimiento': servicioFechaDeVencimiento, 'estatusExterno': servicioEstatusExterno,
-                                                         'sucursal_ID': servicioSucursalId, "tecnico_ID": servicioTecnicoId}})
+            mongo.db.servicio.update_one({'_id': servicioId},
+                                         {"$set": {'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
+                                                   'tipoDeMantenimiento': servicioTipoDeMantenimiento,
+                                                   'fechaDeVencimiento': servicioFechaDeVencimiento,
+                                                   'estatusExterno': servicioEstatusExterno,
+                                                   'sucursal_ID': servicioSucursalId, "tecnico_ID": servicioTecnicoId}})
             return redirect(url_for('servicios'))
     else:
-        #NOTA: Tenemos que llamar los servicios por orden inverso
-        diccionarioServicios = mongo.db.servicio.find({})
+        # NOTA: Tenemos que llamar los servicios por orden inverso
         diccionarioSucursales = mongo.db.sucursal.find({})
-        diccionarioTecnicos = mongo.db.tecnico.find({})
+        diccionarioTecnicos = mongo.db.tecnico.find({'estado':'Activo'}).sort('nombre', 1)
 
         pipeline = [{'$lookup': {
             'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
         }, {'$lookup': {
             'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
         }
+            # hay que sortear la pipeline
         ]
 
         arrTemp = []

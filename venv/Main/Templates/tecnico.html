@@ -102,6 +102,9 @@
                                             <input type="date" class="editInput" name="tecnicoFechaDeNacimiento"
                                                    value="{{ tecnico['fechaDeNacimiento'] }}">
                                         </div>
+                                        <div class="col-md-9 .ml-auto" style="padding:0;"> <b>Estatus: </b>
+                                            <span>{{ tecnico['estado'] }}</span>
+                                        </div>
                                         <div class="col-md-9 .ml-auto" style="padding:0;"><b>Telefono: </b>
                                             <span class="etiquetaTexto">{{ tecnico['telefono'] }}</span>
                                             <input type="text" class="editInput" name="tecnicoTelefono" value="{{ tecnico['telefono'] }}">
@@ -124,8 +127,14 @@
                                             <input type="submit" class="btn btn-primary" value="Guardar">
                                         </form>-->
                                         <button type="button" class="btn btn-secondary etiquetaTexto" onclick="editDisplay('{{tecnico['_id']}}')" >Editar</button>
+                                        {% if tecnico['estado'] == 'Activo' %}
+                                        <button type="submit" name="btn" class="btn btn-secondary" value="Desactivar" data-value="{{ tecnico['_id'] }}">Desactivar</button>
+                                        {% else %}
+                                        <button type="submit" name="btn" class="btn btn-secondary" value="Reactivar" data-value="{{ tecnico['_id'] }}">Reactivar</button>
+                                        {% endif %}
                                         <button type="submit" name="btn" class="btn btn-primary editInput" value="Guardar"
                                                 data-value="{{ tecnico['_id'] }}">Guardar</button>
+
                                     </div>
                                 </form>
 

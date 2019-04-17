@@ -84,6 +84,10 @@
                                 <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
                                 <button type="button" class="btn btn-primary" data-backdrop="static" data-keyboard="false" data-toggle="modal" 
                                         data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
+                                <span class="badge badge-secondary" id="pendiente" >Pendiente</span>
+                                <span class="badge badge-success" id="terminado" >Terminado</span>
+                                <span class="badge badge-warning" id="proceso" >En proceso</span>
+                                <span class="badge badge-danger" id="tardio" >Tardío</span>
                             </div>
                         </div>
 
@@ -145,13 +149,39 @@
                                     </div>
 
 
-                                    <div class=".col-md-4 .ml-auto"><b>Pagina De Internet:  </b><a href="view/{{ servicio['paginaDeInternet'] }}" target="_blank">Ver</a>
+                                    <div class=".col-md-4 .ml-auto"><b>Pagina De Internet:  </b>
+                                        {% if servicio['paginaDeInternet'] != None %}
+
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paginaDeInternet-{{servicio._id}}"
+                                                data-backdrop="static" data-keyboard="false" data-dismiss="modal" aria-label="Close"> Ver foto
+                                        </button></a>
+                                        {% else %}
+                                        No hay foto
+                                        {% endif %}
                                         <input type="file" class="editInput" name="servicioPaginaDeInternet">
                                     </div>
-                                    <div class=".col-md-4 .ml-auto"><b>Autorizacion:  </b>{{ servicio['autorizacion'] }}
+                                    <div class=".col-md-4 .ml-auto"><b>Autorizacion:  </b>
+                                        {% if servicio['autorizacion'] != None %}
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#autorizacion-{{servicio._id}}" data-backdrop="static" data-keyboard="false"
+                                                data-dismiss="modal" aria-label="Close">
+                                          Ver foto
+                                        </button>
+                                        {% else %}
+                                        No hay foto
+                                        {% endif %}
                                         <input type="file" class="editInput" name="servicioAutorizacion">
                                     </div>
-                                    <div class=".col-md-4 .ml-auto"><b>Plano:  </b>{{ servicio['plano'] }}
+                                    <div class=".col-md-4 .ml-auto"><b>Plano:  </b>
+                                        {% if servicio['plano'] != None %}
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#plano-{{servicio._id}}" data-backdrop="static" data-keyboard="false"
+                                                data-dismiss="modal" aria-label="Close">
+                                          Ver foto
+                                        </button>
+                                        {% else %}
+                                        No hay foto
+                                        {% endif %}
                                         <input type="file" class="editInput" name="servicioPlano">
                                     </div>
                                     <div class=".col-md-4 .ml-auto"><b>Estatus Interno:  </b>{{ servicio['estatusInterno'] }}
@@ -173,13 +203,65 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" onclick="editDisplay({{ servicio['ticket'] }})">Editar</button>
+                                <button type="button" class="btn btn-secondary miMamaMeMima" onclick="editDisplay({{ servicio['ticket'] }})">Editar</button>
                                 <button type="submit" name="btn" class="btn btn-primary" value="Guardar" data-value="{{servicio['_id']}}">Guardar</button>
                             </div>
 
                             </form>
                         </div>
 
+                    </div>
+                </div>
+
+                <div class="modal fade" id="paginaDeInternet-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Foto</h5>
+                                <button type="button" class="close" data-toggle="modal" data-target="#orden" data-backdrop="static" data-keyboard="false" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img style="height: 200px;" src="{{ servicio['paginaDeInternet']}}" >
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="autorizacion-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Foto</h5>
+                                <button type="button" class="close" data-toggle="modal" data-target="#orden" data-backdrop="static" data-keyboard="false" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img style="height: 200px;" src="{{ servicio['autorizacion']}}" >
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="plano-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Foto</h5>
+                                <button type="button" class="close" data-toggle="modal" data-target="#orden" data-backdrop="static" data-keyboard="false" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img style="height: 200px;" src="{{ servicio['plano']}}" >
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -290,4 +372,43 @@
         
     
     </script>
+
+<script language="javascript">
+
+                $( document ).ready(function() {
+                    $("#proceso").hide();
+                    $("#tardio").hide();
+                    $("#pendiente").show();
+                    $("#terminado").hide();
+                });
+				function hs() {
+					switch ($("#estado").val()) {
+						case 'proceso':
+							$("#proceso").show();
+							$("#tardio").hide();
+							$("#pendiente").hide();
+							$("#terminado").hide();
+						break;
+						case 'tardio':
+							$("#proceso").hide();
+							$("#tardio").show();
+							$("#pendiente").hide();
+							$("#terminado").hide();
+						break;
+						case 'pendiente':
+							$("#proceso").hide();
+							$("#tardio").hide();
+							$("#pendiente").show();
+							$("#terminado").hide();
+						break;
+						case 'terminado':
+							$("#proceso").hide();
+							$("#tardio").hide();
+							$("#pendiente").hide();
+							$("#terminado").show();
+						break;
+					}
+				}
+
+			</script>
 </html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="locale" content="US">
+		<meta name="language" content="en">
+		<meta name="country" content="US">
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>
+			CETEC
+		</title>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/style.css">
+
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+	</head>
+
+	<body>
+
+		<div class="wrapper">
+		    <!-- Sidebar -->
+		    <nav id="sidebar">
+		        <div class="sidebar-header">
+		            <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="img/icon.png" ></h3>
+		        </div>
+
+		        <ul class="list-unstyled components">
+
+		            <li>
+                    <a href="{{url_for('servicios')}}">Ordenes</a>
+					</li>
+					<li>
+						<a href="{{url_for('reportes')}}">Reportes</a>
+					</li>
+					<li>
+						<a href="{{url_for('tecnico')}}">Tecnicos</a>
+
+					</li>
+					<li>
+						<a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
+					</li>
+					<li>
+						<a href="{{url_for('materiales')}}">Materiales</a>
+					</li>
+					<li>
+						<a href="{{url_for('claves')}}">Conceptos</a>
+					</li>
+					 <li>
+						<a href="{{url_for('empresas')}}">Empresas</a>
+					</li>
+					<li>
+						<a href="{{url_for('nominas')}}">Nomina</a>
+					</li>
+					<li class="active"><a href="{{url_for('Usuario')}}">Nuevo Usuario</a></li>
+
+					<li><a href="{{url_for('home_page')}}">Salir</a></li>
+					</ul>
+		    </nav>
+
+
+
+
+
+
+
+             <div id="content">
+
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+
+                        <div class="container-fluid">
+
+                            <form action="" style="margin-left:33%; margin-top:6%; font-size:1.6rem;">
+                              <div class="container">
+                                <h2>Registro</h2>
+                                <p style="font-size:1.4rem;">Llene el formulario para crear un nuevo usuario</p>
+                                <hr>
+
+                                <label><b>Usuario</b></label>
+                                <br><input type="text" placeholder="Nombre de Usuario" required>
+
+                               <br><br> <label><b>Password</b></label>
+                                <br><input type="password" placeholder="Contraseña" name="psw" required>
+                                <br><br> <label><b>Tipo de Usuario</b></label>
+                                  <br><select id="typeuser" onchange="show(this)">
+                                      <option value="none">-------------------</option>
+                                      <option value="admin">Administrador</option>
+                                      <option value="tecnic">Tecnico</option>
+                                  </select>
+                                    <br>
+                                  <br>
+                                  <div  id="typetec">
+                                  <label><b>Seleccione al Tecnico</b></label><br>
+                                  <select>
+                                        <label><b>Seleccione al Tecnico</b></label><br>
+                                      <option>Tecnico 1</option>
+                                      <option>Tecnico 2</option>
+                                      <option>Tecnico 3</option>
+
+                                  </select><br></div>
+
+
+                                <br><button type="submit" class="btn btn-primary"><h2>Registrar</h2></button>
+                              </div>
+
+                            </form>
+
+
+                        </div>
+
+
+                    </nav>
+            </div>
+
+   		</div>
+        <style>
+            #typetec{
+                display:none;
+            }
+
+        </style>
+              <script language="javascript">
+
+
+                    function shosw(value) {
+                        switch ($(".typeuser").val()) {
+                            case 'none':
+                                $(".typetec").hide();
+                            break;
+                            case 'admin':
+                               $(".typetec").hide();
+                            break;
+                            case 'tecnic':
+                                $(".typetec").show();
+                            break;
+
+                        }
+                    }
+
+                    function show( choices ){
+
+                        var Utype = choices.options[ choices.selectedIndex ].value;
+
+                        if ( Utype == 'none' ){
+                            document.getElementById('typetec').style.display = 'none';
+
+                        }
+                        else if(Utype == 'admin'){
+                            document.getElementById('typetec').style.display = 'none';
+
+                        }
+
+                        else if(Utype == 'tecnic'){
+                            document.getElementById('typetec').style.display = 'block';
+
+                        }
+                    }
+
+			</script>
+
+	</body>
+
+
+
+</html>

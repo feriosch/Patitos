@@ -12,26 +12,15 @@
         CETEC
     </title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
-            integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
-            crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
-            integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
-            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
 
 </head>
@@ -40,9 +29,7 @@
     <!-- Sidebar -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-weight: 510 !important;">CETEC<img id="logo"
-                                                               src="{{ url_for('static', filename='img/icon.png') }}">
-            </h3>
+            <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="{{ url_for('static', filename='img/icon.png') }}" ></h3>
         </div>
 
         <ul class="list-unstyled components">
@@ -51,7 +38,7 @@
                 <a href="{{url_for('servicios')}}">Ordenes</a>
             </li>
             <li>
-                <a href="{{url_for('reportes')}}">Reportes</a>
+               <a href="{{url_for('reportes')}}">Reportes</a>
             </li>
             <li>
                 <a href="{{url_for('tecnico')}}">Tecnicos</a>
@@ -66,115 +53,107 @@
             <li>
                 <a href="{{url_for('claves')}}">Conceptos</a>
             </li>
-            <li>
-                <a href="{{url_for('empresas')}}">Empresas</a>
-            </li>
-            <li>
-                <a href="{{url_for('nominas')}}">Nomina</a>
-            </li>
+             <li>
+                    <a href="{{url_for('empresas')}}">Empresas</a>
+                </li>
+                <li>
+                    <a href="{{url_for('nominas')}}">Nomina</a>
+                </li>
             <li><a href="{{url_for('home_page')}}">Salir</a></li>
         </ul>
     </nav>
 
 
-    <div id="content">
+
+     <div id="content">
 
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <div class="row">
-                    {% for tecnico in tecnicos %}
-                    <div class="card" style="width: 20rem;">
-                        <div class="card-body">
-                            <h4 class="card-title">{{ tecnico['nombre'] }}</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">Técnico</h6>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <div class="row">
+                        {% for tecnico in tecnicos %}
+                        <div class="card" style="width: 20rem;">
+                              <div class="card-body">
+                                <h4 class="card-title">{{ tecnico['nombre'] }}</h4>
+                                <h6 class="card-subtitle mb-2 text-muted">Técnico</h6>
 
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#confirm-delete-{{tecnico._id}}"
-                                    data-backdrop="static" data-keyboard="false" value={{tecnico['_id']}}>
-                                Detalles
-                            </button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm-delete-{{tecnico._id}}"
+                                        data-backdrop="static" data-keyboard="false" value={{tecnico['_id']}}>
+                                  Detalles</button>
+                              </div>
                         </div>
-                    </div>
 
-                    <div class="modal fade" id="confirm-delete-{{tecnico._id}}" tabindex="-1" role="dialog"
-                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
+                        <div class="modal fade" id="confirm-delete-{{tecnico._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
                                 <div class="modal-header" style="padding-bottom:0;">
 
-                                    <h3 align="center">{{ tecnico['nombre'] }}</h3>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                            onclick="closeTecnicoDetails({{ tecnico['_id'] }})">
-                                        <span aria-hidden="true">x</span>
-                                    </button>
+                                        <h3 align="center">{{ tecnico['nombre'] }}</h3>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                          onclick="closeTecnicoDetails({{ tecnico['_id'] }})">
+                                    <span aria-hidden="true">x</span>
+                                  </button>
                                 </div>
                                 <div class="modal-body">
                                     <img src="{{ tecnico['foto'] }}" style="width:10rem;">
                                     <div class=".col-md-4 .ml-auto"><b>Nombre: </b>{{ tecnico['nombre'] }}</div>
 
-                                    <div class=".col-md-4 .ml-auto"><b>Añadir materiales:</b></div>
+                                    <div class=".col-md-4 .ml-auto"> <b>Añadir materiales:</b></div>
                                     <form action="{{url_for('agregarInventario') }}" method="post">
-                                        <select name="material_id">
+                                        <select name="material_id" >
                                             {% for material in materiales%}}
                                             <option value="{{material[1]}}">{{ material[0] }}</option>
-                                            {% endfor %}
+                                          {% endfor %}
                                         </select>
-                                        <button class="btn" type="button" id="menos"
-                                                onclick="javascript: contadormenos()">-
-                                        </button>
-                                        <input id="cantidad" type="number" style="text-align: center;" value="0"
-                                               name="cantidad">
-                                        <button class="btn" type="button" id="mas" onclick="javascript: contadormas()">
-                                            +
-                                        </button>
-                                        <button type="submit" class="btn btn-primary" value="{{tecnico['_id']}}"
-                                                name="tecnico_id">Agregar
-                                        </button>
+                                        <button class="btn" type="button" id="menos" onclick="javascript: contadormenos()">-</button>
+                                        <input id="cantidad" type="number" style="text-align: center;" value="0" name="cantidad">
+                                        <button class="btn" type="button" id="mas" onclick="javascript: contadormas()">+</button>
+                                        <button type="submit" class="btn btn-primary" value="{{tecnico['_id']}}" name="tecnico_id">Agregar</button>
 
 
-                                    </form>
 
-                                    <table class="table">
-                                        <thead class="thead-dark">
+                                      </form>
 
-                                        <tr>
-                                            <th scope="col">Material</th>
-                                            <th scope="col">Cantidad</th>
+                                        <table class="table">
+                                              <thead class="thead-dark">
 
-                                        </tr>
+                                                <tr>
+                                                  <th scope="col">Material</th>
+                                                  <th scope="col">Cantidad</th>
 
-                                        </thead>
-                                        <tbody>
-                                        {% for relacion in diccRela %}
-                                        {% if relacion['patatita'][0]['_id'] == tecnico['_id'] %}
-                                        <tr>
-                                            <th scope="row">{{ relacion['tomatito'][0]['nombre'] }}</th>
-                                            <th>{{ relacion['cantidad'] }}</th>
-                                        </tr>
-                                        {% endif %}
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
+                                                </tr>
 
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                              </thead>
+                                              <tbody>
+                                              {% for relacion in diccRela %}
+                                                {% if relacion['patatita'][0]['_id'] == tecnico['_id'] %}
+                                                <tr>
+                                                   <th scope="row">{{ relacion['tomatito'][0]['nombre'] }}</th>
+                                                    <th>{{ relacion['cantidad'] }}</th>
+                                                </tr>
+                                              {% endif %}
+                                              {% endfor %}
+                                              </tbody>
+                                         </table>
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
                                 </div>
 
+                              </div>
                             </div>
                         </div>
+                        {% endfor %}
+
                     </div>
-                    {% endfor %}
-
                 </div>
-            </div>
 
-        </nav>
+            </nav>
 
+        </div>
     </div>
-</div>
 
-<script language="javascript">
+    <script language="javascript">
         var i = 0;
         function contadormas(){
             i = i + 1;
@@ -197,12 +176,11 @@
             }
         }
 
-
-</script>
+    </script>
 
 </body>
 
-<script type="text/javascript">
+<script type="text/javascript" >
     $('.modal fade').modal({
         backdrop: 'static',
         keyboard: false
@@ -235,6 +213,5 @@
             all[i].style.display = 'none';
         }
     }
-
 </script>
 </html>

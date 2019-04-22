@@ -1,8 +1,10 @@
 from flask import Flask,render_template,request, redirect, url_for, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from reportlab.pdfgen import canvas
 import dropbox
 import datetime
+
 
 dbx = dropbox.Dropbox("uLQxcVq_gSAAAAAAAAAADX50ce1j-fy3qtTAb9ricooFDS1GFb5zv7sk_nnI4DMR")
 
@@ -328,7 +330,14 @@ def servicios():
                                               'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None,
                                               'autorizacion': None, 'plano': None, 'estatusInterno': 'Pendiente',
                                               'estatusExterno': 'Pendiente', 'fechaDeCreacion': datetime.datetime.now(),
-                                              'fechaDeVencimiento': servicioFechaDeVencimiento})
+                                              'fechaDeVencimiento': servicioFechaDeVencimiento,
+
+                                              'fechaHoraInicio': None, 'fechaHoraFin': None, 'descripcionServicio': None,
+                                              'solucionServicio': None, 'observaciones': None, 'firmaUsuario:': None,
+                                              'firmaTecnico': None, 'selloSucursal': None, 'nombreFirmaFM': None,
+                                              'collageEvidencia': None,
+
+                                              'cliente': None, 'subtotal': 0, 'total': 0})
                 return redirect(url_for('servicios'))
             elif request.form["btn"]=="Guardar":
                 conFotoInternet = True
@@ -463,19 +472,26 @@ def empresas():
 def reportes():
     if 'username' in session:
         if request.method == 'POST':
+            id = request.form.get("id")
+            servicio = mongo.db.servicio.find_one({'id': ObjectId(id)})
+
+            c = canvas.Canvas("PDF_Prueba.pdf")
+            c.drawImage("TemplatePDF_3.png", 0, 0, width=580, height=830)
+
+            c.drawString(77, 723, servicio['sucursal'])
+            c.drawString(77, 668, "Fecha ejemplo")
+
+
             pass
         else:
             diccionarioSucursales = mongo.db.sucursal.find({})
-            tempID = ObjectId(session['tecnicoID'])
-            print(tempID)
-            diccionarioTecnicos = mongo.db.tecnico.find({'_id': tempID})
+            diccionarioTecnicos = mongo.db.tecnico.find()
 
-            pipeline = [{'$match': {'tecnico_ID': tempID}}, {'$lookup': {
+            pipeline = [{'$lookup': {
                 'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
             }, {'$lookup': {
                 'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
-                        }
-                        ]
+            }]
 
             arrTemp = []
             for doc in (mongo.db.servicio.aggregate(pipeline)):
@@ -491,7 +507,7 @@ def reportes():
             for element in diccionarioTecnicos:
                 diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
 
-            return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+            return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
                                    tecnicos=diccionarioTecnicosArray)
     else:
         return redirect(url_for('home_page'))

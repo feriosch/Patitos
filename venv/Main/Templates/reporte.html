@@ -230,15 +230,7 @@
                     $(this).closest(".option-row").remove();
 
                 });
-                //Agrega opciones
-                $(".addRow").click(function() {
-                    var html = "<div class='option-row' id='rowtk" + count + "'><div class='form-group'><div class='input-group select'><input type='text' class='form-control' placeholder='Añade opción' /><span class='input-group-btn'><button class='btn btn-primary remove-option' type='button'><a class='remove-tipe' href='javascript: void(0)'><span class='glyphicon glyphicon-trash' style='color:white'></span></a></button></span></div></div></div>";
 
-                    var form = $(html);
-
-                    $(this).closest(".verificar").find(".optionRow").append(form);
-
-                });
             });
             count++;
 

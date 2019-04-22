@@ -35,9 +35,9 @@ def home_page():
         return render_template("index.html")
 
 
-@app.route('/view/<imagen>')
-def visualizarImagenes(imagen):
-    return render_template("visual.html", imagen)
+@app.route('/FirmaDig/<servicioID>')
+def visualizarImagenes(servicioID):
+    return render_template("FirmaDig.html")
 
 
 @app.route('/material',methods=['GET','POST'])
@@ -333,7 +333,8 @@ def servicios():
                                               'fechaDeVencimiento': servicioFechaDeVencimiento,
 
                                               'fechaHoraInicio': None, 'fechaHoraFin': None, 'descripcionServicio': None,
-                                              'solucionServicio': None, 'observaciones': None, 'firmaUsuario:': None,
+                                              'solucionServicio': None, 'observacionesServicio': None,
+                                              'firmaUsuario:': None,
                                               'firmaTecnico': None, 'selloSucursal': None, 'nombreFirmaFM': None,
                                               'collageEvidencia': None,
 
@@ -472,43 +473,117 @@ def empresas():
 def reportes():
     if 'username' in session:
         if request.method == 'POST':
-            id = request.form.get("id")
-            servicio = mongo.db.servicio.find_one({'id': ObjectId(id)})
+            if request.form["btn"] == "Anadir":
+                servicioID = ObjectId(request.form.get("id"))
+                servicioFechaInicio = request.form.get("servicioFechaInicio")
+                servicioFechaFin = request.form.get("servicioFechFin")
+                servicioDescripcion = request.form.get("servicioDescripcion")
+                servicioSolucion = request.form.get("servicioSolucion")
+                servicioObservaciones = request.form.get("servicioObservaciones")
+                conFotoSelloSucursal = True
+                conFotoNombreFirmaFM = True
+                conFotoCollage = True
 
-            c = canvas.Canvas("PDF_Prueba.pdf")
-            c.drawImage("TemplatePDF_3.png", 0, 0, width=580, height=830)
+                try:
+                    servicioSelloSucursal = request.files['servicioSelloSucursal']
+                except:
+                    conFotoSelloSucursal = False
+                try:
+                    servicioNombreFirmaFM = request.files['servicioNombreFirmaFM']
+                except:
+                    conFotoNombreFirmaFM = False
+                try:
+                    servicioCollage = request.files['servicioCollage']
+                except:
+                    conFotoCollage = False
 
-            c.drawString(77, 723, servicio['sucursal'])
-            c.drawString(77, 668, "Fecha ejemplo")
+                if conFotoSelloSucursal:
+                    route = '/FotosServicios/FirmasSellos/' + servicioID + 'selloSucursal.jpg'
+                    dbx.files_upload(servicioSelloSucursal.read(), route, mode=dropbox.files.WriteMode.overwrite)
+                    link = dbx.sharing_create_shared_link(route).url
+                    url = list(link)
+                    url[-1] = '1'
+                    url = ''.join(url)
+                    mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'selloSucursal': url}})
+                if conFotoNombreFirmaFM:
+                    route = '/FotosServicios/FirmasSellos/' + servicioID + 'nombreFirmaFM.jpg'
+                    dbx.files_upload(servicioNombreFirmaFM.read(), route, mode=dropbox.files.WriteMode.overwrite)
+                    link = dbx.sharing_create_shared_link(route).url
+                    url = list(link)
+                    url[-1] = '1'
+                    url = ''.join(url)
+                    mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'nombreFiramDM': url}})
+                if conFotoCollage:
+                    route = '/FotosServicios/FirmasSellos/' + servicioID + 'collage.jpg'
+                    dbx.files_upload(servicioCollage.read(), route, mode=dropbox.files.WriteMode.overwrite)
+                    link = dbx.sharing_create_shared_link(route).url
+                    url = list(link)
+                    url[-1] = '1'
+                    url = ''.join(url)
+                    mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'collage': url}})
 
-
-            pass
+                mongo.db.servicio.update_one({'_id': servicioID},
+                                             {"$set": {'fechaHoraInicio': servicioFechaInicio,
+                                                       'fechaHoraFin': servicioFechaFin,
+                                                       'descripcionServicio': servicioDescripcion,
+                                                       'solucionServicio': servicioSolucion,
+                                                       'observacionesServicio': servicioObservaciones }})
+                return redirect(url_for('reporte'))
         else:
-            diccionarioSucursales = mongo.db.sucursal.find({})
-            diccionarioTecnicos = mongo.db.tecnico.find()
+            if session['tipo'] != "tecnico":
+                diccionarioSucursales = mongo.db.sucursal.find({})
+                diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'}).sort('nombre', 1)
 
-            pipeline = [{'$lookup': {
-                'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
-            }, {'$lookup': {
-                'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
-            }]
+                pipeline = [{'$lookup': {
+                    'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
+                }, {'$lookup': {
+                    'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
+                }
+                ]
 
-            arrTemp = []
-            for doc in (mongo.db.servicio.aggregate(pipeline)):
-                arrTemp.append(doc)
-            print(arrTemp)
+                arrTemp = []
+                for doc in (mongo.db.servicio.aggregate(pipeline)):
+                    arrTemp.append(doc)
 
-            arrTemp = sorted(arrTemp, key=lambda k: k['fechaDeCreacion'], reverse=True)
-            diccionarioSucursalesArray = []
-            for element in diccionarioSucursales:
-                diccionarioSucursalesArray.append([element["nombre"], element["_id"]])
+                arrTemp = sorted(arrTemp, key=lambda k: k['fechaDeCreacion'], reverse=True)
+                diccionarioSucursalesArray = []
+                for element in diccionarioSucursales:
+                    diccionarioSucursalesArray.append([element["nombre"], element["_id"]])
 
-            diccionarioTecnicosArray = []
-            for element in diccionarioTecnicos:
-                diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
+                diccionarioTecnicosArray = []
+                for element in diccionarioTecnicos:
+                    diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
 
-            return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
-                                   tecnicos=diccionarioTecnicosArray)
+                return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                       tecnicos=diccionarioTecnicosArray)
+            else:
+                diccionarioSucursales = mongo.db.sucursal.find({})
+                tempID = ObjectId(session['tecnicoID'])
+                diccionarioTecnicos = mongo.db.tecnico.find({'_id': tempID})
+
+                pipeline = [{'$match': {'tecnico_ID': tempID}}, {'$lookup': {
+                    'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
+                }, {'$lookup': {
+                    'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
+                            }
+                            ]
+
+                arrTemp = []
+                for doc in (mongo.db.servicio.aggregate(pipeline)):
+                    arrTemp.append(doc)
+                print(arrTemp)
+
+                arrTemp = sorted(arrTemp, key=lambda k: k['fechaDeCreacion'], reverse=True)
+                diccionarioSucursalesArray = []
+                for element in diccionarioSucursales:
+                    diccionarioSucursalesArray.append([element["nombre"], element["_id"]])
+
+                diccionarioTecnicosArray = []
+                for element in diccionarioTecnicos:
+                    diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
+
+                return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                       tecnicos=diccionarioTecnicosArray)
     else:
         return redirect(url_for('home_page'))
 

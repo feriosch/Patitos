@@ -1,194 +1,215 @@
 <!doctype html>
 <html>
 
-	<head>
-		<meta charset="utf-8">
-		<meta name="locale" content="US">
-		<meta name="language" content="en">
-		<meta name="country" content="US">
-		<meta name="HandheldFriendly" content="True">
-		<meta name="MobileOptimized" content="320">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>
-			CETEC
-		</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="locale" content="US">
+    <meta name="language" content="en">
+    <meta name="country" content="US">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        CETEC
+    </title>
 
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 
-        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-    	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+            integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
+            integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+            crossorigin="anonymous"></script>
 
-	</head>
+</head>
 
-	<body>
+<body>
 
-		<div class="wrapper">
-		    <!-- Sidebar -->
-		    <nav id="sidebar">
-		        <div class="sidebar-header">
-		            <h3 style="font-weight: 510 !important;">CETEC<img id="logo" src="{{ url_for('static', filename='img/icon.png') }}" ></h3>
-		        </div>
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="font-weight: 510 !important;">CETEC<img id="logo"
+                                                               src="{{ url_for('static', filename='img/icon.png') }}">
+            </h3>
+        </div>
 
-		        <ul class="list-unstyled components">
+        <ul class="list-unstyled components">
 
-                <li>
-                    <a href="{{url_for('servicios')}}">Ordenes</a>
-                </li>
-                <li class="active">
-                    <a href="{{url_for('reportes')}}">Reportes</a>
-                </li>
-                <li>
-                    <a href="{{url_for('tecnico')}}">Tecnicos</a>
+            <li>
+                <a href="{{url_for('servicios')}}">Ordenes</a>
+            </li>
+            <li class="active">
+                <a href="{{url_for('reportes')}}">Reportes</a>
+            </li>
+            <li>
+                <a href="{{url_for('tecnico')}}">Tecnicos</a>
 
-                </li>
-                <li>
-                    <a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
-                </li>
-                <li>
-                    <a href="{{url_for('materiales')}}">Materiales</a>
-                </li>
+            </li>
+            <li>
+                <a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
+            </li>
+            <li>
+                <a href="{{url_for('materiales')}}">Materiales</a>
+            </li>
 
-                <li>
-                    <a href="{{url_for('claves')}}">Conceptos</a>
-                </li>
-                <li>
-                    <a href="{{url_for('empresas')}}">Empresas</a>
-                </li>
-                <li>
-                    <a href="{{url_for('nominas')}}">Nomina</a>
-                </li>
-                <li><a href="{{url_for('home_page')}}">Salir</a></li>
-            </ul>
-		    </nav>
-
-
-
-		 <div id="content">
-
-<!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
-
-		        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-		            <div class="container-fluid">
-						<div class="row">
-							<div class="card" style="width: 20rem;">
-								  <div class="card-body">
-									<h4 class="card-title">Reporte</h4>
-									<h6 class="card-subtitle mb-2 text-muted">Sucursal: Villa Coapa</h6>
-									<h6 class="card-subtitle mb-2 text-muted">Solicitante: Jorge de Jesus Cruz </h6>
-									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevo_rep">
-									  Editar servicio</button>
-								  </div>
-							</div>
-						</div>
-		            </div>
-
-		        </nav>
+            <li>
+                <a href="{{url_for('claves')}}">Conceptos</a>
+            </li>
+            <li>
+                <a href="{{url_for('empresas')}}">Empresas</a>
+            </li>
+            <li>
+                <a href="{{url_for('nominas')}}">Nomina</a>
+            </li>
+            <li><a href="{{url_for('home_page')}}">Salir</a></li>
+        </ul>
+    </nav>
 
 
+    <div id="content">
 
-			 <!-- Modales-->
+        <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
 
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <div class="row">
+                    {% for servicio in servicios%}
 
+                    <div class="card" id="" style="width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">Numero de Ticket: {{ servicio['ticket'] }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    value={{servicio['_id']}} data-target="#{{servicio._id}}">
+                                Editar servicio
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
 
-					 <div class="modal fade" id="nuevo_rep" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-					   <div class="modal-dialog" role="document">
-						 <div class="modal-content">
-						   <div class="modal-header">
-							 <h5 class="modal-title" id="exampleModalLongTitle">Edición</h5>
-							 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							   <span aria-hidden="true">&times;</span>
-							 </button>
-						   </div>
-						   <div class="modal-body">
-							 <form action="" method="post">
-
-								 <label>Fecha de inicio y final</label><br>
-								 <input type="date">
-								  <input type="date"><br><br>
-
-								 <label>Descripción de servicio</label><br>
-								 <input type="text" placeholder="Descripción del servicio"><br>
-
-								 <label>Solución del servicio</label><br>
-								 <input type="text" placeholder="Solución del servicio"><br>
-
-								 <label>Observaciones</label><br>
-								 <input type="text" placeholder="Observaciones"><br>
-
-								 <label>Crear Presupuesto</label><br>
+        </nav>
 
 
-								 <div class="duplicate all">
-									<div class="up-box-question" style="text-align: center">
-										<a class="remove-aditional" href="javascript: void(0)"><span class="glyphicon glyphicon-trash icon"></span></a>
-									</div>
-									<div class="box-question" style="text-align: center">
-										<div class="row">
-											<div class="col-md-12">
-												<select class="form-control select" name="">
-																	<option value="1">Concepto 1</option>
-																	<option value="2">Concepto 2</option>
-												</select>
-											</div>
+        <!-- Modales-->
 
-											<div class="row verificar">
-												<div class="text option" style="margin-top:10px; text-align: center">
-													<a class="btn btn-primary addRow" href="javascript: void(0)" type="button"><span></span>Agregar Opcion</a>
-												</div>
-												<br>
+        {% for servicio in servicios %}
+        <div class="modal fade" id="{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Edición</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{url_for('reportes')}}" method="post">
 
-											</div>
-										</div>
-									</div>
-								</div>
+                            <label>Fecha de inicio y final</label><br>
+                            <input type="date" name="servicioFechaInicio">
+                            <input type="date" name="servicioFechaFin"><br><br>
 
-								 <div class="aditional-box duplicate-btn">
+                            <label>Descripción de servicio</label><br>
+                            <input type="text" placeholder="Descripción del servicio" name="servicioDescripcion"><br>
 
-									<a class="btn btn-secondary agregar add" href="javascript: void(0)" type="button"><span></span>Añadir concepto</a>
+                            <label>Solución del servicio</label><br>
+                            <input type="text" placeholder="Solución del servicio" name="servicioSolucion"><br>
 
-								</div>
+                            <label>Observaciones</label><br>
+                            <input type="text" placeholder="Observaciones" name="servicioObservaciones"><br>
 
-
-
+                            <label>Crear Presupuesto</label><br>
 
 
-								 <label for="imagen">Imagen del croquis</label><br>
-								 <input name="archivo1" type="file" class="archivo1"><br><br>
+                            <div class="duplicate all">
+                                <div class="up-box-question" style="text-align: center">
+                                    <a class="remove-aditional" href="javascript: void(0)"><span
+                                            class="glyphicon glyphicon-trash icon"></span></a>
+                                </div>
+                                <div class="box-question" style="text-align: center">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <select class="form-control select" name="">
+                                                <option value="1">Concepto 1</option>
+                                                <option value="2">Concepto 2</option>
+                                            </select>
+                                        </div>
 
-								 <label for="imagen">Imágenes</label><br>
-								 <input name="archivo1" type="file" class="archivo2">
+                                        <div class="row verificar">
+                                            <div class="text option" style="margin-top:10px; text-align: center">
+                                                <a class="btn btn-primary addRow" href="javascript: void(0)"
+                                                   type="button"><span></span>Agregar Opcion</a>
+                                            </div>
+                                            <br>
 
-								 <label for="imagen">Sello</label><br>
-								 <input name="archivo1" type="file" class="archivo3"><br><br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-								 <label for="imagen">Nombre y Firma FM</label><br>
-								 <input name="archivo1" type="file" class="archivo4"><br><br>
+                            <div class="aditional-box duplicate-btn">
 
-								 <a href="FirmaDig.html" target="_blank"><button class="btn btn-secondary" type="button">Firma digital Usuario</button></a>
-								<a href="FirmaDig.html" target="_blank"><button class="btn btn-secondary" type="button">Firma digital del Técnico</button></a>
+                                <a class="btn btn-secondary agregar add" href="javascript: void(0)"
+                                   type="button"><span></span>Añadir concepto</a>
 
-
-							   <div class="modal-footer">
-
-								 <input class="btn btn-primary" type="submit" name="" value="Añadir" >
-							   </div>
-							 </form>
-						   </div>
-						 </div>
-					   </div>
-					</div>
+                            </div>
 
 
-		 </div>
+                            <label for="imagen">Imagen del croquis</label><br>
+                            <input name="servicioCroquis" type="file" class="archivo1"><br><br>
 
-   		</div>
+                            <label for="imagen">Collage de Evidencia</label><br>
+                            <input name="servicioCollage" type="file" class="archivo2"><br>
 
-	<script>
+                            <label for="imagen">Sello</label><br>
+                            <input name="servicioSelloSucursal" type="file" class="archivo3"><br><br>
+
+                            <label for="imagen">Nombre y Firma FM</label><br>
+                            <input name="servicioNombreFirmaFM" type="file" class="archivo4"><br><br>
+
+                            <a href="/FirmaDig/{{servicio._id}}" target="_blank">
+                                <button class="btn btn-secondary" type="button">Firma digital Usuario</button>
+                            </a>
+                            <a href="/FirmaDig/{{servicio._id}}" target="_blank">
+                                <button class="btn btn-secondary" type="button">Firma digital del Técnico</button>
+                            </a>
+
+
+                            <div class="modal-footer">
+
+                                <input class="btn btn-primary" type="submit" name="Anadir" value="Anadir">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+
+</div>
+
+<script>
 
 			 $(document).ready(function() {
 
@@ -254,10 +275,10 @@
 
 
 
-	</script>
 
-	</body>
+</script>
 
+</body>
 
 
 </html>

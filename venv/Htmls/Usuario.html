@@ -89,13 +89,15 @@
                                <br><br> <label><b>Password</b></label>
                                 <br><input type="password" placeholder="Contraseña" name="psw" required>
                                 <br><br> <label><b>Tipo de Usuario</b></label>
-                                  <br><select id="typeuser" onchange="show(this)">
+
+								  <br><select id="typeuser" onchange="show(this)">
                                       <option value="none">-------------------</option>
                                       <option value="admin">Administrador</option>
                                       <option value="tecnic">Tecnico</option>
                                   </select>
                                     <br>
                                   <br>
+
                                   <div  id="typetec">
                                   <label><b>Seleccione al Tecnico</b></label><br>
                                   <select>
@@ -128,21 +130,6 @@
         </style>
               <script language="javascript">
 
-
-                    function shosw(value) {
-                        switch ($(".typeuser").val()) {
-                            case 'none':
-                                $(".typetec").hide();
-                            break;
-                            case 'admin':
-                               $(".typetec").hide();
-                            break;
-                            case 'tecnic':
-                                $(".typetec").show();
-                            break;
-
-                        }
-                    }
 
                     function show( choices ){
 

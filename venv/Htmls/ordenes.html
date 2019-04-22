@@ -75,63 +75,42 @@
 		 	<div id="content">
 
 				<div align="right">
-					<b>Seleccione filtración:</b>
-					<select id="filtracion" onchange="show(this)">
-						<option value="none">none</option>
-						<option value="Nrtick">Número de ticker</option>
-						<option value="Sucu">Sucursal</option>
-						<option value="Tecnic">Técnico</option>
-						<option value="Estatus">Estatus</option>
-						<option value="Fecha">Fecha</option>
-					</select>
 
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nueva_orden">Nuevo</button>
 
 				</div>
-				<div align="right" style="margin-right:5rem;" id="NrTicket">
+				<div align="left">
 					<form>
-						<label><b>Escriba el numero de ticket</b></label>
+						<label><b>Numero de ticket</b></label>
 						<input type="text" placeholder="Nr. de ticket">
-					</form>
-				</div>
-				<div align="right" style="margin-right:5rem;" id="Sucu">
-					<form>
-						<label><b>Seleccione la sucursal</b></label>
+
+						<label><b>Sucursal</b></label>
 						<select>
 							<option>sucursal 1</option>
 							<option>sucursal 2</option>
 							<option>sucursal 3</option>
 							<option>sucursal 4</option>
 						</select>
-					</form>
-				</div>
-				<div align="right" style="margin-right:5rem;" id="Tecnic">
-					<form>
-						<label><b>Seleccione al tecnico</b></label>
+
+						<label><b>Tecnico</b></label>
 						<select>
 							<option>tecnico 1</option>
 							<option>tecnico 2</option>
 							<option>tecnico 3</option>
 							<option>tecnico 4</option>
 						</select>
-					</form>
-				</div>
-				<div align="right" style="margin-right:5rem;" id="Estatus">
-					<form>
-						<label><b>Seleccione el estado</b></label>
+
+						<label><b>Estado</b></label>
 						<select>
 							<option>pendiente</option>
 							<option>en proceso</option>
 							<option>terminado</option>
 							<option>tardío</option>
 						</select>
-					</form>
-				</div>
-				<div align="right" style="margin-right:5rem;" id="Fecha">
-					<form>
-						<label><b>Seleccione fecha de inicio</b></label>
+
+						<label><b>Fecha de inicio</b></label>
 						<input type="date">
-						<label><b>Seleccione fecha final</b></label>
+						<label><b>Fecha final</b></label>
 						<input type="date">
 					</form>
 				</div>
@@ -306,21 +285,7 @@
 
    		</div>
 		<style>
-            #NrTicket{
-                display:none;
-            }
-            #Sucu{
-                display:none;
-            }
-            #Tecnic{
-                display:none;
-            }
-            #Estatus{
-                display:none;
-            }
-            #Fecha{
-                display:none;
-            }
+
 
         </style>
 
@@ -362,59 +327,7 @@
 					}
 				}
 
-				function show( choices ){
 
-                        var Utype = choices.options[ choices.selectedIndex ].value;
-
-                        if ( Utype == 'none' ){
-                            document.getElementById('NrTicket').style.display = 'none';
-                            document.getElementById('Sucu').style.display = 'none';
-							document.getElementById('Tecnic').style.display = 'none';
-							document.getElementById('Estatus').style.display = 'none';
-							document.getElementById('Fecha').style.display = 'none';
-                        }
-                        else if(Utype == 'Nrtick'){
-                             document.getElementById('NrTicket').style.display = 'block';
-                            document.getElementById('Sucu').style.display = 'none';
-							document.getElementById('Tecnic').style.display = 'none';
-							document.getElementById('Estatus').style.display = 'none';
-							document.getElementById('Fecha').style.display = 'none';
-
-                        }
-
-                        else if(Utype == 'Sucu'){
-                             document.getElementById('NrTicket').style.display = 'none';
-                            document.getElementById('Sucu').style.display = 'block';
-							document.getElementById('Tecnic').style.display = 'none';
-							document.getElementById('Estatus').style.display = 'none';
-							document.getElementById('Fecha').style.display = 'none';
-
-                        }
-                        else if(Utype == 'Tecnic'){
-                             document.getElementById('NrTicket').style.display = 'none';
-                            document.getElementById('Sucu').style.display = 'none';
-							document.getElementById('Tecnic').style.display = 'block';
-							document.getElementById('Estatus').style.display = 'none';
-							document.getElementById('Fecha').style.display = 'none';
-
-                        }
-                        else if(Utype == 'Estatus'){
-                             document.getElementById('NrTicket').style.display = 'none';
-                            document.getElementById('Sucu').style.display = 'none';
-							document.getElementById('Tecnic').style.display = 'none';
-							document.getElementById('Estatus').style.display = 'block';
-							document.getElementById('Fecha').style.display = 'none';
-
-                        }
-                        else if(Utype == 'Fecha'){
-                             document.getElementById('NrTicket').style.display = 'none';
-                            document.getElementById('Sucu').style.display = 'none';
-							document.getElementById('Tecnic').style.display = 'none';
-							document.getElementById('Estatus').style.display = 'none';
-							document.getElementById('Fecha').style.display = 'block';
-
-                        }
-                }
 
 
 

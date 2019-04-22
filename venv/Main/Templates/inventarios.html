@@ -178,32 +178,6 @@
 
     </script>
 
-<!--
-    {{ materiales }}
-    {% for tecnico in tecnicos %}
-    <div> {{tecnico['nombre']}}</div>
-    <ul>
-        {% for relacion in diccRela %}
-            {% if relacion['|
-            <li>{{ relacion['tomatito'][0]['nombre']}} --- {{ relacion['cantidad']}}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    <button>Editar inventario</button>
-
-    <form action="{{url_for('agregarInventario')}}" method="post">
-        <select name="material_id">
-                {% for material in materiales %}
-                    <option  value='{{ material[1] }}'>{{ material[0] }}</option>
-
-                {% endfor %}
-        </select>
-        <input type="number" name="cantidad">
-        <button name="tecnico_id" value={{tecnico['_id']}}>Agregar Material a Tecnico</button>
-    </form>
-
-    {% endfor %}
--->
 </body>
 
 <script type="text/javascript" >

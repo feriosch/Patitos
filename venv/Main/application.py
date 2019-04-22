@@ -452,7 +452,7 @@ def servicios():
                 return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
                                        tecnicos=diccionarioTecnicosArray)
     else:
-        return render_template("index.html")
+        return redirect(url_for('home_page'))
 
 
 @app.route('/empresa',methods=['GET','POST'])
@@ -461,7 +461,40 @@ def empresas():
 
 @app.route('/reporte',methods=['GET','POST'])
 def reportes():
-    return render_template("reporte.html")
+    if 'username' in session:
+        if request.method == 'POST':
+            pass
+        else:
+            diccionarioSucursales = mongo.db.sucursal.find({})
+            tempID = ObjectId(session['tecnicoID'])
+            print(tempID)
+            diccionarioTecnicos = mongo.db.tecnico.find({'_id': tempID})
+
+            pipeline = [{'$match': {'tecnico_ID': tempID}}, {'$lookup': {
+                'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
+            }, {'$lookup': {
+                'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
+                        }
+                        ]
+
+            arrTemp = []
+            for doc in (mongo.db.servicio.aggregate(pipeline)):
+                arrTemp.append(doc)
+            print(arrTemp)
+
+            arrTemp = sorted(arrTemp, key=lambda k: k['fechaDeCreacion'], reverse=True)
+            diccionarioSucursalesArray = []
+            for element in diccionarioSucursales:
+                diccionarioSucursalesArray.append([element["nombre"], element["_id"]])
+
+            diccionarioTecnicosArray = []
+            for element in diccionarioTecnicos:
+                diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
+
+            return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                   tecnicos=diccionarioTecnicosArray)
+    else:
+        return redirect(url_for('home_page'))
 
 @app.route('/nomina',methods=['GET','POST'])
 def nominas():

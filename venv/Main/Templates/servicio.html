@@ -84,10 +84,10 @@
                                 <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
                                 <button type="button" class="btn btn-primary" data-backdrop="static" data-keyboard="false" data-toggle="modal" 
                                         data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
-                                <span class="badge badge-secondary" id="pendiente" >Pendiente</span>
-                                <span class="badge badge-success" id="terminado" >Terminado</span>
-                                <span class="badge badge-warning" id="proceso" >En proceso</span>
-                                <span class="badge badge-danger" id="tardio" >Tardío</span>
+                                <span class="badge badge-secondary">Pendiente</span>
+                                <span class="badge badge-success">Terminado</span>
+                                <span class="badge badge-warning" >En proceso</span>
+                                <span class="badge badge-danger" >Tardío</span>
                             </div>
                         </div>
 
@@ -376,36 +376,36 @@
 <script language="javascript">
 
                 $( document ).ready(function() {
-                    $("#proceso").hide();
-                    $("#tardio").hide();
-                    $("#pendiente").show();
-                    $("#terminado").hide();
+                    $(".badge-warning").hide();
+                    $(".badge-danger").hide();
+                    $(".badge-secondary").show();
+                    $(".badge-success").hide();
                 });
 				function hs() {
 					switch ($("#estado").val()) {
 						case 'proceso':
-							$("#proceso").show();
-							$("#tardio").hide();
-							$("#pendiente").hide();
-							$("#terminado").hide();
+							$(".badge-warning").show();
+							$(".badge-danger").hide();
+							$(".badge-secondary").hide();
+							$(".badge-success").hide();
 						break;
 						case 'tardio':
-							$("#proceso").hide();
-							$("#tardio").show();
-							$("#pendiente").hide();
-							$("#terminado").hide();
+							$(".badge-warning").hide();
+							$(".badge-danger").show();
+							$(".badge-secondary").hide();
+							$(".badge-success").hide();
 						break;
 						case 'pendiente':
-							$("#proceso").hide();
-							$("#tardio").hide();
-							$("#pendiente").show();
-							$("#terminado").hide();
+							$(".badge-warning").hide();
+							$(".badge-danger").hide();
+							$(".badge-secondary").show();
+							$(".badge-success").hide();
 						break;
 						case 'terminado':
-							$("#proceso").hide();
-							$("#tardio").hide();
-							$("#pendiente").hide();
-							$("#terminado").show();
+							$(".badge-warning").hide();
+							$(".badge-danger").hide();
+							$(".badge-secondary").hide();
+							$(".badge-success").show();
 						break;
 					}
 				}

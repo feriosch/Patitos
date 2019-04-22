@@ -109,11 +109,43 @@
 						   <div class="modal-body">
 							 <form action="" method="post">
 								 <label>Crear Presupuesto</label><br>
-								 <select>
-									 <option>CET-001</option>
-									 <option>CET-002</option>
-									 <option>CET-003</option>
-								 </select> <br>
+
+
+								<div class="duplicate all">
+									<div class="up-box-question" style="text-align: center">
+										<a class="remove-aditional" href="javascript: void(0)"><span class="glyphicon glyphicon-trash icon"></span></a>
+									</div>
+									<div class="box-question" style="text-align: center">
+										<div class="row">
+											<div class="col-md-12">
+												<select class="form-control select" name="">
+																	<option value="1">Concepto 1</option>
+																	<option value="2">Concepto 2</option>
+												</select>
+											</div>
+
+											<div class="row verificar">
+												<div class="text option" style="margin-top:10px; text-align: center">
+													<a class="btn btn-primary addRow" href="javascript: void(0)" type="button"><span></span>Agregar Opcion</a>
+												</div>
+												<br>
+												<div class="optionRow">
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								 <div class="aditional-box duplicate-btn">
+
+									<a class="btn btn-secondary agregar add" href="javascript: void(0)" type="button"><span></span>Añadir concepto</a>
+
+								</div>
+
+
+
+								 <br>
 								 <label for="imagen">Imagen del croquis</label><br>
 								 <input name="archivo1" type="file" id="archivo1"><br><br>
 
@@ -137,7 +169,84 @@
 
 		 </div>
 
+
+
    		</div>
+	<script>
+
+			 $(document).ready(function() {
+
+            $('.verificar').hide();
+            $('.duplicate').hide();
+
+            var count = 2;
+
+            //duplicate
+            $('a.add').on('click', function() {
+
+                //clone
+                var row = $('.duplicate').clone();
+                $(row).insertAfter('.duplicate-btn');
+                $(row).show();
+
+                //add new ids
+                $(row).find('select').attr('id', 'select_' + count);
+                $(row).find('verificar').attr('id', 'verificar_' + count);
+
+                //remove duplicate class
+                $(row).removeClass('duplicate');
+
+                //onchange of select
+                $('select').on('change', function() {
+
+                    var value = $(this).val();
+                    var select = $(this).parent();
+                    if (value == 1) {
+                        $(select).siblings('.inputed').show();
+                        $(select).siblings('.ocultar').hide();
+                    } else {
+                        $(select).siblings('.inputed').hide();
+
+                    }
+                    if (value == 2) {
+                        $(select).siblings('.ocultar').show();
+                        $(select).siblings('.verificar').show();
+                    } else {
+                        $(select).siblings('.verificar').hide();
+                        $(select).siblings('.ocultar').show();
+                    }
+
+                });
+
+                //click of remove pregunta
+                $(".up-box-question").on("click", ".remove-aditional", function() {
+
+                    $(this).closest(".all").remove();
+
+                });
+
+                $(".optionRow").on("click", ".remove-option", function() {
+
+                    $(this).closest(".option-row").remove();
+
+                });
+                //Agrega opciones
+                $(".addRow").click(function() {
+                    var html = "<div class='option-row' id='rowtk" + count + "'><div class='form-group'><div class='input-group select'><input type='text' class='form-control' placeholder='Añade opción' /><span class='input-group-btn'><button class='btn btn-primary remove-option' type='button'><a class='remove-tipe' href='javascript: void(0)'><span class='glyphicon glyphicon-trash' style='color:white'></span></a></button></span></div></div></div>";
+
+                    var form = $(html);
+
+                    $(this).closest(".verificar").find(".optionRow").append(form);
+
+                });
+            });
+            count++;
+
+        });
+
+
+
+	</script>
 
 	</body>
 

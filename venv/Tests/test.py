@@ -1,17 +1,16 @@
-from pymongo import MongoClient
+from reportlab.pdfgen import canvas
 
-client = MongoClient('mongodb+srv://Master:CiscoCLass@ssei-bwmef.mongodb.net/test?retryWrites=true')
 
-db = client.test
-colle = db['materialesTecnico']
 
-pipeline = [{'$lookup':{
-    'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as':'patatita'}
-            },{'$lookup':{
-    'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as':'pststito'}
-            }
-]
-arrTemp = []
-for doc in (colle.aggregate(pipeline)):
-    arrTemp.append(doc)
-print(arrTemp)
+def hello(c):
+
+    c.drawImage("perrito.jpg", 0, 0, width=595, height=841)
+
+    for x in range(10):
+        c.drawString(100, 100+10*x, "Hello World")
+    #canvas.drawImage(self, image, x, y, width=None, height=None, mask=None)
+
+c = canvas.Canvas("hello.pdf")
+hello(c)
+c.showPage()
+c.save()

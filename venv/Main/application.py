@@ -36,56 +36,37 @@ def visualizarImagenes(imagen):
     return render_template("visual.html", imagen)
 
 
-@app.route('/material/editar', methods=['GET','POST'])
-def editarMaterial():
-    materialNombre = request.form.get("materialNombre")
-    materialDescripcion = request.form.get("materialDescripcion")
-    flag = mongo.db.material.find_one({'nombre': materialNombre})
-    id = request.form.get("id")
-    id = ObjectId(id)
-    if flag is None:
-        print(type(id))
-        mongo.db.material.update_one({'_id': id},
-                                     {"$set": {'nombre': materialNombre, 'descripcion': materialDescripcion}})
-        diccionarioMateriales = mongo.db.material.find({})
-        return render_template("material.html", materiales=diccionarioMateriales)
-    else:
-        if flag['_id'] == id:
-            mongo.db.material.update_one({'_id': id},
-                                         {"$set": {'nombre': materialNombre, 'descripcion': materialDescripcion}})
-            diccionarioMateriales = mongo.db.material.find({})
-            return render_template("material.html", materiales=diccionarioMateriales)
-        diccionarioMateriales = mongo.db.material.find({})
-        return render_template("material.html", materiales=diccionarioMateriales, materialExiste=True)
-
-
 @app.route('/material',methods=['GET','POST'])
 def materiales():
-    if request.method == 'POST':
-        if request.form["btn"] == "Anadir":
-            materialNombre = request.form.get("materialNombre")
-            materialDescripcion = request.form.get("materialDescripcion")
-            flag = mongo.db.material.find_one({'nombre': materialNombre})
+    if 'username' in session:
+        if request.method == 'POST':
+            if request.form["btn"] == "Anadir":
+                materialNombre = request.form.get("materialNombre")
+                materialDescripcion = request.form.get("materialDescripcion")
+                flag = mongo.db.material.find_one({'nombre': materialNombre})
 
-            if flag is None:
-                mongo.db.material.insert_one({'nombre': materialNombre, 'descripcion': materialDescripcion})
-            else:
+                if flag is None:
+                    mongo.db.material.insert_one({'nombre': materialNombre, 'descripcion': materialDescripcion})
+                else:
+                    diccionarioMateriales = mongo.db.material.find({})
+                    return render_template("material.html", materiales=diccionarioMateriales, materialExiste=True)
                 diccionarioMateriales = mongo.db.material.find({})
-                return render_template("material.html", materiales=diccionarioMateriales, materialExiste=True)
-            diccionarioMateriales = mongo.db.material.find({})
-            return render_template("material.html", materiales=diccionarioMateriales)
+                return render_template("material.html", materiales=diccionarioMateriales)
 
-        elif request.form["btn"] == "Guardar":
-            materialNombre = request.form.get("materialNombre")
-            materialDescripcion = request.form.get("materialDescripcion")
-            id = request.form.get("materialID")
-            id = ObjectId(id)
-            mongo.db.material.update_one({'_id': id}, {"$set": {'nombre': materialNombre,
-                                                                'descripcion': materialDescripcion}})
-            return redirect(url_for('materiales'))
+            elif request.form["btn"] == "Guardar":
+                materialNombre = request.form.get("materialNombre")
+                materialDescripcion = request.form.get("materialDescripcion")
+                id = request.form.get("materialID")
+                id = ObjectId(id)
+                mongo.db.material.update_one({'_id': id}, {"$set": {'nombre': materialNombre,
+                                                                    'descripcion': materialDescripcion}})
+                return redirect(url_for('materiales'))
+        else:
+            diccionarioMateriales = mongo.db.material.find({})
+            return render_template("material.html",materiales=diccionarioMateriales)
     else:
-        diccionarioMateriales = mongo.db.material.find({})
-        return render_template("material.html",materiales=diccionarioMateriales)
+        return redirect(url_for('home_page'))
+
 
 
 @app.route('/material/eliminar',methods=['GET','POST'])
@@ -98,95 +79,77 @@ def eliminarMaterial():
 
 @app.route('/tecnico',methods=['GET','POST'])
 def tecnico():
-    if request.method == 'POST':
-        if request.form["btn"] == "Anadir":
-            tecnicoNombre = request.form.get("tecnicoNombre")
-            tecnicoFoto = request.files['tecnicoFoto']
-            tecnicoNacimiento = request.form.get("tecnicoNacimiento")
-            tecnicoTelefono = request.form.get("tecnicoTelefono")
-
-            # Aqui se tiene que subir la foto a Dropbox
-            id = ObjectId()
-            idString = str(id)
-            route = '/FotosTecnicos/'+idString+'.jpg'
-            dbx.files_upload(tecnicoFoto.read(), route)
-            link = dbx.sharing_create_shared_link(route).url
-            url = list(link)
-            url[-1] = '1'
-            url = ''.join(url)
-
-            mongo.db.tecnico.insert_one({'_id': id, 'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
-                                         'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'})
-
-            return redirect(url_for('tecnico'))
-        elif request.form["btn"] == "Guardar":
-            conFoto = True
-
-            tecnicoNombre = request.form.get("tecnicoNombre")
-            tecnicoNacimiento = request.form.get("tecnicoFechaDeNacimiento")
-            tecnicoTelefono = request.form.get("tecnicoTelefono")
-            id = request.form.get("tecnicoID")
-
-            try:
+    if 'username' in session:
+        if request.method == 'POST':
+            if request.form["btn"] == "Anadir":
+                tecnicoNombre = request.form.get("tecnicoNombre")
                 tecnicoFoto = request.files['tecnicoFoto']
-            except:
-                conFoto = False
+                tecnicoNacimiento = request.form.get("tecnicoNacimiento")
+                tecnicoTelefono = request.form.get("tecnicoTelefono")
 
-            if conFoto:
-                route = '/FotosTecnicos/' + id + '.jpg'
-                dbx.files_upload(tecnicoFoto.read(), route, mode=dropbox.files.WriteMode.overwrite)
+                # Aqui se tiene que subir la foto a Dropbox
+                id = ObjectId()
+                idString = str(id)
+                route = '/FotosTecnicos/'+idString+'.jpg'
+                dbx.files_upload(tecnicoFoto.read(), route)
                 link = dbx.sharing_create_shared_link(route).url
                 url = list(link)
                 url[-1] = '1'
                 url = ''.join(url)
 
-                id = ObjectId(id)
+                mongo.db.tecnico.insert_one({'_id': id, 'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
+                                             'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'})
 
-                mongo.db.tecnico.update_one({'_id': id},
-                                            {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
-                                                      'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'}})
-            else:
-                id = ObjectId(id)
+                return redirect(url_for('tecnico'))
+            elif request.form["btn"] == "Guardar":
+                conFoto = True
 
+                tecnicoNombre = request.form.get("tecnicoNombre")
+                tecnicoNacimiento = request.form.get("tecnicoFechaDeNacimiento")
+                tecnicoTelefono = request.form.get("tecnicoTelefono")
+                id = request.form.get("tecnicoID")
+
+                try:
+                    tecnicoFoto = request.files['tecnicoFoto']
+                except:
+                    conFoto = False
+
+                if conFoto:
+                    route = '/FotosTecnicos/' + id + '.jpg'
+                    dbx.files_upload(tecnicoFoto.read(), route, mode=dropbox.files.WriteMode.overwrite)
+                    link = dbx.sharing_create_shared_link(route).url
+                    url = list(link)
+                    url[-1] = '1'
+                    url = ''.join(url)
+
+                    id = ObjectId(id)
+
+                    mongo.db.tecnico.update_one({'_id': id},
+                                                {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
+                                                          'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'}})
+                else:
+                    id = ObjectId(id)
+
+                    mongo.db.tecnico.update_one({'_id': id},
+                                                {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
+                                                          'telefono': tecnicoTelefono,  'estado': 'Activo'}})
+                return redirect(url_for('tecnico'))
+            elif request.form["btn"] == "Desactivar":
+                id = request.form.get("tecnicoID")
+                id = ObjectId(id)
+                mongo.db.tecnico.update_one({'_id': id}, {"$set": {'estado': 'Inactivo'}})
+                return redirect(url_for('tecnico'))
+            elif request.form["btn"] == "Reactivar":
+                id = request.form.get("tecnicoID")
+                id = ObjectId(id)
                 mongo.db.tecnico.update_one({'_id': id},
-                                            {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
-                                                      'telefono': tecnicoTelefono,  'estado': 'Activo'}})
-            return redirect(url_for('tecnico'))
-        elif request.form["btn"] == "Desactivar":
-            id = request.form.get("tecnicoID")
-            id = ObjectId(id)
-            mongo.db.tecnico.update_one({'_id': id}, {"$set": {'estado': 'Inactivo'}})
-            return redirect(url_for('tecnico'))
-        elif request.form["btn"] == "Reactivar":
-            id = request.form.get("tecnicoID")
-            id = ObjectId(id)
-            mongo.db.tecnico.update_one({'_id': id},
-                                        {"$set": {'estado': 'Activo'}})
-            return redirect(url_for('tecnico'))
+                                            {"$set": {'estado': 'Activo'}})
+                return redirect(url_for('tecnico'))
+        else:
+            diccionarioTecnicos = mongo.db.tecnico.find({})
+            return render_template("tecnico.html", tecnicos=diccionarioTecnicos)
     else:
-        diccionarioTecnicos = mongo.db.tecnico.find({})
-        return render_template("tecnico.html", tecnicos=diccionarioTecnicos)
-
-
-@app.route('/tecnico/editar', methods=['GET', 'POST'])
-def editarTecnico():
-    tecnicoNombre = request.form.get("tecnicoNombre")
-    tecnicoFoto = request.files['tecnicoFoto']
-    tecnicoNacimiento = request.form.get("tecnicoNacimiento")
-    tecnicoTelefono = request.form.get("tecnicoTelefono")
-    id = request.form.get("id")
-
-    route = '/FotosTecnicos/' + id + '.jpg'
-    dbx.files_upload(tecnicoFoto.read(), route,mode=dropbox.files.WriteMode.overwrite)
-    link = dbx.sharing_create_shared_link(route).url
-    url = list(link)
-    url[-1] = '1'
-    url = ''.join(url)
-
-    id = ObjectId(id)
-    mongo.db.tecnico.update_one({'_id': id}, {"$set": {'nombre': tecnicoNombre, 'fechaDeNacimiento': tecnicoNacimiento,
-                                                       'telefono': tecnicoTelefono, 'foto': url, 'estado': 'Activo'}})
-    return redirect(url_for('tecnico'))
+        return redirect(url_for('home_page'))
 
 
 @app.route('/tecnico/desactivar', methods=['GET', 'POST'])
@@ -199,123 +162,124 @@ def desactivarTecnico():
 
 @app.route('/inventarios',methods=['GET','POST'])
 def inventario():
-    if request.method == 'POST':
+    if 'username' in session:
+        if request.method == 'POST':
 
-        return redirect(url_for('inventario'))
+            return redirect(url_for('inventario'))
+        else:
+            pipeline = [{'$lookup': {
+                'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'patatita'}
+            }, {'$lookup': {
+                'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as': 'tomatito'}
+                }
+            ]
+            arrTemp = []
+            for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
+                arrTemp.append(doc)
+            diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
+            diccionarioMateriales = mongo.db.material.find({})
+            diccionarioMaterialesArray = []
+            for element in diccionarioMateriales:
+                diccionarioMaterialesArray.append([element["nombre"],str(element["_id"])])
+            print(diccionarioMaterialesArray)
+
+            return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
+                                   materiales=diccionarioMaterialesArray)
     else:
-        pipeline = [{'$lookup': {
-            'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'patatita'}
-        }, {'$lookup': {
-            'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as': 'tomatito'}
-            }
-        ]
-        arrTemp = []
-        for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
-            arrTemp.append(doc)
-        diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
-        diccionarioMateriales = mongo.db.material.find({})
-        diccionarioMaterialesArray = []
-        for element in diccionarioMateriales:
-            diccionarioMaterialesArray.append([element["nombre"],str(element["_id"])])
-        print(diccionarioMaterialesArray)
+        return redirect(url_for('home_page'))
 
-        return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
-                               materiales=diccionarioMaterialesArray)
 
 
 @app.route('/inventarios/agregarInventario',methods=['GET', 'POST'])
 def agregarInventario():
-    if request.method == 'POST':
-        tecnico_id = request.form.get("tecnico_id")
-        tecnico_id = ObjectId(tecnico_id)
-        material_id = request.form.get("material_id")
-        print(material_id)
-        material_id = ObjectId(material_id)
-        print(material_id)
-        cantidad = int(request.form.get("cantidad"))
+    if 'username' in session:
+        if request.method == 'POST':
+            tecnico_id = request.form.get("tecnico_id")
+            tecnico_id = ObjectId(tecnico_id)
+            material_id = request.form.get("material_id")
+            print(material_id)
+            material_id = ObjectId(material_id)
+            print(material_id)
+            cantidad = int(request.form.get("cantidad"))
 
-        relExistente = mongo.db.materialesTecnico.find_one({'material_ID': material_id, 'tecnico_ID': tecnico_id})
-        if relExistente is None:
-            mongo.db.materialesTecnico.insert_one({'material_ID': material_id, 'tecnico_ID': tecnico_id,
-                                                   'cantidad': cantidad})
+            relExistente = mongo.db.materialesTecnico.find_one({'material_ID': material_id, 'tecnico_ID': tecnico_id})
+            if relExistente is None:
+                mongo.db.materialesTecnico.insert_one({'material_ID': material_id, 'tecnico_ID': tecnico_id,
+                                                       'cantidad': cantidad})
+            else:
+                mongo.db.materialesTecnico.update_one({'_id': relExistente['_id']},
+                                                      {"$set": {'cantidad': cantidad+relExistente['cantidad']}})
+            return redirect(url_for('inventario'))
         else:
-            mongo.db.materialesTecnico.update_one({'_id': relExistente['_id']},
-                                                  {"$set": {'cantidad': cantidad+relExistente['cantidad']}})
-        return redirect(url_for('inventario'))
+            pass
+    else:
+        return redirect(url_for('home_page'))
+
 
 
 @app.route('/claves', methods=['GET', 'POST'])
 def claves():
-    if request.method == 'POST':
-        if request.form["btn"] == "Anadir":
-            claveID = request.form.get("claveID")
-            claveCodigo = request.form.get("claveCodigo")
-            claveConcepto = request.form.get('claveConcepto')
-            claveUnidad = request.form.get("claveUnidad")
-            clavePrecioUnitario = request.form.get("clavePrecioUnitario")
-            clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
-            claveDescripcion = request.form.get("claveDescripcion")
-            mongo.db.clave.insert_one({'_id': claveID, 'codigo': claveCodigo, 'concepto': claveConcepto,
-                                       'unidad': claveUnidad, 'precioUnitario': clavePrecioUnitario,
-                                       'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
-                                       'descripcion': claveDescripcion})
-            return redirect(url_for('claves'))
+    if 'username' in session:
+        if request.method == 'POST':
+            if request.form["btn"] == "Anadir":
+                claveID = request.form.get("claveID")
+                claveCodigo = request.form.get("claveCodigo")
+                claveConcepto = request.form.get('claveConcepto')
+                claveUnidad = request.form.get("claveUnidad")
+                clavePrecioUnitario = request.form.get("clavePrecioUnitario")
+                clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
+                claveDescripcion = request.form.get("claveDescripcion")
+                mongo.db.clave.insert_one({'_id': claveID, 'codigo': claveCodigo, 'concepto': claveConcepto,
+                                           'unidad': claveUnidad, 'precioUnitario': clavePrecioUnitario,
+                                           'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
+                                           'descripcion': claveDescripcion})
+                return redirect(url_for('claves'))
 
-        elif request.form["btn"] == "Guardar":
-            claveID = request.form.get("claveId")
-            claveCodigo = request.form.get("claveCodigo")
-            claveConcepto = request.form.get('claveConcepto')
-            claveUnidad = request.form.get("claveUnidad")
-            clavePrecioUnitario = request.form.get("clavePrecioUnitario")
-            clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
-            claveDescripcion = request.form.get("claveDescripcion")
+            elif request.form["btn"] == "Guardar":
+                claveID = request.form.get("claveId")
+                claveCodigo = request.form.get("claveCodigo")
+                claveConcepto = request.form.get('claveConcepto')
+                claveUnidad = request.form.get("claveUnidad")
+                clavePrecioUnitario = request.form.get("clavePrecioUnitario")
+                clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
+                claveDescripcion = request.form.get("claveDescripcion")
 
-            mongo.db.clave.update_one({'_id': claveID},
-                                      {"$set": {'codigo': claveCodigo, 'concepto': claveConcepto, 'unidad': claveUnidad,
-                                                'precioUnitario': clavePrecioUnitario,
-                                                'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
-                                                'descripcion': claveDescripcion}})
-            return redirect(url_for('claves'))
+                mongo.db.clave.update_one({'_id': claveID},
+                                          {"$set": {'codigo': claveCodigo, 'concepto': claveConcepto, 'unidad': claveUnidad,
+                                                    'precioUnitario': clavePrecioUnitario,
+                                                    'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
+                                                    'descripcion': claveDescripcion}})
+                return redirect(url_for('claves'))
+        else:
+            diccionarioClaves = mongo.db.clave.find({})
+            return render_template("clave.html", claves=diccionarioClaves)
     else:
-        diccionarioClaves = mongo.db.clave.find({})
-        return render_template("clave.html", claves=diccionarioClaves)
+        return redirect(url_for('home_page'))
 
 
-@app.route('/claves/editar', methods=['GET', 'POST'])
-def editarClave():
-    id = request.form.get("id")
-    claveConcepto = request.form.get('claveConcepto')
-    claveUnidad = request.form.get("claveUnidad")
-    clavePrecioUnitario = request.form.get("clavePrecioUnitario")
-    clavePrecioUnitarioTecnico = request.form.get("clavePrecioUnitarioTecnico")
-    claveDescripcion = request.form.get("claveDescripcion")
-
-    mongo.db.clave.update_one({'_id': id}, {"$set": {'concepto': claveConcepto,'unidad': claveUnidad,
-                                                     'precioUnitario': clavePrecioUnitario,
-                                                     'precioUnitarioTecnico': clavePrecioUnitarioTecnico,
-                                                     'descripcion': claveDescripcion}})
-
-    return redirect(url_for('claves'))
 
 @app.route('/sucursales',methods=['GET','POST'])
 def sucursales():
-    if request.method == 'POST':
-        sucursalNombre = request.form.get("sucursalNombre")
-        sucursalNucleo = request.form.get("sucursalNucleo")
-        sucursalDireccion = request.form.get('sucursalDireccion')
-        sucursalCoordenadaX = request.form.get("sucursalCoordenadaX")
-        sucursalCoordenadaY = request.form.get("sucursalCoordenadaY")
-        id = ObjectId()
+    if 'username' in session:
+        if request.method == 'POST':
+            sucursalNombre = request.form.get("sucursalNombre")
+            sucursalNucleo = request.form.get("sucursalNucleo")
+            sucursalDireccion = request.form.get('sucursalDireccion')
+            sucursalCoordenadaX = request.form.get("sucursalCoordenadaX")
+            sucursalCoordenadaY = request.form.get("sucursalCoordenadaY")
+            id = ObjectId()
 
-        mongo.db.sucursal.insert_one({'_id': id, 'nombre': sucursalNombre, 'nucleo': sucursalNucleo,
-                                      'direccion': sucursalDireccion, 'coordenadaX': sucursalCoordenadaX,
-                                      'coordenadaY': sucursalCoordenadaY})
-        return redirect(url_for('sucursales'))
+            mongo.db.sucursal.insert_one({'_id': id, 'nombre': sucursalNombre, 'nucleo': sucursalNucleo,
+                                          'direccion': sucursalDireccion, 'coordenadaX': sucursalCoordenadaX,
+                                          'coordenadaY': sucursalCoordenadaY})
+            return redirect(url_for('sucursales'))
+        else:
+            diccionarioSucursales = mongo.db.sucursal.find({})
+            return render_template("sucursal.html", sucursales=diccionarioSucursales)
     else:
-        diccionarioSucursales = mongo.db.sucursal.find({})
-        return render_template("sucursal.html", sucursales=diccionarioSucursales)
+        return redirect(url_for('home_page'))
 
-@app.route('/sucursal/editar',methods=['GET','POST'])
+@app.route('/sucursal/editar',methods=['POST'])
 def editarSucursal():
     id = request.form.get("id")
     id = ObjectId(id)

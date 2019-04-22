@@ -10,11 +10,11 @@ Resposive para todooo
 
 
 ---- QUE FALTA ----
-Calcular nominas
-Hacer los PDFs
+Calcular nominas (meh)
+Hacer los PDFs :/ (dificil)
 Sesiones :)
-Filtros
-Usuarios
+Filtros (facil)
+Usuarios (facil)
 
 
 Sucursales (sacar la tabla)

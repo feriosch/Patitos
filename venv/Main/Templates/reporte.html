@@ -106,6 +106,20 @@
 						   </div>
 						   <div class="modal-body">
 							 <form action="" method="post">
+
+								 <label>Fecha de inicio y final</label><br>
+								 <input type="date">
+								  <input type="date"><br><br>
+
+								 <label>Descripción de servicio</label><br>
+								 <input type="text" placeholder="Descripción del servicio"><br>
+
+								 <label>Solución del servicio</label><br>
+								 <input type="text" placeholder="Solución del servicio"><br>
+
+								 <label>Observaciones</label><br>
+								 <input type="text" placeholder="Observaciones"><br>
+
 								 <label>Crear Presupuesto</label><br>
 
 
@@ -144,15 +158,19 @@
 
 
 								 <label for="imagen">Imagen del croquis</label><br>
-								 <input name="archivo1" type="file" id="archivo1"><br><br>
+								 <input name="archivo1" type="file" class="archivo1"><br><br>
 
 								 <label for="imagen">Imágenes</label><br>
-								 <input name="archivo1" type="file" id="archivo2">
+								 <input name="archivo1" type="file" class="archivo2">
 
 								 <label for="imagen">Sello</label><br>
-								 <input name="archivo1" type="file" id="archivo3"><br><br>
+								 <input name="archivo1" type="file" class="archivo3"><br><br>
 
-								 <input class="btn btn-secondary" type="button" value="Firma Digital" onclick="window.location.href='FirmaDig.html'" />
+								 <label for="imagen">Nombre y Firma FM</label><br>
+								 <input name="archivo1" type="file" class="archivo4"><br><br>
+
+								 <a href="FirmaDig.html" target="_blank"><button class="btn btn-secondary" type="button">Firma digital Usuario</button></a>
+								<a href="FirmaDig.html" target="_blank"><button class="btn btn-secondary" type="button">Firma digital del Técnico</button></a>
 
 
 							   <div class="modal-footer">

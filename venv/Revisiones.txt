@@ -1,1 +1,23 @@
 Tecnico.html 127: Boton Desactivar -> color rojo
+Tecnico.html: Boton Reactivar -> color verde
+Servicio.html: La tachita de las fotos debe regresar al modal y no al menu de servicio
+Servicio.html: No sabemos como usar los badges
+Clave.html: Ajustar el estilo cuando se edita
+Todas : poner una etiqueta donde aparezca el nombre de usuario
+
+Resposive para todooo
+
+
+
+---- QUE FALTA ----
+Calcular nominas
+Hacer los PDFs
+Sesiones :)
+Filtros
+Usuarios
+
+
+Sucursales (sacar la tabla)
+Recopilar informacion de reportes (fotos, claves, firmas)
+
+

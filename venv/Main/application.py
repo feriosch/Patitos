@@ -28,6 +28,8 @@ def home_page():
 
     else:
         session.pop('username',None)
+        session.pop('tipo',None)
+        session.pop('tecnicoID',None)
         return render_template("index.html")
 
 
@@ -393,33 +395,62 @@ def servicios():
                                                        'sucursal_ID': servicioSucursalId, "tecnico_ID": servicioTecnicoId}})
                 return redirect(url_for('servicios'))
         else:
-            # NOTA: Tenemos que llamar los servicios por orden inverso
-            diccionarioSucursales = mongo.db.sucursal.find({})
-            diccionarioTecnicos = mongo.db.tecnico.find({'estado':'Activo'}).sort('nombre', 1)
+            if session['tipo'] != "tecnico":
+                diccionarioSucursales = mongo.db.sucursal.find({})
+                diccionarioTecnicos = mongo.db.tecnico.find({'estado':'Activo'}).sort('nombre', 1)
 
-            pipeline = [{'$lookup': {
-                'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
-            }, {'$lookup': {
-                'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
-            }
-                # hay que sortear la pipeline
-            ]
+                pipeline = [{'$lookup': {
+                    'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
+                }, {'$lookup': {
+                    'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
+                }
+                ]
 
-            arrTemp = []
-            for doc in (mongo.db.servicio.aggregate(pipeline)):
-                arrTemp.append(doc)
+                arrTemp = []
+                for doc in (mongo.db.servicio.aggregate(pipeline)):
+                    arrTemp.append(doc)
 
-            diccionarioSucursalesArray = []
-            for element in diccionarioSucursales:
-                diccionarioSucursalesArray.append([element["nombre"], element["_id"]])
+                arrTemp = sorted(arrTemp, key=lambda k: k['fechaDeCreacion'],reverse=True)
+                diccionarioSucursalesArray = []
+                for element in diccionarioSucursales:
+                    diccionarioSucursalesArray.append([element["nombre"], element["_id"]])
 
-            diccionarioTecnicosArray = []
-            for element in diccionarioTecnicos:
-                diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
+                diccionarioTecnicosArray = []
+                for element in diccionarioTecnicos:
+                    diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
 
 
-            return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
-                                   tecnicos=diccionarioTecnicosArray)
+                return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                       tecnicos=diccionarioTecnicosArray)
+            else:
+                diccionarioSucursales = mongo.db.sucursal.find({})
+                tempID = ObjectId(session['tecnicoID'])
+                print(tempID)
+                diccionarioTecnicos = mongo.db.tecnico.find({'_id': tempID})
+
+                pipeline = [{'$match': {'tecnico_ID': tempID}},{'$lookup': {
+                    'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
+                }, {'$lookup': {
+                    'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'valsTecnico'}
+                }
+                ]
+
+                arrTemp = []
+                for doc in (mongo.db.servicio.aggregate(pipeline)):
+                    arrTemp.append(doc)
+                print(arrTemp)
+
+                arrTemp = sorted(arrTemp, key=lambda k: k['fechaDeCreacion'], reverse=True)
+                diccionarioSucursalesArray = []
+                for element in diccionarioSucursales:
+                    diccionarioSucursalesArray.append([element["nombre"], element["_id"]])
+
+                diccionarioTecnicosArray = []
+                for element in diccionarioTecnicos:
+                    diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
+
+                return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                       tecnicos=diccionarioTecnicosArray)
     else:
         return render_template("index.html")
 

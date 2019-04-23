@@ -194,7 +194,6 @@ def inventario():
             diccionarioMaterialesArray = []
             for element in diccionarioMateriales:
                 diccionarioMaterialesArray.append([element["nombre"],str(element["_id"])])
-            print(diccionarioMaterialesArray)
 
             return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
                                    materiales=diccionarioMaterialesArray)
@@ -210,9 +209,7 @@ def agregarInventario():
             tecnico_id = request.form.get("tecnico_id")
             tecnico_id = ObjectId(tecnico_id)
             material_id = request.form.get("material_id")
-            print(material_id)
             material_id = ObjectId(material_id)
-            print(material_id)
             cantidad = int(request.form.get("cantidad"))
 
             relExistente = mongo.db.materialesTecnico.find_one({'material_ID': material_id, 'tecnico_ID': tecnico_id})
@@ -339,7 +336,7 @@ def servicios():
                                               'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None,
                                               'autorizacion': None, 'plano': None, 'estatusInterno': 'Pendiente',
                                               'estatusExterno': 'Pendiente', 'fechaDeCreacion': datetime.datetime.now(),
-                                              'fechaDeVencimiento': servicioFechaDeVencimiento,
+                                              'fechaDeVencimiento': servicioFechaDeVencimiento, 'HoraInicio': None, 'HoraFin': None,
 
                                               'fechaHoraInicio': None, 'fechaHoraFin': None, 'descripcionServicio': None,
                                               'solucionServicio': None, 'observacionesServicio': None,
@@ -444,7 +441,6 @@ def servicios():
             else:
                 diccionarioSucursales = mongo.db.sucursal.find({})
                 tempID = ObjectId(session['tecnicoID'])
-                print(tempID)
                 diccionarioTecnicos = mongo.db.tecnico.find({'_id': tempID})
 
                 pipeline = [{'$match': {'tecnico_ID': tempID}},{'$lookup': {
@@ -457,7 +453,6 @@ def servicios():
                 arrTemp = []
                 for doc in (mongo.db.servicio.aggregate(pipeline)):
                     arrTemp.append(doc)
-                print(arrTemp)
 
                 arrTemp = sorted(arrTemp, key=lambda k: k['fechaDeCreacion'], reverse=True)
                 diccionarioSucursalesArray = []
@@ -484,10 +479,11 @@ def reportes():
         if request.method == 'POST':
             if request.form["btn"] == "Anadir":
                 servicioID = request.form.get("idOrden")
-                print(servicioID)
                 servicioFechaInicio = request.form.get("servicioFechaInicio")
                 servicioFechaFin = request.form.get("servicioFechaFin")
                 servicioDescripcion = request.form.get("servicioDescripcion")
+                servicioHoraInicio = request.form.get("servicioHoraInicio")
+                servicioHoraFin = request.form.get("servicioHoraFin")
                 servicioSolucion = request.form.get("servicioSolucion")
                 servicioObservaciones = request.form.get("servicioObservaciones")
                 conFotoSelloSucursal = True
@@ -502,7 +498,6 @@ def reportes():
                 try:
                     servicioNombreFirmaFM = request.files['servicioNombreFirmaFM']
                 except:
-                    print("Hola")
                     conFotoNombreFirmaFM = False
 
                 try:
@@ -543,7 +538,9 @@ def reportes():
                                                        'fechaHoraFin': servicioFechaFin,
                                                        'descripcionServicio': servicioDescripcion,
                                                        'solucionServicio': servicioSolucion,
-                                                       'observacionesServicio': servicioObservaciones }})
+                                                       'observacionesServicio': servicioObservaciones,
+                                                       'HoraInicio': servicioHoraInicio,
+                                                       'HoraFin': servicioHoraFin}})
                 return redirect(url_for('reportes'))
         else:
             if session['tipo'] != "tecnico":

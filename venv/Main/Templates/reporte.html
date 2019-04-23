@@ -127,8 +127,8 @@
 								 <input type="date" value="{{ servicio['fechaHoraInicio'] }}" name="servicioFechaInicio">
 								  <input type="date" value="{{ servicio['fechaHoraFin'] }}" name="servicioFechaFin"><br><br>
 								 <label><b>Hora de inicio y hora de fin</b></label><br>
-								 <input type="time" >
-								  <input type="time"><br><br>
+								 <input type="time" value="{{ servicio['HoraInicio'] }}" name="servicioHoraInicio">
+								  <input type="time" value="{{ servicio['HoraFin'] }}" name="servicioHoraFin"><br><br>
 
 							<label><b>Descripción de servicio</b></label><br>
                             <input type="text" placeholder="Descripción del servicio"
@@ -179,18 +179,18 @@
                             </div>
 
 
-							<label for="imagen"><b>Imagen del croquis</b></label><br>
+							<label ><b>Imagen del croquis</b></label><br>
                             <input name="servicioCroquis" type="file" class="archivo1"><br><br>
 
-							<label for="imagen"><b>Collage de Evidencia</b></label><br>
+							<label ><b>Collage de Evidencia</b></label><br>
                             <input name="servicioCollage" type="file" class="archivo2"><br>
 
-                            <label for="imagen"><b>Sello</b></label><br>
+                            <label ><b>Sello</b></label><br>
                             <input name="servicioSelloSucursal" type="file" class="archivo3"><br><br>
 
                             <input type="text" name="idOrden" value="{{ servicio['_id'] }}" style="display: none;">
 
-							<label for="imagen"><b>Nombre y Firma FM</b></label><br>
+							<label ><b>Nombre y Firma FM</b></label><br>
                             <input name="servicioNombreFirmaFM" type="file" class="archivo4"><br><br>
 
                             <a href="/FirmaDig/Usuario/{{servicio._id}}" target="_blank">

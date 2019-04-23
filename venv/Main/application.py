@@ -488,6 +488,48 @@ def reportes():
                 servicioHoraFin = request.form.get("servicioHoraFin")
                 servicioSolucion = request.form.get("servicioSolucion")
                 servicioObservaciones = request.form.get("servicioObservaciones")
+
+                listaClaves = [[]]
+                clave1 = request.form.get("clave1")
+                cantidad1 = request.form.get("cantidad1")
+                cantidad1 = int(cantidad1)
+                if clave1 != "nada" and cantidad1 > 0:
+                    listaClaves.append([clave1, cantidad1])
+
+                clave2 = request.form.get("clave2")
+                cantidad2 = request.form.get("cantidad2")
+                cantidad2 = int(cantidad2)
+                if clave2 != "nada" and cantidad2 > 0:
+                    listaClaves.append([clave2, cantidad2])
+
+                clave3 = request.form.get("clave3")
+                cantidad3 = request.form.get("cantidad3")
+                cantidad3 = int(cantidad3)
+                if clave3 != "nada" and cantidad3 > 0:
+                    listaClaves.append([clave3, cantidad3])
+
+                clave4 = request.form.get("clave4")
+                cantidad4 = request.form.get("cantidad4")
+                cantidad4 = int(cantidad4)
+                if clave4 != "nada" and cantidad4 > 0:
+                    listaClaves.append([clave4, cantidad4])
+
+                clave5 = request.form.get("clave5")
+                cantidad5 = request.form.get("cantidad5")
+                cantidad5 = int(cantidad5)
+                if clave5 != "nada" and cantidad5 > 0:
+                    listaClaves.append([clave5, cantidad5])
+
+                clave6 = request.form.get("clave6")
+                cantidad6 = request.form.get("cantidad6")
+                cantidad6 = int(cantidad6)
+                if clave6 != "nada" and cantidad6 > 0:
+                    listaClaves.append([clave6, cantidad6])
+
+
+
+
+
                 conFotoCroquis = True
                 conFotoSelloSucursal = True
                 conFotoNombreFirmaFM = True
@@ -558,6 +600,8 @@ def reportes():
                                                        'observacionesServicio': servicioObservaciones,
                                                        'HoraInicio': servicioHoraInicio,
                                                        'HoraFin': servicioHoraFin}})
+                mongo.db.servicio.update_one({'_id': servicioID},
+                                             {"$set": {'conceptos': listaClaves}})
                 return redirect(url_for('reportes'))
             # PDFS
             elif request.form["btn"] == "PDF":
@@ -571,27 +615,59 @@ def reportes():
                 #c = canvas.Canvas("PDF_" + servicioID +".pdf")
                 c = canvas.Canvas(bufferPDF)
 
-
-                #PAGINA 1
+                # PAGINA 1
                 c.drawImage("TemplatePDF.png", 0, 0, width=580, height=830)
                 c.drawString(77, 723, str(servicio['sucursal_ID']))
                 c.drawString(77, 668, str(servicio['fechaDeCreacion']))
-                #falta el cruce
+                # falta el cruce
 
-                #PAGINA 2
+                # PAGINA 2
                 c.showPage()
+                c.drawImage("TemplatePDF_Croquis1.0.png", 0, 0, width=580, height=830)
+                # falta el cruce
+                # croquis
                 file_bytes = io.BytesIO()
                 metadata, res = dbx.files_download("/FotosServicios/Croquis/" + servicioID + "croquis.jpg")
                 file_bytes.write(res.content)
-
                 img = ImageReader(file_bytes)
-                c.drawImage(img, 0, 0, width=580, height=830)
+                c.drawImage(img, 33, 90, width=500, height=360)
+
+                # PAGINA 3
+                c.showPage()
+                c.drawImage("TemplatePDF_Croquis1.0.png", 0, 0, width=580, height=830)
+                # falta el cruce
+                # collage evidencia
+                file_bytes = io.BytesIO()
+                metadata, res = dbx.files_download("/FotosServicios/FirmasSellos/" + servicioID + "collage.jpg")
+                file_bytes.write(res.content)
+                img = ImageReader(file_bytes)
+                c.drawImage(img, 33, 90, width=500, height=360)
+
+                c.drawString(490, 65, "TOTAL")
+
+                # PAGINA 4
+                c.showPage()
+                # whatsapp
+                file_bytes = io.BytesIO()
+                metadata, res = dbx.files_download("/FotosServicios/Autorizaciones/" + servicioID + "autorizacion.jpg")
+                file_bytes.write(res.content)
+                img = ImageReader(file_bytes)
+                c.drawImage(img, 20, 20, width=550, height=800)
+
+                # PAGINA 5
+                c.showPage()
+                # pagina de Internet
+                file_bytes = io.BytesIO()
+                metadata, res = dbx.files_download("/FotosServicios/PaginasDeInternet/" + servicioID + "paginaInternet.jpg")
+                file_bytes.write(res.content)
+                img = ImageReader(file_bytes)
+                c.drawImage(img, 20, 20, width=550, height=800)
                 c.save()
 
-                #Reiniciar Posicio del BufferPDF
+                # Reiniciar Posicio del BufferPDF
                 bufferPDF.seek(io.SEEK_SET)
 
-                #Subir PDF a Dropbox
+                # Subir PDF a Dropbox
                 route = '/PDFServicios/' + servicioID + '.pdf'
                 dbx.files_upload(bufferPDF.read(), route, mode=dropbox.files.WriteMode.overwrite)
                 link = dbx.sharing_create_shared_link(route).url
@@ -605,6 +681,7 @@ def reportes():
             if session['tipo'] != "tecnico":
                 diccionarioSucursales = mongo.db.sucursal.find({})
                 diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'}).sort('nombre', 1)
+                diccionarioClaves = mongo.db.clave.find({})
 
                 pipeline = [{'$lookup': {
                     'from': 'sucursal', 'localField': 'sucursal_ID', 'foreignField': '_id', 'as': 'valsSucursal'}
@@ -626,10 +703,15 @@ def reportes():
                 for element in diccionarioTecnicos:
                     diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
 
+                diccionarioClavesArray = []
+                for element in diccionarioClaves:
+                    diccionarioClavesArray.append([element["_id"], element["codigo"], element["concepto"]])
+
                 return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
-                                       tecnicos=diccionarioTecnicosArray)
+                                       tecnicos=diccionarioTecnicosArray, claves=diccionarioClavesArray)
             else:
                 diccionarioSucursales = mongo.db.sucursal.find({})
+                diccionarioClaves = mongo.db.clave.find({})
                 tempID = ObjectId(session['tecnicoID'])
                 diccionarioTecnicos = mongo.db.tecnico.find({'_id': tempID})
 
@@ -654,8 +736,12 @@ def reportes():
                 for element in diccionarioTecnicos:
                     diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
 
+                diccionarioClavesArray = []
+                for element in diccionarioClaves:
+                    diccionarioClavesArray.append([element["_id"], element["codigo"], element["concepto"]])
+
                 return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
-                                       tecnicos=diccionarioTecnicosArray)
+                                       tecnicos=diccionarioTecnicosArray, claves=diccionarioClavesArray)
     else:
         return redirect(url_for('home_page'))
 
@@ -663,3 +749,6 @@ def reportes():
 def nominas():
     return render_template("nomina.html")
 
+@app.route('/usuario',methods=['GET','POST'])
+def usuarios():
+    return render_template("usuario.html")

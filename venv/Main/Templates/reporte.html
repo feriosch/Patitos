@@ -76,49 +76,50 @@
                 <a href="{{url_for('nominas')}}">Nomina</a>
             </li>
             <li><a href="{{url_for('usuarios')}}">Nuevo Usuario</a></li>
-                <li><a href="{{url_for('home_page')}}">Salir</a></li>
+            <li><a href="{{url_for('home_page')}}">Salir</a></li>
 
-                <br><br><li style="margin-left:17%;">Bienvenido Usuario</li>
+            <br><br>
+            <li style="margin-left:17%;">Bienvenido Usuario</li>
         </ul>
     </nav>
 
 
     <div id="content">
 
-       <form>
-						<label><b>Numero de ticket</b></label>
-						<input type="text" placeholder="Nr. de ticket">
+        <form>
+            <label><b>Numero de ticket</b></label>
+            <input type="text" placeholder="Nr. de ticket">
 
-						<label><b>Sucursal</b></label>
-						<select>
-							<option>sucursal 1</option>
-							<option>sucursal 2</option>
-							<option>sucursal 3</option>
-							<option>sucursal 4</option>
-						</select>
+            <label><b>Sucursal</b></label>
+            <select>
+                <option>sucursal 1</option>
+                <option>sucursal 2</option>
+                <option>sucursal 3</option>
+                <option>sucursal 4</option>
+            </select>
 
-						<label><b>Tecnico</b></label>
-						<select>
-							<option>tecnico 1</option>
-							<option>tecnico 2</option>
-							<option>tecnico 3</option>
-							<option>tecnico 4</option>
-						</select>
+            <label><b>Tecnico</b></label>
+            <select>
+                <option>tecnico 1</option>
+                <option>tecnico 2</option>
+                <option>tecnico 3</option>
+                <option>tecnico 4</option>
+            </select>
 
-						<label><b>Estado</b></label>
-						<select>
-							<option>pendiente</option>
-							<option>en proceso</option>
-							<option>terminado</option>
-							<option>tardío</option>
-						</select>
+            <label><b>Estado</b></label>
+            <select>
+                <option>pendiente</option>
+                <option>en proceso</option>
+                <option>terminado</option>
+                <option>tardío</option>
+            </select>
 
-						<label><b>Fecha de inicio</b></label>
-						<input type="date">
-						<label><b>Fecha final</b></label>
-						<input type="date">
-                        <input type="submit" class="btn btn-secondary" name="" value="Filtrar" >
-					</form>
+            <label><b>Fecha de inicio</b></label>
+            <input type="date">
+            <label><b>Fecha final</b></label>
+            <input type="date">
+            <input type="submit" class="btn btn-secondary" name="" value="Filtrar">
+        </form>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -127,19 +128,20 @@
 
                     <div class="card" id="" style="width: 20rem;">
                         <div class="card-body">
-                            <form  action="{{url_for('reportes')}}" method="post" >
-                            <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
-                            <input name="servicioID" value="{{servicio['_id']}}" style="display=None;"></input>
+                            <form action="{{url_for('reportes')}}" method="post">
+                                <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
+                                <input name="servicioID" value="{{servicio['_id']}}" style="display=None;"></input>
                                 Numero de Ticket: {{ servicio['ticket'] }}
-                            <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" name="idOrden"
-                                    value={{servicio['_id']}} data-target="#modal-{{servicio._id}}">
-                                Editar servicio
-                            </button>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" name="idOrden"
+                                        value={{servicio['_id']}} data-target="#modal-{{servicio._id}}">
+                                    Editar servicio
+                                </button>
 
-                            <button type="submit" class="btn btn-primary" data-toggle="modal" name="btn" value="PDF">
-                                Bajar PDF
-                            </button>
+                                <button type="submit" class="btn btn-primary" data-toggle="modal" name="btn"
+                                        value="PDF">
+                                    Bajar PDF
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -153,7 +155,8 @@
         <!-- Modales-->
 
         {% for servicio in servicios %}
-        <div class="modal fade" id="modal-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        <div class="modal fade" id="modal-{{servicio._id}}" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -167,110 +170,116 @@
                         <form action="{{url_for('reportes')}}" method="post" enctype="multipart/form-data">
 
                             <label><b>Fecha de inicio y final</b></label><br>
-								 <input type="date" value="{{ servicio['fechaHoraInicio'] }}" name="servicioFechaInicio">
-								  <input type="date" value="{{ servicio['fechaHoraFin'] }}" name="servicioFechaFin"><br><br>
-								 <label><b>Hora de inicio y hora de fin</b></label><br>
-								 <input type="time" value="{{ servicio['HoraInicio'] }}" name="servicioHoraInicio">
-								  <input type="time" value="{{ servicio['HoraFin'] }}" name="servicioHoraFin"><br><br>
+                            <input type="date" value="{{ servicio['fechaHoraInicio'] }}" name="servicioFechaInicio">
+                            <input type="date" value="{{ servicio['fechaHoraFin'] }}" name="servicioFechaFin"><br><br>
+                            <label><b>Hora de inicio y hora de fin</b></label><br>
+                            <input type="time" value="{{ servicio['HoraInicio'] }}" name="servicioHoraInicio">
+                            <input type="time" value="{{ servicio['HoraFin'] }}" name="servicioHoraFin"><br><br>
 
-							<label><b>Descripción de servicio</b></label><br>
+                            <label><b>Descripción de servicio</b></label><br>
                             <input type="text" placeholder="Descripción del servicio"
                                    value="{{ servicio['descripcionServicio'] }}" name="servicioDescripcion"><br>
 
-							<label><b>Solución del servicio</b></label><br>
+                            <label><b>Solución del servicio</b></label><br>
                             <input type="text" placeholder="Solución del servicio"
                                    value="{{ servicio['solucionServicio'] }}" name="servicioSolucion"><br>
 
                             <label><b>Observaciones</b></label><br>
                             <input type="text" placeholder="Observaciones"
-                                   value="{{ servicio['observacionesServicio'] }}"name="servicioObservaciones"><br>
+                                   value="{{ servicio['observacionesServicio'] }}" name="servicioObservaciones"><br>
 
-							<label><b>Crear Presupuesto</b></label><br>
-
-
-                           <div class="row">
-										<div class="col-md-12">
-											<div class="s1">
-												<select  name="">
-													<option value="1">Concepto 1</option>
-													<option value="2">Concepto 2</option>
-
-												</select>
-												<input type="text" value="Cantidad">
-											</div>
-										</div>
-
-										<div class="col-md-12">
-											<div class="s2">
-												<select  name="">
-													<option value="1">Concepto 1</option>
-													<option value="2">Concepto 2</option>
-
-												</select>
-												<input type="text" value="Cantidad">
-											</div>
-										</div>
-
-										<div class="col-md-12">
-											<div class="s3">
-												<select  name="">
-													<option value="1">Concepto 1</option>
-													<option value="2">Concepto 2</option>
-
-												</select>
-												<input type="text" value="Cantidad">
-											</div>
-										</div>
-
-										<div class="col-md-12">
-											<div class="s4">
-												<select  name="">
-													<option value="1">Concepto 1</option>
-													<option value="2">Concepto 2</option>
-
-												</select>
-												<input type="text" value="Cantidad">
-											</div>
-										</div>
-
-										<div class="col-md-12">
-											<div class="s5">
-												<select  name="">
-													<option value="1">Concepto 1</option>
-													<option value="2">Concepto 2</option>
-
-												</select>
-												<input type="text" value="Cantidad">
-											</div>
-										</div>
-
-										<div class="col-md-12">
-											<div class="s6">
-												<select  name="">
-													<option value="1">Concepto 1</option>
-													<option value="2">Concepto 2</option>
-
-												</select>
-												<input type="text" value="Cantidad">
-											</div>
-										</div>
-									</div>
-								<input class="btn btn-secondary" type="button" onclick="javascript: sel()" value="Añadir Concepto">
+                            <label><b>Crear Presupuesto</b></label><br>
 
 
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="s1">
+                                        <select name="clave1">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad1">
+                                    </div>
+                                </div>
 
-							<label ><b>Imagen del croquis</b></label><br>
+                                <div class="col-md-12">
+                                    <div class="s2">
+                                        <select name="clave2">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad2">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s3">
+                                        <select name="clave3">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad3">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s4">
+                                        <select name="clave4">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad4">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s5">
+                                        <select name="clave5">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad5">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s6">
+                                        <select name="clave6">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad6">
+                                    </div>
+                                </div>
+                            </div>
+                            <input class="btn btn-secondary" type="button" onclick="javascript: sel()"
+                                   value="Añadir Concepto">
+
+
+                            <label><b>Imagen del croquis</b></label><br>
                             <input name="servicioCroquis" type="file" class="archivo1"><br><br>
 
-							<label ><b>Collage de Evidencia</b></label><br>
+                            <label><b>Collage de Evidencia</b></label><br>
                             <input name="servicioCollage" type="file" class="archivo2"><br>
 
-                            <label ><b>Sello</b></label><br>
+                            <label><b>Sello</b></label><br>
                             <input name="servicioSelloSucursal" type="file" class="archivo3"><br><br>
 
                             <input type="text" name="idOrden" value="{{ servicio['_id'] }}" style="display: none;">
 
-							<label ><b>Nombre y Firma FM</b></label><br>
+                            <label><b>Nombre y Firma FM</b></label><br>
                             <input name="servicioNombreFirmaFM" type="file" class="archivo4"><br><br>
 
                             <a href="/FirmaDig/Usuario/{{servicio._id}}" target="_blank">
@@ -371,6 +380,7 @@
 
 
 		}
+
 
 
 

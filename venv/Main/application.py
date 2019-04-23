@@ -335,12 +335,12 @@ def servicios():
                                               'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
                                               'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None,
                                               'autorizacion': None, 'plano': None, 'estatusInterno': 'Pendiente',
-                                              'estatusExterno': 'Pendiente', 'fechaDeCreacion': datetime.datetime.now(),
+                                              'estatusExterno': 'Falta Autorizacion', 'fechaDeCreacion': datetime.datetime.now(),
                                               'fechaDeVencimiento': servicioFechaDeVencimiento, 'HoraInicio': None, 'HoraFin': None,
 
                                               'fechaHoraInicio': None, 'fechaHoraFin': None, 'descripcionServicio': None,
                                               'solucionServicio': None, 'observacionesServicio': None,
-                                              'firmaUsuario:': None,
+                                              'firmaUsuario:': None, 'croquis': None,
                                               'firmaTecnico': None, 'selloSucursal': None, 'nombreFirmaFM': None,
                                               'collageEvidencia': None,
 
@@ -486,9 +486,15 @@ def reportes():
                 servicioHoraFin = request.form.get("servicioHoraFin")
                 servicioSolucion = request.form.get("servicioSolucion")
                 servicioObservaciones = request.form.get("servicioObservaciones")
+                conFotoCroquis = True
                 conFotoSelloSucursal = True
                 conFotoNombreFirmaFM = True
                 conFotoCollage = True
+
+                try:
+                    servicioCroquis = request.files['servicioCroquis']
+                except:
+                    conFotoCroquis = False
 
                 try:
                     servicioSelloSucursal = request.files['servicioSelloSucursal']
@@ -504,6 +510,15 @@ def reportes():
                     servicioCollage = request.files['servicioCollage']
                 except:
                     conFotoCollage = False
+
+                if conFotoCroquis:
+                    route = '/FotosServicios/Croquis/' + servicioID + 'croquis.jpg'
+                    dbx.files_upload(servicioCroquis.read(), route, mode=dropbox.files.WriteMode.overwrite)
+                    link = dbx.sharing_create_shared_link(route).url
+                    url = list(link)
+                    url[-1] = '1'
+                    url = ''.join(url)
+                    mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'croquis': url}})
 
                 if conFotoSelloSucursal:
                     route = '/FotosServicios/FirmasSellos/' + servicioID + 'selloSucursal.jpg'

@@ -91,13 +91,20 @@
 
                     <div class="card" id="" style="width: 20rem;">
                         <div class="card-body">
+                            <form  action="{{url_for('reportes')}}" method="post" >
                             <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">Numero de Ticket: {{ servicio['ticket'] }}</h6>
+                            <input name="servicioID" value="{{servicio['_id']}}" style="display=None;"></input>
+                                Numero de Ticket: {{ servicio['ticket'] }}
                             <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
                             <button type="button" class="btn btn-primary" data-toggle="modal" name="idOrden"
                                     value={{servicio['_id']}} data-target="#modal-{{servicio._id}}">
                                 Editar servicio
                             </button>
+
+                            <button type="submit" class="btn btn-primary" data-toggle="modal" name="btn" value="PDF">
+                                Bajar PDF
+                            </button>
+                            </form>
                         </div>
                     </div>
                     {% endfor %}

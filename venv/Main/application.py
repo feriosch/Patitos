@@ -2,8 +2,10 @@ from flask import Flask,render_template,request, redirect, url_for, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
 import dropbox
 import datetime
+import io
 
 
 dbx = dropbox.Dropbox("uLQxcVq_gSAAAAAAAAAADX50ce1j-fy3qtTAb9ricooFDS1GFb5zv7sk_nnI4DMR")
@@ -557,6 +559,48 @@ def reportes():
                                                        'HoraInicio': servicioHoraInicio,
                                                        'HoraFin': servicioHoraFin}})
                 return redirect(url_for('reportes'))
+            # PDFS
+            elif request.form["btn"] == "PDF":
+                servicioID = request.form.get("servicioID")
+                print(servicioID)
+                servicio = mongo.db.servicio.find_one({'_id': servicioID})
+
+                #Crear buffer para el pdf
+                bufferPDF = io.BytesIO()
+
+                #c = canvas.Canvas("PDF_" + servicioID +".pdf")
+                c = canvas.Canvas(bufferPDF)
+
+
+                #PAGINA 1
+                c.drawImage("TemplatePDF.png", 0, 0, width=580, height=830)
+                c.drawString(77, 723, str(servicio['sucursal_ID']))
+                c.drawString(77, 668, str(servicio['fechaDeCreacion']))
+                #falta el cruce
+
+                #PAGINA 2
+                c.showPage()
+                file_bytes = io.BytesIO()
+                metadata, res = dbx.files_download("/FotosServicios/Croquis/" + servicioID + "croquis.jpg")
+                file_bytes.write(res.content)
+
+                img = ImageReader(file_bytes)
+                c.drawImage(img, 0, 0, width=580, height=830)
+                c.save()
+
+                #Reiniciar Posicio del BufferPDF
+                bufferPDF.seek(io.SEEK_SET)
+
+                #Subir PDF a Dropbox
+                route = '/PDFServicios/' + servicioID + '.pdf'
+                dbx.files_upload(bufferPDF.read(), route, mode=dropbox.files.WriteMode.overwrite)
+                link = dbx.sharing_create_shared_link(route).url
+                url = list(link)
+                url[-1] = '1'
+                url = ''.join(url)
+                mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'pdf': url}})
+                return redirect(url, code=302)
+
         else:
             if session['tipo'] != "tecnico":
                 diccionarioSucursales = mongo.db.sucursal.find({})

@@ -663,3 +663,16 @@ def reportes():
 def nominas():
     return render_template("nomina.html")
 
+@app.route('/usuarios',methods=['GET','POST'])
+def usuarios():
+    if 'username' in session:
+        if request.method == 'POST':
+            nombreDeUsuario = request.form.get("usn")
+            contrasena = request.form.get("psw")
+            tipo = request.form.get("tipoDeUsuario")
+
+
+        else:
+            return render_template("usuario.html")
+    else:
+        return redirect(url_for('home_page'))

@@ -162,7 +162,7 @@
 
 								 <br>
 								 <label for="imagen"><b>Imagen del croquis</b></label><br>
-								 <input name="archivo1" type="file" class="archivo1"><br><br>
+								 <input name="archivo1" type="file" class="archivo1"><br>
 
 								 <label for="imagen"><b>Imágenes</b></label><br>
 								 <input name="archivo1" type="file" class="archivo2"><br><br>
@@ -170,7 +170,7 @@
 								 <label for="imagen"><b>Sello</b></label><br>
 								 <input name="archivo1" type="file" class="archivo3"><br><br>
 
-								 <label for="imagen"><b>Nombre y Firma FM</b></label><br>
+								 <label for="imagen"><b>Nombre y Firma FM<b></b></label><br>
 								 <input name="archivo1" type="file" class="archivo4"><br><br>
 
 								 <a href="FirmaDig.html" target="_blank"><button class="btn btn-secondary" type="button">Firma digital Usuario</button></a>
@@ -233,6 +233,19 @@
                         $(select).siblings('.verificar').hide();
                         $(select).siblings('.ocultar').show();
                     }
+
+                });
+
+                //click of remove pregunta
+                $(".up-box-question").on("click", ".remove-aditional", function() {
+
+                    $(this).closest(".all").remove();
+
+                });
+
+                $(".optionRow").on("click", ".remove-option", function() {
+
+                    $(this).closest(".option-row").remove();
 
                 });
 

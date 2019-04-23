@@ -526,10 +526,6 @@ def reportes():
                 if clave6 != "nada" and cantidad6 > 0:
                     listaClaves.append([clave6, cantidad6])
 
-
-
-
-
                 conFotoCroquis = True
                 conFotoSelloSucursal = True
                 conFotoNombreFirmaFM = True

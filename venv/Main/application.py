@@ -335,7 +335,7 @@ def servicios():
                                               'solicitante': servicioSolicitante, 'prioridad': servicioPrioridad,
                                               'tipoDeMantenimiento': servicioTipoDeMantenimiento, 'paginaDeInternet': None,
                                               'autorizacion': None, 'plano': None, 'estatusInterno': 'Pendiente',
-                                              'estatusExterno': 'Pendiente', 'fechaDeCreacion': datetime.datetime.now(),
+                                              'estatusExterno': 'Falta Autorizacion', 'fechaDeCreacion': datetime.datetime.now(),
                                               'fechaDeVencimiento': servicioFechaDeVencimiento, 'HoraInicio': None, 'HoraFin': None,
 
                                               'fechaHoraInicio': None, 'fechaHoraFin': None, 'descripcionServicio': None,

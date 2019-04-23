@@ -72,6 +72,41 @@
 
 		 <div id="content">
 
+			 <form>
+						<label><b>Numero de ticket</b></label>
+						<input type="text" placeholder="Nr. de ticket">
+
+						<label><b>Sucursal</b></label>
+						<select>
+							<option>sucursal 1</option>
+							<option>sucursal 2</option>
+							<option>sucursal 3</option>
+							<option>sucursal 4</option>
+						</select>
+
+						<label><b>Tecnico</b></label>
+						<select>
+							<option>tecnico 1</option>
+							<option>tecnico 2</option>
+							<option>tecnico 3</option>
+							<option>tecnico 4</option>
+						</select>
+
+						<label><b>Estado</b></label>
+						<select>
+							<option>pendiente</option>
+							<option>en proceso</option>
+							<option>terminado</option>
+							<option>tardío</option>
+						</select>
+
+						<label><b>Fecha de inicio</b></label>
+						<input type="date">
+						<label><b>Fecha final</b></label>
+						<input type="date">
+                        <input type="submit" class="btn btn-secondary" name="" value="Filtrar" >
+					</form>
+
 <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
 
 		        <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -127,29 +162,74 @@
 
 								 <label><b>Crear Presupuesto</b></label><br>
 
+									<div class="row">
+										<div class="col-md-12">
+											<div class="s1">
+												<select  name="">
+													<option value="1">Concepto 1</option>
+													<option value="2">Concepto 2</option>
 
-								<div class="duplicate all">
-
-									<div class="box-question" style="text-align: center">
-										<div class="row">
-											<div class="col-md-12">
-												<select class="form-control select" name="">
-																	<option value="1">Concepto 1</option>
-																	<option value="2">Concepto 2</option>
 												</select>
+												<input type="text" value="Cantidad">
 											</div>
+										</div>
 
+										<div class="col-md-12">
+											<div class="s2">
+												<select  name="">
+													<option value="1">Concepto 1</option>
+													<option value="2">Concepto 2</option>
 
+												</select>
+												<input type="text" value="Cantidad">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="s3">
+												<select  name="">
+													<option value="1">Concepto 1</option>
+													<option value="2">Concepto 2</option>
+
+												</select>
+												<input type="text" value="Cantidad">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="s4">
+												<select  name="">
+													<option value="1">Concepto 1</option>
+													<option value="2">Concepto 2</option>
+
+												</select>
+												<input type="text" value="Cantidad">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="s5">
+												<select  name="">
+													<option value="1">Concepto 1</option>
+													<option value="2">Concepto 2</option>
+
+												</select>
+												<input type="text" value="Cantidad">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="s6">
+												<select  name="">
+													<option value="1">Concepto 1</option>
+													<option value="2">Concepto 2</option>
+
+												</select>
+												<input type="text" value="Cantidad">
+											</div>
 										</div>
 									</div>
-								</div>
-
-								 <div class="aditional-box duplicate-btn">
-
-									<a class="btn btn-secondary agregar add" href="javascript: void(0)" type="button"><span></span>Añadir concepto</a>
-
-								</div>
-
+								<input class="btn btn-secondary" type="button" onclick="javascript: sel()" value="Añadir Concepto">
 
 
 								 <br>
@@ -183,69 +263,80 @@
 
    		</div>
 	<script>
-
-			 $(document).ready(function() {
-
-            $('.verificar').hide();
-            $('.duplicate').hide();
-
-            var count = 2;
-
-            //duplicate
-            $('a.add').on('click', function() {
-
-                //clone
-                var row = $('.duplicate').clone();
-                $(row).insertAfter('.duplicate-btn');
-                $(row).show();
-
-                //add new ids
-                $(row).find('select').attr('id', 'select_' + count);
-                $(row).find('verificar').attr('id', 'verificar_' + count);
-
-                //remove duplicate class
-                $(row).removeClass('duplicate');
-
-                //onchange of select
-                $('select').on('change', function() {
-
-                    var value = $(this).val();
-                    var select = $(this).parent();
-                    if (value == 1) {
-                        $(select).siblings('.inputed').show();
-                        $(select).siblings('.ocultar').hide();
-                    } else {
-                        $(select).siblings('.inputed').hide();
-
-                    }
-                    if (value == 2) {
-                        $(select).siblings('.ocultar').show();
-                        $(select).siblings('.verificar').show();
-                    } else {
-                        $(select).siblings('.verificar').hide();
-                        $(select).siblings('.ocultar').show();
-                    }
-
-                });
-
-                //click of remove pregunta
-                $(".up-box-question").on("click", ".remove-aditional", function() {
-
-                    $(this).closest(".all").remove();
-
-                });
-
-                $(".optionRow").on("click", ".remove-option", function() {
-
-                    $(this).closest(".option-row").remove();
-
-                });
+		$( document ).ready(function() {
+			$(".s1").hide();
+			$(".s2").hide();
+			$(".s3").hide();
+			$(".s4").hide();
+			$(".s5").hide();
+			$(".s6").hide();
+		});
+		var count = 0;
+		function sel(){
 
 
-            });
-            count++;
+			if(count==0){
+					$(".s1").show();
+					$(".s2").hide();
+					$(".s3").hide();
+					$(".s4").hide();
+					$(".s5").hide();
+					$(".s6").hide();
 
-        });
+
+			}
+			if(count==1){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").hide();
+					$(".s4").hide();
+					$(".s5").hide();
+					$(".s6").hide();
+
+			}
+			if(count==2){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").show();
+					$(".s4").hide();
+					$(".s5").hide();
+					$(".s6").hide();
+
+			}
+			if(count==3){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").show();
+					$(".s4").show();
+					$(".s5").hide();
+					$(".s6").hide();
+
+			}
+			if(count==4){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").show();
+					$(".s4").show();
+					$(".s5").show();
+					$(".s6").hide();
+
+			}
+			if(count==5){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").show();
+					$(".s4").show();
+					$(".s5").show();
+					$(".s6").show();
+
+			}
+			count++
+
+
+
+		}
+
+
 
 
 

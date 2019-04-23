@@ -104,6 +104,7 @@
 						<input type="date">
 						<label><b>Fecha final</b></label>
 						<input type="date">
+                        <input type="submit" class="btn btn-secondary" name="" value="Filtrar" >
 					</form>
 				</div>
         <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
@@ -129,10 +130,17 @@
                                 <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
                                 <button type="button" class="btn btn-primary" data-backdrop="static" data-keyboard="false" data-toggle="modal" 
                                         data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
+
+                                <!--Aqui se filtran las badge-->
+                                {% if servicio['estatusInterno'] == "Pendiente" %}
                                 <span class="badge badge-secondary">Pendiente</span>
+                                {% elif servicio['estatusInterno'] == "Terminado" %}
                                 <span class="badge badge-success">Terminado</span>
+                                {% elif servicio['estatusInterno'] == "En Proceso" %}
                                 <span class="badge badge-warning" >En proceso</span>
+                                {% elif servicio['estatusInterno'] == "Tardio" %}
                                 <span class="badge badge-danger" >Tardío</span>
+                                {% endif %}
                             </div>
                         </div>
 
@@ -229,13 +237,13 @@
                                         {% endif %}
                                         <input type="file" class="editInput" name="servicioPlano">
                                     </div>
-                                    <div class=".col-md-4 .ml-auto"><b>Estatus Interno:  </b>{{ servicio['estatusInterno'] }}
+                                    <div class=".col-md-4 .ml-auto" class="estado"><b>Estatus Interno:  </b>{{ servicio['estatusInterno'] }}
                                     </div>
                                     <div class=".col-md-4 .ml-auto"><b>Estatus Externo:  </b><span class="miMamaMeMima">{{ servicio['estatusExterno'] }}</span>
                                         <select name="servicioEstatusExterno" class="editInput" value="{{ servicio['estatusExterno'] }}">
-                                            <option selected value="valor1">valor1</option>
-                                            <option value="valor2">valor2</option>
-                                            <option value="valor3">valor3</option>
+                                            <option selected value="Falta Autorizacion">Falta Autorizacion</option>
+                                            <option value="autorizado">Autorizado</option>
+                                            <option value="noAutorizado">No Autorizado</option>
                                         </select>
                                     </div>
                                     <div class=".col-md-4 .ml-auto"><b>Fecha de Vencimiento:  </b><span class="miMamaMeMima">{{ servicio['fechaDeVencimiento'] }}</span>
@@ -435,41 +443,6 @@
     </script>
 
 <script language="javascript">
-
-                $( document ).ready(function() {
-                    $(".badge-warning").hide();
-                    $(".badge-danger").hide();
-                    $(".badge-secondary").show();
-                    $(".badge-success").hide();
-                });
-				function hs() {
-					switch ($("#estado").val()) {
-						case 'proceso':
-							$(".badge-warning").show();
-							$(".badge-danger").hide();
-							$(".badge-secondary").hide();
-							$(".badge-success").hide();
-						break;
-						case 'tardio':
-							$(".badge-warning").hide();
-							$(".badge-danger").show();
-							$(".badge-secondary").hide();
-							$(".badge-success").hide();
-						break;
-						case 'pendiente':
-							$(".badge-warning").hide();
-							$(".badge-danger").hide();
-							$(".badge-secondary").show();
-							$(".badge-success").hide();
-						break;
-						case 'terminado':
-							$(".badge-warning").hide();
-							$(".badge-danger").hide();
-							$(".badge-secondary").hide();
-							$(".badge-success").show();
-						break;
-					}
-				}
 
 
 

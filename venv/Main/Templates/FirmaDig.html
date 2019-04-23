@@ -182,11 +182,11 @@ height: 300px ;
         $('#sendBtn').live('click', function () {
             var Pic = document.getElementById("canvas").toDataURL("image/jpg");
             Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "")
-
+            
             // Sending the image data to Server
             $.ajax({
                 type: 'POST',
-                url: 'WebForm2.aspx/UploadPic',
+                url: '/subirFirma',
                 data: '{ "imageData" : "' + Pic + '" }',
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
@@ -239,7 +239,7 @@ height: 300px ;
             <td width="33%">
    </td>
            <td width="33%">
-                <input id="sendBtn" type="button" value="Send To Server" /></td>
+                <input id="sendBtn" type="button" value="Subir" /></td>
             <td width="33%">
                 &nbsp;</td>
         </tr>

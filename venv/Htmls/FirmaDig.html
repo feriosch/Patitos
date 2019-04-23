@@ -181,12 +181,13 @@ height: 300px ;
         // Send the drawn image to the server
         $('#sendBtn').live('click', function () {
             var Pic = document.getElementById("canvas").toDataURL("image/jpg");
+            Console.log("Hola");
             Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "")
 
             // Sending the image data to Server
             $.ajax({
                 type: 'POST',
-                url: 'WebForm2.aspx/UploadPic',
+                url: '/UploadPic',
                 data: '{ "imageData" : "' + Pic + '" }',
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',

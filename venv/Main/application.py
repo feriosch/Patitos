@@ -35,10 +35,19 @@ def home_page():
         return render_template("index.html")
 
 
-@app.route('/FirmaDig/<servicioID>')
+@app.route('/FirmaDig/Tecnico/<servicioID>')
 def visualizarImagenes(servicioID):
     return render_template("FirmaDig.html")
 
+
+@app.route('/FirmaDig/Usuario/<servicioID>')
+def visualizarImagenesDos(servicioID):
+    return render_template("FirmaDig.html")
+
+@app.route('/subirFirma', methods= ['POST'])
+def subirFirma():
+    print(request.files)
+    return render_template("FirmaDig.html")
 
 @app.route('/material',methods=['GET','POST'])
 def materiales():
@@ -474,9 +483,10 @@ def reportes():
     if 'username' in session:
         if request.method == 'POST':
             if request.form["btn"] == "Anadir":
-                servicioID = ObjectId(request.form.get("id"))
+                servicioID = request.form.get("idOrden")
+                print(servicioID)
                 servicioFechaInicio = request.form.get("servicioFechaInicio")
-                servicioFechaFin = request.form.get("servicioFechFin")
+                servicioFechaFin = request.form.get("servicioFechaFin")
                 servicioDescripcion = request.form.get("servicioDescripcion")
                 servicioSolucion = request.form.get("servicioSolucion")
                 servicioObservaciones = request.form.get("servicioObservaciones")
@@ -488,10 +498,13 @@ def reportes():
                     servicioSelloSucursal = request.files['servicioSelloSucursal']
                 except:
                     conFotoSelloSucursal = False
+
                 try:
                     servicioNombreFirmaFM = request.files['servicioNombreFirmaFM']
                 except:
+                    print("Hola")
                     conFotoNombreFirmaFM = False
+
                 try:
                     servicioCollage = request.files['servicioCollage']
                 except:
@@ -505,6 +518,7 @@ def reportes():
                     url[-1] = '1'
                     url = ''.join(url)
                     mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'selloSucursal': url}})
+
                 if conFotoNombreFirmaFM:
                     route = '/FotosServicios/FirmasSellos/' + servicioID + 'nombreFirmaFM.jpg'
                     dbx.files_upload(servicioNombreFirmaFM.read(), route, mode=dropbox.files.WriteMode.overwrite)
@@ -512,7 +526,8 @@ def reportes():
                     url = list(link)
                     url[-1] = '1'
                     url = ''.join(url)
-                    mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'nombreFiramDM': url}})
+                    mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'nombreFirmaFM': url}})
+
                 if conFotoCollage:
                     route = '/FotosServicios/FirmasSellos/' + servicioID + 'collage.jpg'
                     dbx.files_upload(servicioCollage.read(), route, mode=dropbox.files.WriteMode.overwrite)
@@ -520,15 +535,16 @@ def reportes():
                     url = list(link)
                     url[-1] = '1'
                     url = ''.join(url)
-                    mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'collage': url}})
+                    mongo.db.servicio.update_one({'_id': servicioID}, {"$set": {'collageEvidencia': url}})
 
+                print(servicioID)
                 mongo.db.servicio.update_one({'_id': servicioID},
                                              {"$set": {'fechaHoraInicio': servicioFechaInicio,
                                                        'fechaHoraFin': servicioFechaFin,
                                                        'descripcionServicio': servicioDescripcion,
                                                        'solucionServicio': servicioSolucion,
                                                        'observacionesServicio': servicioObservaciones }})
-                return redirect(url_for('reporte'))
+                return redirect(url_for('reportes'))
         else:
             if session['tipo'] != "tecnico":
                 diccionarioSucursales = mongo.db.sucursal.find({})
@@ -571,7 +587,7 @@ def reportes():
                 arrTemp = []
                 for doc in (mongo.db.servicio.aggregate(pipeline)):
                     arrTemp.append(doc)
-                print(arrTemp)
+
 
                 arrTemp = sorted(arrTemp, key=lambda k: k['fechaDeCreacion'], reverse=True)
                 diccionarioSucursalesArray = []

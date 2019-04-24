@@ -604,60 +604,129 @@ def reportes():
                 servicioID = request.form.get("servicioID")
                 print(servicioID)
                 servicio = mongo.db.servicio.find_one({'_id': servicioID})
+                tecnico = mongo.db.tecnico.find_one({'_id': servicio['tecnico_ID']})
+                sucursal = mongo.db.sucursal.find_one({'_id': servicio['sucursal_ID']})
+                conceptosPDF = []
+                for i in range (1,len(servicio['conceptos'])):
+                    conceptosPDF.append(mongo.db.clave.find_one({'_id': servicio['conceptos'][i][0]}))
 
-                #Crear buffer para el pdf
+                # Crear buffer para el pdf
                 bufferPDF = io.BytesIO()
 
-                #c = canvas.Canvas("PDF_" + servicioID +".pdf")
+                # c = canvas.Canvas("PDF_" + servicioID +".pdf")
                 c = canvas.Canvas(bufferPDF)
 
                 # PAGINA 1
                 c.drawImage("TemplatePDF.png", 0, 0, width=580, height=830)
-                c.drawString(77, 723, str(servicio['sucursal_ID']))
+                c.drawString(77, 723, sucursal['nombre'])
                 c.drawString(77, 668, str(servicio['fechaDeCreacion']))
-                # falta el cruce
 
+                subtotal = 0.0
+                x = 0
+                for concepto in conceptosPDF:
+                    c.drawString(20, 610 - 20 * x, concepto['codigo'])
+                    c.drawString(77, 610 - 20 * x, concepto['concepto'])
+                    c.drawString(350, 610 - 20 * x, concepto['unidad'])
+                    c.drawString(400, 610 - 20 * x, str(servicio['conceptos'][x+1][1]))
+                    c.drawString(445, 610 - 20 * x, "$"+concepto['precioUnitario'])
+                    c.drawString(497, 610 - 20 * x, "$"+str(servicio['conceptos'][x+1][1] * float(concepto['precioUnitario'])))
+                    subtotal += servicio['conceptos'][x + 1][1] * float(concepto['precioUnitario'])
+                    x = x+1
+
+                total = subtotal + subtotal * 0.16
+                c.drawString(497, 95, str(subtotal))
+                c.drawString(497, 75, str(subtotal * 0.16))
+                c.drawString(497, 55, str(total))
                 # PAGINA 2
                 c.showPage()
                 c.drawImage("TemplatePDF_Croquis1.0.png", 0, 0, width=580, height=830)
-                # falta el cruce
+                c.drawString(115, 755, servicioID)
+
+                x = 0
+
+                for concepto in conceptosPDF:
+                    c.drawString(33, 710 - 15 * x, concepto['codigo'])
+                    c.drawString(93, 710 - 15 * x, concepto['descripcion'])
+
+                    c.drawString(33, 600 - 20 * x, concepto['unidad'])
+                    c.drawString(270, 600 - 20 * x, str(x) + " cm")
+                    c.drawString(325, 600 - 20 * x, str(x) + " cm")
+                    c.drawString(375, 600 - 20 * x, str(x) + " cm")
+                    c.drawString(420, 600 - 20 * x, str(servicio['conceptos'][x+1][1]))
+                    c.drawString(480, 600 - 20 * x, "$"+str(servicio['conceptos'][x+1][1] *
+                                                            float(concepto['precioUnitario'])))
+
+                    x = x+1
+
+
+
+                # subir los totales a mongo
+                mongo.db.servicio.update_one({'_id': servicioID},
+                                             {"$set": {'subtotal': subtotal, 'total': total}})
+
                 # croquis
-                file_bytes = io.BytesIO()
-                metadata, res = dbx.files_download("/FotosServicios/Croquis/" + servicioID + "croquis.jpg")
-                file_bytes.write(res.content)
-                img = ImageReader(file_bytes)
-                c.drawImage(img, 33, 90, width=500, height=360)
+                try:
+                    file_bytes = io.BytesIO()
+                    metadata, res = dbx.files_download("/FotosServicios/Croquis/" + servicioID + "croquis.jpg")
+                    file_bytes.write(res.content)
+                    img = ImageReader(file_bytes)
+                    c.drawImage(img, 33, 90, width=500, height=360)
+                except:
+                    return "No hay croquis"
 
                 # PAGINA 3
                 c.showPage()
                 c.drawImage("TemplatePDF_Croquis1.0.png", 0, 0, width=580, height=830)
-                # falta el cruce
+                c.drawString(115, 755, servicioID)
+
+                x = 0
+                for concepto in conceptosPDF:
+                    c.drawString(33, 710 - 15 * x, concepto['codigo'])
+                    c.drawString(93, 710 - 15 * x, concepto['descripcion'])
+
+                    c.drawString(33, 600 - 20 * x, concepto['unidad'])
+                    c.drawString(270, 600 - 20 * x, str(x) + " cm")
+                    c.drawString(325, 600 - 20 * x, str(x) + " cm")
+                    c.drawString(375, 600 - 20 * x, str(x) + " cm")
+                    c.drawString(420, 600 - 20 * x, str(servicio['conceptos'][x + 1][1]))
+                    c.drawString(480, 600 - 20 * x,
+                                 "$" + str(servicio['conceptos'][x + 1][1] * float(concepto['precioUnitario'])))
+                    x = x+1
                 # collage evidencia
-                file_bytes = io.BytesIO()
-                metadata, res = dbx.files_download("/FotosServicios/FirmasSellos/" + servicioID + "collage.jpg")
-                file_bytes.write(res.content)
-                img = ImageReader(file_bytes)
-                c.drawImage(img, 33, 90, width=500, height=360)
+                try:
+                    file_bytes = io.BytesIO()
+                    metadata, res = dbx.files_download("/FotosServicios/FirmasSellos/" + servicioID + "collage.jpg")
+                    file_bytes.write(res.content)
+                    img = ImageReader(file_bytes)
+                    c.drawImage(img, 33, 90, width=500, height=360)
+                except:
+                    return "No hay collage"
 
                 c.drawString(490, 65, "TOTAL")
 
                 # PAGINA 4
                 c.showPage()
                 # whatsapp
-                file_bytes = io.BytesIO()
-                metadata, res = dbx.files_download("/FotosServicios/Autorizaciones/" + servicioID + "autorizacion.jpg")
-                file_bytes.write(res.content)
-                img = ImageReader(file_bytes)
-                c.drawImage(img, 20, 20, width=550, height=800)
+                try:
+                    file_bytes = io.BytesIO()
+                    metadata, res = dbx.files_download("/FotosServicios/Autorizaciones/" + servicioID + "autorizacion.jpg")
+                    file_bytes.write(res.content)
+                    img = ImageReader(file_bytes)
+                    c.drawImage(img, 20, 20, width=550, height=800)
+                except:
+                    return "No hay autorizacion"
 
                 # PAGINA 5
                 c.showPage()
                 # pagina de Internet
-                file_bytes = io.BytesIO()
-                metadata, res = dbx.files_download("/FotosServicios/PaginasDeInternet/" + servicioID + "paginaInternet.jpg")
-                file_bytes.write(res.content)
-                img = ImageReader(file_bytes)
-                c.drawImage(img, 20, 20, width=550, height=800)
+                try:
+                    file_bytes = io.BytesIO()
+                    metadata, res = dbx.files_download("/FotosServicios/PaginasDeInternet/" + servicioID + "paginaInternet.jpg")
+                    file_bytes.write(res.content)
+                    img = ImageReader(file_bytes)
+                    c.drawImage(img, 20, 20, width=550, height=800)
+                except:
+                    return "No hay fotografia de Pagina de Internet"
                 c.save()
 
                 # Reiniciar Posicio del BufferPDF

@@ -1,10 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="locale" content="US">
+    <meta name="language" content="en">
+    <meta name="country" content="US">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Servicios</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+
+
 </head>
+
 <body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3 style="font-weight: 510 !important;"><b>CETEC</b><img id="logo" src="{{ url_for('static', filename='img/icon.png') }}" ></h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="{{url_for('servicios')}}">Ordenes</a>
+                </li>
+                <li>
+                    <a href="{{url_for('reportes')}}">Reportes</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
+                </li>
+
+                <li>
+                    <a href="{{url_for('claves')}}">Conceptos</a>
+                </li>
+
+                <li>
+                    <a href="{{url_for('nominas')}}">Nomina</a>
+                </li>
+
+                <li><a href="{{url_for('home_page')}}">Salir</a></li>
+
+                <br><br><li style="margin-left:17%;">Bienvenido Usuario</li>
+
+            </ul>
+        </nav>
+
+        <div id="content">
+
+
+
+				<div align="left">
+					<form>
+						<label><b>Numero de ticket</b></label>
+						<input type="text" placeholder="Nr. de ticket">
+
+						<label><b>Sucursal</b></label>
+						<select>
+							<option>sucursal 1</option>
+							<option>sucursal 2</option>
+							<option>sucursal 3</option>
+							<option>sucursal 4</option>
+						</select>
+
+						<label><b>Tecnico</b></label>
+						<select>
+							<option>tecnico 1</option>
+							<option>tecnico 2</option>
+							<option>tecnico 3</option>
+							<option>tecnico 4</option>
+						</select>
+
+						<label><b>Estado</b></label>
+						<select>
+							<option>pendiente</option>
+							<option>en proceso</option>
+							<option>terminado</option>
+							<option>tardío</option>
+						</select>
+
+						<label><b>Fecha de inicio</b></label>
+						<input type="date">
+						<label><b>Fecha final</b></label>
+						<input type="date">
+                        <input type="submit" class="btn btn-secondary" name="" value="Filtrar" >
+					</form>
+				</div>
+        <!-- 4 cards por navbar navbar-expand-lg navbar-light bg-light-->
+
+
+
+
+
+
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+
+                <div class="container-fluid">
+                    <div class="row">
+                    {% for servicio in servicios %}
+                        <div class="card" style="width: 20rem;">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
+                                <h4 class="card-title">Numero de Ticket: {{ servicio['ticket'] }}</h4>
+                                <h4 class="card-title">Fecha de Vencimiento: {{ servicio['fechaDeVencimiento'] }}</h4>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ servicio['sucursal'] }}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
+                                <button type="button" class="btn btn-primary" data-backdrop="static" data-keyboard="false" data-toggle="modal"
+                                        data-target="#confirm-delete-{{servicio._id}}"  value={{servicio['_id']}}>Detalles</button>
+
+                                <!--Aqui se filtran las badge-->
+                                {% if servicio['estatusInterno'] == "Pendiente" %}
+                                <span class="badge badge-secondary">Pendiente</span>
+                                {% elif servicio['estatusInterno'] == "Terminado" %}
+                                <span class="badge badge-success">Terminado</span>
+                                {% elif servicio['estatusInterno'] == "En Proceso" %}
+                                <span class="badge badge-warning" >En proceso</span>
+                                {% elif servicio['estatusInterno'] == "Tardio" %}
+                                <span class="badge badge-danger" >Tardío</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!--AQUI-->
+                        <div class="modal fade" id="confirm-delete-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document" >
+                        <div class="modal-content" >
+                            <form action="{{url_for('servicios')}}" method="post"  enctype="multipart/form-data">
+                            <div class="modal-header" style="padding-bottom:0;">
+                                <h5 class="modal-title" id="exampleModalLongTitle" style="padding-left:1rem;"><b>Orden de servicio</b></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeOrderDetails({{ servicio['ticket'] }})">
+                                    <span aria-hidden="true">x</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+
+
+                                <div class="container-fluid"  id="{{ servicio['ticket'] }}">
+                                    <div class=".col-md-4 .ml-auto"><b>No. de Ticket:</b> <input name="idticket" value="{{ servicio['ticket'] }}" type="hidden">{{ servicio['ticket'] }}</div>
+                                    <div class="col-md-9 .ml-auto" style="padding:0;"><b>Solicitante: </b><span class="miMamaMeMima">{{ servicio['solicitante'] }}</span>
+                                        <input type="text" class="editInput" name="servicioSolicitante"
+                                               value="{{ servicio['solicitante'] }}">
+                                    </div>
+
+                                    <div class=".col-md-4 .ml-auto"><b>Sucursal: </b><span class="miMamaMeMima">{{ servicio['valsSucursal'][0]['nombre'] }}</span>
+                                        <select name="servicioSucursal" class="editInput" value="{{ servicio['valsSucursal'][0]['nombre'] }}">
+                                            {% for sucursal in sucursales %}
+                                                {% if sucursal[1] == servicio['valsSucursal'][0]['_id'] %}
+                                                    <option selected value="{{ sucursal[1] }}">{{sucursal[0]}}</option>
+                                                {% else %}
+                                                    <option value="{{ sucursal[1] }}">{{sucursal[0]}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>ID(Tecnico): </b><span class="miMamaMeMima">{{ servicio['valsTecnico'][0]['nombre'] }}</span>
+                                       <select name="servicioTecnico" class="editInput" value="{{ servicio['valsTecnico'][0]['nombre'] }}">
+                                            {% for tecnico in tecnicos %}
+                                                {% if tecnico[1] == servicio['valsTecnico'][0]['_id'] %}
+                                                    <option selected value="{{ tecnico[1] }}">{{tecnico[0]}}</option>
+                                                {% else %}
+                                                    <option value="{{ tecnico[1] }}">{{tecnico[0]}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>ID(Presupuesto): </b>{{ servicio['presupuesto_ID'] }}</div>
+                                    <div class=".col-md-4 .ml-auto"><b>Prioridad: </b><span class="miMamaMeMima">{{ servicio['prioridad'] }}</span>
+                                        <select name="servicioPrioridad" class="editInput" value="{{ servicio['prioridad'] }}">
+                                            <option selected value="alta">alta</option>
+                                            <option value="media">media</option>
+                                            <option value="baja">baja</option>
+                                        </select>
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Tipo de mantenimiento: </b>{{ servicio['tipoDeMantenimiento'] }}
+                                        <input type="text" class="editInput" name="servicioTipoDeMantenimiento"
+                                               value="{{ servicio['tipoDeMantenimiento'] }}">
+                                    </div>
+
+
+                                    <div class=".col-md-4 .ml-auto"><b>Pagina De Internet:  </b>
+                                        {% if servicio['paginaDeInternet'] != None %}
+
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paginaDeInternet-{{servicio._id}}"
+                                                data-backdrop="static" data-keyboard="false" data-dismiss="modal" aria-label="Close"> Ver foto
+                                        </button></a>
+                                        {% else %}
+                                        No hay foto
+                                        {% endif %}
+                                        <input type="file" class="editInput" name="servicioPaginaDeInternet">
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Autorizacion:  </b>
+                                        {% if servicio['autorizacion'] != None %}
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#autorizacion-{{servicio._id}}" data-backdrop="static" data-keyboard="false"
+                                                data-dismiss="modal" aria-label="Close">
+                                          Ver foto
+                                        </button>
+                                        {% else %}
+                                        No hay foto
+                                        {% endif %}
+                                        <input type="file" class="editInput" name="servicioAutorizacion">
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Plano:  </b>
+                                        {% if servicio['plano'] != None %}
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#plano-{{servicio._id}}" data-backdrop="static" data-keyboard="false"
+                                                data-dismiss="modal" aria-label="Close">
+                                          Ver foto
+                                        </button>
+                                        {% else %}
+                                        No hay foto
+                                        {% endif %}
+                                        <input type="file" class="editInput" name="servicioPlano">
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto" class="estado"><b>Estatus Interno:  </b>{{ servicio['estatusInterno'] }}
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Estatus Externo:  </b><span class="miMamaMeMima">{{ servicio['estatusExterno'] }}</span>
+                                        <select name="servicioEstatusExterno" class="editInput" value="{{ servicio['estatusExterno'] }}">
+                                            <option selected value="Falta Autorizacion">Falta Autorizacion</option>
+                                            <option value="autorizado">Autorizado</option>
+                                            <option value="noAutorizado">No Autorizado</option>
+                                        </select>
+                                    </div>
+                                    <div class=".col-md-4 .ml-auto"><b>Fecha de Vencimiento:  </b><span class="miMamaMeMima">{{ servicio['fechaDeVencimiento'] }}</span>
+                                        <input type="date" class="editInput" name="servicioFechaDeVencimiento"
+                                               value="{{ servicio['fechaDeVencimiento'] }}">
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="submit" name="btn" class="btn btn-primary" value="Guardar" data-value="{{servicio['_id']}}">Guardar</button>
+                            </div>
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal fade" id="paginaDeInternet-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Foto</h5>
+                                <button type="button" class="close" data-toggle="modal" data-target="#orden" data-backdrop="static" data-keyboard="false" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img style="height: 200px;" src="{{ servicio['paginaDeInternet']}}" >
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="autorizacion-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Foto</h5>
+                                <button type="button" class="close" data-toggle="modal" data-target="#orden" data-backdrop="static" data-keyboard="false" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img style="height: 200px;" src="{{ servicio['autorizacion']}}" >
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="plano-{{servicio._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Foto</h5>
+                                <button type="button" class="close" data-toggle="modal" data-target="#orden" data-backdrop="static" data-keyboard="false" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img style="height: 200px;" src="{{ servicio['plano']}}" >
+                                <div class="modal-footer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+                </div>
+
+
+            </nav>
+
+            <!-- Modales-->
+
+
+        </div>
+    </div>
 
 </body>
+
+    <style>
+        .editInput{
+            display: none;
+        }
+
+        #NrTicket{
+                display:none;
+            }
+            #Sucu{
+                display:none;
+            }
+            #Tecnic{
+                display:none;
+            }
+            #Estatus{
+                display:none;
+            }
+            #Fecha{
+                display:none;
+            }
+
+    </style>
+
+<script type="text/javascript" >
+    $('.modal fade').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+    function editDisplay(id) {
+        var cuadrito = document.getElementById(id);
+
+        var all = cuadrito.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = cuadrito.getElementsByClassName('miMamaMeMima');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+        //cuadrito.innerHTML= "";
+        //var a = document.createElement("form");
+        //a.setAttribute("method","post");
+        //a.setAttribute("action","action="{{url_for('tecnico')}}"");
+    }
+
+    function closeOrderDetails(id) {
+        var cuadrito = document.getElementById(id);
+
+        var all = cuadrito.getElementsByClassName('miMamaMeMima');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'inline';
+        }
+        var all = cuadrito.getElementsByClassName('editInput');
+        for (var i = 0; i < all.length; i++) {
+            all[i].style.display = 'none';
+        }
+    }
+
+
+    </script>
+
+<script language="javascript">
+
+
+
+			</script>
 </html>

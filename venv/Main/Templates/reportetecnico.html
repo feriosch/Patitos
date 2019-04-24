@@ -1,10 +1,386 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="locale" content="US">
+    <meta name="language" content="en">
+    <meta name="country" content="US">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        CETEC
+    </title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+            integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
+            integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+            crossorigin="anonymous"></script>
+
 </head>
+
 <body>
 
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="font-weight: 510 !important;">CETEC<img id="logo"
+                                                               src="{{ url_for('static', filename='img/icon.png') }}">
+            </h3>
+        </div>
+
+        <ul class="list-unstyled components">
+
+            <li>
+                <a href="{{url_for('servicios')}}">Ordenes</a>
+            </li>
+            <li class="active">
+                <a href="{{url_for('reportes')}}">Reportes</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
+            </li>
+
+
+            <li>
+                <a href="{{url_for('claves')}}">Conceptos</a>
+            </li>
+
+            <li>
+                <a href="{{url_for('nominas')}}">Nomina</a>
+            </li>
+
+            <li><a href="{{url_for('home_page')}}">Salir</a></li>
+
+            <br><br>
+            <li style="margin-left:17%;">Bienvenido Usuario</li>
+        </ul>
+    </nav>
+
+
+    <div id="content">
+
+        <form>
+            <label><b>Numero de ticket</b></label>
+            <input type="text" placeholder="Nr. de ticket">
+
+            <label><b>Sucursal</b></label>
+            <select>
+                <option>sucursal 1</option>
+                <option>sucursal 2</option>
+                <option>sucursal 3</option>
+                <option>sucursal 4</option>
+            </select>
+
+            <label><b>Tecnico</b></label>
+            <select>
+                <option>tecnico 1</option>
+                <option>tecnico 2</option>
+                <option>tecnico 3</option>
+                <option>tecnico 4</option>
+            </select>
+
+            <label><b>Estado</b></label>
+            <select>
+                <option>pendiente</option>
+                <option>en proceso</option>
+                <option>terminado</option>
+                <option>tardío</option>
+            </select>
+
+            <label><b>Fecha de inicio</b></label>
+            <input type="date">
+            <label><b>Fecha final</b></label>
+            <input type="date">
+            <input type="submit" class="btn btn-secondary" name="" value="Filtrar">
+        </form>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <div class="row">
+                    {% for servicio in servicios%}
+
+                    <div class="card" id="" style="width: 20rem;">
+                        <div class="card-body">
+                            <form action="{{url_for('reportes')}}" method="post">
+                                <h4 class="card-title">{{ servicio['valsSucursal'][0]['nombre'] }}</h4>
+                                <input name="servicioID" value="{{servicio['_id']}}" style="display=None;"></input>
+                                Numero de Ticket: {{ servicio['ticket'] }}
+                                <h6 class="card-subtitle mb-2 text-muted">{{ servicio['solicitante'] }} </h6>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" name="idOrden"
+                                        value={{servicio['_id']}} data-target="#modal-{{servicio._id}}">
+                                    Editar servicio
+                                </button>
+
+                                <button type="submit" class="btn btn-primary" data-toggle="modal" name="btn"
+                                        value="PDF">
+                                    Bajar PDF
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </nav>
+
+
+        <!-- Modales-->
+
+        {% for servicio in servicios %}
+        <div class="modal fade" id="modal-{{servicio._id}}" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Edición</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{url_for('reportes')}}" method="post" enctype="multipart/form-data">
+
+                            <label><b>Fecha de inicio y final</b></label><br>
+                            <input type="date" value="{{ servicio['fechaHoraInicio'] }}" name="servicioFechaInicio">
+                            <input type="date" value="{{ servicio['fechaHoraFin'] }}" name="servicioFechaFin"><br><br>
+                            <label><b>Hora de inicio y hora de fin</b></label><br>
+                            <input type="time" value="{{ servicio['HoraInicio'] }}" name="servicioHoraInicio">
+                            <input type="time" value="{{ servicio['HoraFin'] }}" name="servicioHoraFin"><br><br>
+
+                            <label><b>Descripción de servicio</b></label><br>
+                            <input type="text" placeholder="Descripción del servicio"
+                                   value="{{ servicio['descripcionServicio'] }}" name="servicioDescripcion"><br>
+
+                            <label><b>Solución del servicio</b></label><br>
+                            <input type="text" placeholder="Solución del servicio"
+                                   value="{{ servicio['solucionServicio'] }}" name="servicioSolucion"><br>
+
+                            <label><b>Observaciones</b></label><br>
+                            <input type="text" placeholder="Observaciones"
+                                   value="{{ servicio['observacionesServicio'] }}" name="servicioObservaciones"><br>
+
+                            <label><b>Crear Presupuesto</b></label><br>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="s1">
+                                        <select name="clave1">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad1">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s2">
+                                        <select name="clave2">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad2">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s3">
+                                        <select name="clave3">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad3">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s4">
+                                        <select name="clave4">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad4">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s5">
+                                        <select name="clave5">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad5">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="s6">
+                                        <select name="clave6">
+                                            <option value="nada"></option>
+                                            {% for clave in claves %}
+                                            <option value="{{ clave[0] }}">{{ clave[2] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="number" value="0" name="cantidad6">
+                                    </div>
+                                </div>
+                            </div>
+                            <input class="btn btn-secondary" type="button" onclick="javascript: sel()"
+                                   value="Añadir Concepto">
+
+
+                            <label><b>Imagen del croquis</b></label><br>
+                            <input name="servicioCroquis" type="file" class="archivo1"><br><br>
+
+                            <label><b>Collage de Evidencia</b></label><br>
+                            <input name="servicioCollage" type="file" class="archivo2"><br>
+
+                            <label><b>Sello</b></label><br>
+                            <input name="servicioSelloSucursal" type="file" class="archivo3"><br><br>
+
+                            <input type="text" name="idOrden" value="{{ servicio['_id'] }}" style="display: none;">
+
+                            <label><b>Nombre y Firma FM</b></label><br>
+                            <input name="servicioNombreFirmaFM" type="file" class="archivo4"><br><br>
+
+                            <a href="/FirmaDig/Usuario/{{servicio._id}}" target="_blank">
+                                <button class="btn btn-secondary" type="button">Firma digital Usuario</button>
+                            </a>
+                            <a href="/FirmaDig/Tecnico/{{servicio._id}}" target="_blank">
+                                <button class="btn btn-secondary" type="button">Firma digital del Técnico</button>
+                            </a>
+
+
+                            <div class="modal-footer">
+
+                                <input class="btn btn-primary" type="submit" name="btn" value="Anadir">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+
+</div>
+
+<script>
+
+			 $( document ).ready(function() {
+			$(".s1").hide();
+			$(".s2").hide();
+			$(".s3").hide();
+			$(".s4").hide();
+			$(".s5").hide();
+			$(".s6").hide();
+		});
+		var count = 0;
+		function sel(){
+
+
+			if(count==0){
+					$(".s1").show();
+					$(".s2").hide();
+					$(".s3").hide();
+					$(".s4").hide();
+					$(".s5").hide();
+					$(".s6").hide();
+
+
+			}
+			if(count==1){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").hide();
+					$(".s4").hide();
+					$(".s5").hide();
+					$(".s6").hide();
+
+			}
+			if(count==2){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").show();
+					$(".s4").hide();
+					$(".s5").hide();
+					$(".s6").hide();
+
+			}
+			if(count==3){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").show();
+					$(".s4").show();
+					$(".s5").hide();
+					$(".s6").hide();
+
+			}
+			if(count==4){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").show();
+					$(".s4").show();
+					$(".s5").show();
+					$(".s6").hide();
+
+			}
+			if(count==5){
+					$(".s1").show();
+					$(".s2").show();
+					$(".s3").show();
+					$(".s4").show();
+					$(".s5").show();
+					$(".s6").show();
+
+			}
+			count++
+
+
+
+		}
+
+
+
+
+
+</script>
+
 </body>
+
+
 </html>

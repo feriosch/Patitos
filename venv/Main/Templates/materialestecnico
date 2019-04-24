@@ -40,26 +40,19 @@
             <li>
                <a href="{{url_for('reportes')}}">Reportes</a>
             </li>
-            <li>
-                <a href="{{url_for('tecnico')}}">Tecnicos</a>
 
-            </li>
             <li class="active">
                 <a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
             </li>
-            <li>
-                <a href="{{url_for('materiales')}}">Materiales</a>
-            </li>
+
             <li>
                 <a href="{{url_for('claves')}}">Conceptos</a>
             </li>
-             <li>
-                    <a href="{{url_for('empresas')}}">Empresas</a>
-                </li>
+
                 <li>
                     <a href="{{url_for('nominas')}}">Nomina</a>
                 </li>
-            <li><a href="{{url_for('usuarios')}}">Nuevo Usuario</a></li>
+
                 <li><a href="{{url_for('home_page')}}">Salir</a></li>
 
                 <br><br><li style="margin-left:17%;">Bienvenido Usuario</li>

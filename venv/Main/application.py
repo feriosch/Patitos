@@ -231,8 +231,7 @@ def inventario():
                 for element in diccionarioMateriales:
                     diccionarioMaterialesArray.append([element["nombre"], str(element["_id"])])
 
-                    return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
-                                           materiales=diccionarioMaterialesArray)
+
                 return render_template("materialestecnico.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
                                        materiales=diccionarioMaterialesArray)
 

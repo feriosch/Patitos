@@ -80,31 +80,20 @@
                    <table class="table" id="tableCon">
 					  <thead class="thead-dark">
 						<tr>
-						  <th scope="col">Núcleo Centro</th>
-						  <th scope="col">Núcleo Santa Fe</th>
-							<th scope="col">Núcleo Pico de Verapaz</th>
-							<th scope="col">Núcleo Sur</th>
+						  <th scope="col">Nombre</th>
+						  <th scope="col">Núcleo</th>
+							<th scope="col">Direccion</th>
 						</tr>
 					  </thead>
 					  <tbody>
-						<tr>
-							<th scope="row">BOD. PINO 307-1</th>
-							<th>EDIF. ATENAS 106</th>
-							<th>EDIF. PICO DE VERAPAZ 331</th>
-							<th>EDIF. BARRANCA DEL MUERTO 24</th>
+					  {% for sucursal in sucursales %}
+					  <tr>
+							<th scope="row">{{ sucursal['nombre'] }}</th>
+							<th>{{ sucursal['nucleo'] }}</th>
+							<th>{{ sucursal['direccion'] }}</th>
 						</tr>
-					  	<tr>
-							<th scope="row">EDIF. 16 DE SEPTIEMBRE 71</th>
-							<th>EDIF. BOSQUE DE DURAZNOS 75</th>
-							<th> </th>
-							<th>EDIF. BOMBAS 487</th>
-						</tr>
-					  	<tr>
-							<th scope="row">EDIF. 16 DE SEPTIEMBRE 73</th>
-							<th>EDIF. EMILIO CASTELAR 75</th>
-							<th> </th>
-							<th>EDIF. DR. VERTIZ 1336</th>
-						</tr>
+					  {% endfor %}
+
 
 					  </tbody>
 				   </table>
@@ -124,15 +113,17 @@
 					   </div>
 					   <div class="modal-body">
 						 <form action="" method="post">
-							 <label>Sucursal:</label>
-							 <select>
-								 <option>Nucleo Centro</option>
-								  <option>Nucleo Santa Fe</option>
-								 <option>Nucleo Pico de Verapaz</option>
-								 <option>Nucleo Sur</option>
+							 <br><label>Nombre:</label>
+							 <input id="Dir" type="text"  placeholder="Nombre" name="sucursalNombre" required /><br>
+							 <label>Nucleo:</label>
+							 <select name="sucursalNucleo">
+								 <option value="Centro">Nucleo Centro</option>
+								  <option value="Santa Fe">Nucleo Santa Fe</option>
+								 <option value="Pico de Verapaz">Nucleo Pico de Verapaz</option>
+								 <option value="Sur">Nucleo Sur</option>
 							 </select>
 							 <br><label>Dirección:</label>
-							 <input id="Dir" type="text"  placeholder="Direccion" required /><br>
+							 <input id="Dir" type="text"  placeholder="Direccion" name="sucursalDireccion" required /><br>
 
 					   </div>
 					   <div class="modal-footer">

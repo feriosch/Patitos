@@ -14,7 +14,7 @@
 		</title>
 
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
@@ -57,7 +57,7 @@
 					<li>
 						<a href="{{url_for('nominas')}}">Nomina</a>
 					</li>
-					<li class="active"><a href="{{url_for('Usuario')}}">Nuevo Usuario</a></li>
+					<li class="active"><a href="{{url_for('usuarios')}}">Nuevo Usuario</a></li>
 
 					<li><a href="{{url_for('home_page')}}">Salir</a></li>
 					</ul>
@@ -76,20 +76,19 @@
 
                         <div class="container-fluid">
 
-                            <form action="" style="margin-left:33%; margin-top:6%; font-size:1.6rem;">
+                            <form action="{{url_for('usuarios.') }}" method="post" style="margin-left:33%; margin-top:6%; font-size:1.6rem;">
                               <div class="container">
                                 <h2>Registro</h2>
                                 <p style="font-size:1.4rem;">Llene el formulario para crear un nuevo usuario</p>
                                 <hr>
 
                                 <label><b>Usuario</b></label>
-                                <br><input type="text" placeholder="Nombre de Usuario" required>
+                                <br><input type="text" placeholder="Nombre de Usuario" required name="usn">
 
                                <br><br> <label><b>Password</b></label>
                                 <br><input type="password" placeholder="Contraseña" name="psw" required>
                                 <br><br> <label><b>Tipo de Usuario</b></label>
-                                  <br><select id="typeuser" onchange="show(this)">
-                                      <option value="none">-------------------</option>
+                                  <br><select id="typeuser" onchange="show(this)" name="tipoDeUsuario">
                                       <option value="admin">Administrador</option>
                                       <option value="tecnic">Tecnico</option>
                                   </select>
@@ -97,11 +96,11 @@
                                   <br>
                                   <div  id="typetec">
                                   <label><b>Seleccione al Tecnico</b></label><br>
-                                  <select>
+                                  <select name="tecnicoID">
                                         <label><b>Seleccione al Tecnico</b></label><br>
-                                      <option>Tecnico 1</option>
-                                      <option>Tecnico 2</option>
-                                      <option>Tecnico 3</option>
+									   {% for tecnico in tecnicos %}
+                                      <option value="{{ tecnico._id }}">{{ tecnico.nombre }}</option>
+									  {% endfor %}
 
                                   </select><br></div>
 

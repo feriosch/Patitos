@@ -12,7 +12,8 @@ dbx = dropbox.Dropbox("uLQxcVq_gSAAAAAAAAAADX50ce1j-fy3qtTAb9ricooFDS1GFb5zv7sk_
 
 app = Flask(__name__)
 app.secret_key = "ElPatatota"
-app.config["MONGO_URI"] =  "mongodb+srv://Master:CiscoCLass@ssei-bwmef.mongodb.net/test?retryWrites=true"
+app.config["MONGO_URI"] = "mongodb://Master:CiscoCLass@ssei-shard-00-00-bwmef.mongodb.net:27017,ssei-shard-00-01-bwmef.mongodb.net:27017,ssei-shard-00-02-bwmef.mongodb.net:27017/test?ssl=true&replicaSet=SSEI-shard-0&authSource=admin&retryWrites=true"
+#app.config["MONGO_URI"] =  "mongodb+srv://Master:CiscoCLass@ssei-bwmef.mongodb.net/test?retryWrites=true"
 mongo = PyMongo(app)
 
 
@@ -287,7 +288,7 @@ def sucursales():
             return redirect(url_for('sucursales'))
         else:
             diccionarioSucursales = mongo.db.sucursal.find({})
-            return render_template("sucursal.html", sucursales=diccionarioSucursales)
+            return render_template("empresa.html", sucursales=diccionarioSucursales)
     else:
         return redirect(url_for('home_page'))
 
@@ -473,7 +474,24 @@ def servicios():
 
 @app.route('/empresa',methods=['GET','POST'])
 def empresas():
-    return render_template("empresa.html")
+    if 'username' in session:
+        if request.method == 'POST':
+            sucursalNombre = request.form.get("sucursalNombre")
+            sucursalNucleo = request.form.get("sucursalNucleo")
+            sucursalDireccion = request.form.get('sucursalDireccion')
+            sucursalCoordenadaX = request.form.get("sucursalCoordenadaX")
+            sucursalCoordenadaY = request.form.get("sucursalCoordenadaY")
+            id = ObjectId()
+
+            mongo.db.sucursal.insert_one({'_id': id, 'nombre': sucursalNombre, 'nucleo': sucursalNucleo,
+                                          'direccion': sucursalDireccion, 'coordenadaX': sucursalCoordenadaX,
+                                          'coordenadaY': sucursalCoordenadaY})
+            return redirect(url_for('empresas'))
+        else:
+            diccionarioSucursales = mongo.db.sucursal.find({})
+            return render_template("empresa.html", sucursales=diccionarioSucursales)
+    else:
+        return redirect(url_for('home_page'))
 
 @app.route('/reporte',methods=['GET','POST'])
 def reportes():
@@ -661,7 +679,52 @@ def reportes():
 
 @app.route('/nomina',methods=['GET','POST'])
 def nominas():
-    return render_template("nomina.html")
+    if 'username' in session:
+        if request.method == 'POST':
+            metaData = mongo.db.nominaMetaData.find_one({})
+            diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
+            nuevaFecha = datetime.datetime.now()
+            for tecnico in diccionarioTecnicos:
+
+                pipeline = [{'$match': {'tecnico_ID': tecnico['_id'] }}]
+
+                diccionarioServicios = []
+                arrayTemp=[]
+                total = 0
+
+                for doc in (mongo.db.servicio.aggregate(pipeline)):
+
+                    if datetime.datetime.strptime(doc['fechaHoraFin'], '%Y-%m-%d') > metaData['fecha']:
+                        diccionarioServicios.append(doc)
+                        subtotal = 0
+                        for i in range(1,len(doc['conceptos'])):
+                            conTemp = mongo.db.clave.find_one({'_id':doc['conceptos'][i][0]})
+                            subtotal = subtotal+float(conTemp['precioUnitarioTecnico'])
+                        total = total+subtotal
+                        arrayTemp.append([doc['_id'], subtotal])
+
+
+                mongo.db.nominas.insert_one({'tecnico_ID': tecnico['_id'], 'total': total, 'detalles': arrayTemp,
+                                             'fecha': nuevaFecha})
+
+
+            mongo.db.nominaMetaData.update_one({'_id': metaData['_id']}, {"$set": {'fecha':nuevaFecha}})
+            return redirect(url_for('nominas'))
+        else:
+            diccionarioNominas = []
+            metaData = mongo.db.nominaMetaData.find_one({})
+            for doc in (mongo.db.nominas.find({})):
+                if doc['fecha'] > metaData['fecha']:
+                    diccionarioNominas.append(doc)
+
+            diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
+            diccionarioTecnicosArray = []
+            for doc in diccionarioTecnicos:
+                diccionarioTecnicosArray.append(doc)
+            return render_template("nomina.html", tecnicos=diccionarioTecnicosArray, nominas=diccionarioNominas, fecha=metaData['fecha'])
+    else:
+        return redirect(url_for('home_page'))
+
 
 @app.route('/usuarios',methods=['GET','POST'])
 def usuarios():
@@ -670,9 +733,17 @@ def usuarios():
             nombreDeUsuario = request.form.get("usn")
             contrasena = request.form.get("psw")
             tipo = request.form.get("tipoDeUsuario")
+            if (tipo == "admin"):
+                mongo.db.usuarios.insert_one({'nombre': nombreDeUsuario, 'contrasena': contrasena, 'tipo': "admin", 'tecnicoID': "None"})
+            elif (tipo == "tecnic"):
+                tecnicoID = request.form.get("tecnicoID")
+                tecnicoID = ObjectId(tecnicoID)
+                mongo.db.usuarios.insert_one({'nombre': nombreDeUsuario, 'contrasena': contrasena, 'tipo': "tecnico", 'tecnicoID': tecnicoID})
 
-
+            return redirect(url_for('usuarios'))
         else:
-            return render_template("usuario.html")
+            diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
+
+            return render_template("usuario.html", tecnicos = diccionarioTecnicos)
     else:
         return redirect(url_for('home_page'))

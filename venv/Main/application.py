@@ -194,26 +194,47 @@ def inventario():
 
             return redirect(url_for('inventario'))
         else:
-            pipeline = [{'$lookup': {
-                'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'patatita'}
-            }, {'$lookup': {
-                'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as': 'tomatito'}
-                }
-            ]
-            arrTemp = []
-            for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
-                arrTemp.append(doc)
-            diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
-            diccionarioMateriales = mongo.db.material.find({})
-            diccionarioMaterialesArray = []
-            for element in diccionarioMateriales:
-                diccionarioMaterialesArray.append([element["nombre"],str(element["_id"])])
-
             if (session['tipo'] != "tecnico"):
-                return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
-                                       materiales=diccionarioMaterialesArray)
+                pipeline = [{'$lookup': {
+                    'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'patatita'}
+                }, {'$lookup': {
+                    'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as': 'tomatito'}
+                    }
+                ]
+                arrTemp = []
+                for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
+                    arrTemp.append(doc)
+                diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
+                diccionarioMateriales = mongo.db.material.find({})
+                diccionarioMaterialesArray = []
+                for element in diccionarioMateriales:
+                    diccionarioMaterialesArray.append([element["nombre"],str(element["_id"])])
+
+
+                    return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
+                                           materiales=diccionarioMaterialesArray)
             else:
-                return redirect(url_for('home_page'))
+                pipeline = [{'$lookup': {
+                    'from': 'tecnico', 'localField': 'tecnico_ID', 'foreignField': '_id', 'as': 'patatita'}
+                }, {'$lookup': {
+                    'from': 'material', 'localField': 'material_ID', 'foreignField': '_id', 'as': 'tomatito'}
+                }
+                ]
+                arrTemp = []
+                for doc in (mongo.db.materialesTecnico.aggregate(pipeline)):
+                    arrTemp.append(doc)
+                tempID = session['tecnicoID']
+                tempID = ObjectId(tempID)
+                diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo','_id':tempID })
+                diccionarioMateriales = mongo.db.material.find({})
+                diccionarioMaterialesArray = []
+                for element in diccionarioMateriales:
+                    diccionarioMaterialesArray.append([element["nombre"], str(element["_id"])])
+
+                    return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
+                                           materiales=diccionarioMaterialesArray)
+                return render_template("materialestecnico.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
+                                       materiales=diccionarioMaterialesArray)
 
 
     else:
@@ -925,6 +946,12 @@ def nominas():
             for doc in diccionarioTecnicos:
                 diccionarioTecnicosArray.append(doc)
             if (session['tipo'] == "tecnico"):
+                tempID = session['tecnicoID']
+                tempID = ObjectId(tempID)
+                diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo', '_id': tempID})
+                diccionarioTecnicosArray = []
+                for doc in diccionarioTecnicos:
+                    diccionarioTecnicosArray.append(doc)
                 return render_template("nominatecnico.html", tecnicos=diccionarioTecnicosArray, nominas=diccionarioNominas, fecha=metaData['fecha'])
             else:
                 return render_template("nomina.html", tecnicos=diccionarioTecnicosArray, nominas=diccionarioNominas, fecha=metaData['fecha'])

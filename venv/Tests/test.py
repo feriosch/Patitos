@@ -16,10 +16,14 @@ def generarPDF(c):
         c.drawString(445, 610-20*x, "$10.00")
         c.drawString(497, 610-20*x, "$1,000.00")
 
+    c.drawString(497, 95, "SUBTOTAL")
+    c.drawString(497, 75, "IVA")
+    c.drawString(497, 55, "TOTAL")
+
     c.showPage()
 
     c.drawImage("TemplatePDF_Croquis1.0.png", 0, 0, width=580, height=830)
-
+    c.drawString(112, 755, "No ticket")
     for x in range(5):
         c.drawString(33, 710 - 15 * x, "CTC-00" + str(x))
         c.drawString(93, 710 - 15 * x, "Concepto djklshflisdhfjesidhfbledhgfbolsdhbgfoidshbgvfiuk" + str(x))

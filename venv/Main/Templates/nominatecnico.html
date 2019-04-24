@@ -1,10 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="locale" content="US">
+    <meta name="language" content="en">
+    <meta name="country" content="US">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        CETEC
+    </title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
+            integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+            crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
+            integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+            crossorigin="anonymous"></script>
+
 </head>
+
 <body>
 
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3 style="font-weight: 510 !important;">CETEC<img id="logo"
+                                                               src="{{ url_for('static', filename='img/icon.png') }}">
+            </h3>
+        </div>
+
+        <ul class="list-unstyled components">
+
+            <li>
+                <a href="{{url_for('servicios')}}">Ordenes</a>
+            </li>
+            <li>
+                <a href="{{url_for('reportes')}}">Reportes</a>
+            </li>
+            <li>
+                <a href="{{url_for('tecnico')}}">Tecnicos</a>
+
+            </li>
+            <li>
+                <a href="{{ url_for('inventario') }}">Materiales Tecnico</a>
+            </li>
+            <li>
+                <a href="{{url_for('materiales')}}">Materiales</a>
+            </li>
+
+            <li>
+                <a href="{{url_for('claves')}}">Conceptos</a>
+            </li>
+            <li>
+                <a href="{{url_for('empresas')}}">Empresas</a>
+            </li>
+            <li class="active">
+                <a href="{{url_for('nominas')}}">Nomina</a>
+            </li>
+            <li><a href="{{url_for('usuarios')}}">Nuevo Usuario</a></li>
+            <li><a href="{{url_for('home_page')}}">Salir</a></li>
+
+            <br><br>
+            <li style="margin-left:17%;">Bienvenido Usuario</li>
+        </ul>
+    </nav>
+
+
+    <div id="content">
+
+
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+
+            <div class="container-fluid">
+
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" style="width:30rem;">Nombre</th>
+                        <th scope="col" style="width:30rem;">Total Mes</th>
+                        <th scope="col" style="width:10rem;"></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for tecnico in tecnicos %}
+                    <tr>
+
+                        <th scope="row">{{ tecnico['nombre']}}</th>
+                        {% for nomina in nominas %}
+                        {% if nomina['tecnico_ID'] == tecnico['_id'] %}
+                        <td>{{ nomina['total'] }}</td>
+                        {% endif %}
+                        {% endfor %}
+
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-{{ tecnico._id }}">
+                                Detalle
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </nav>
+        {% for tecnico in tecnicos %}
+        <div class="modal fade" id="modal-{{ tecnico._id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Detalle</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <!--id orde, sucursal, monto aportado-->
+                        <table class="table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col" style="width:30rem;">ID orden</th>
+                                <th scope="col" style="width:30rem;">Sucursal</th>
+                                <th scope="col" style="width:10rem;">Monto</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for nomina in nominas %}
+
+                                {% if nomina['tecnico_ID'] == tecnico['_id'] %}
+                            {% for detalle in nomina['detalles'] %}
+                            <tr>
+                                <th scope="row">{{ detalle[0] }}</th>
+                                <td>EDIF. ATENAS 106</td>
+                                <td>{{ detalle[1] }}</td>
+                                </tr>
+                            {% endfor %}
+                                {% endif %}
+
+
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <div class="modal-footer">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <script language="javascript">
+
+    </script>
 </body>
+
+
 </html>

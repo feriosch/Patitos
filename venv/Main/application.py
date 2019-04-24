@@ -27,7 +27,10 @@ def home_page():
             session['username'] = usuario
             session['tipo'] = usuarioPrueba['tipo']
             session['tecnicoID'] = str(usuarioPrueba['tecnicoID'])
-            return render_template("home.html")
+            if(session['tipo'] == "tecnico"):
+                return render_template("hometecnico.html")
+            else:
+                return render_template("home.html")
         else:
             return "Not found"
 
@@ -65,9 +68,9 @@ def materiales():
                     mongo.db.material.insert_one({'nombre': materialNombre, 'descripcion': materialDescripcion})
                 else:
                     diccionarioMateriales = mongo.db.material.find({})
-                    return render_template("material.html", materiales=diccionarioMateriales, materialExiste=True)
+                    return redirect(url_for('materiales'))
                 diccionarioMateriales = mongo.db.material.find({})
-                return render_template("material.html", materiales=diccionarioMateriales)
+                return redirect(url_for('materiales'))
 
             elif request.form["btn"] == "Guardar":
                 materialNombre = request.form.get("materialNombre")
@@ -79,7 +82,11 @@ def materiales():
                 return redirect(url_for('materiales'))
         else:
             diccionarioMateriales = mongo.db.material.find({})
-            return render_template("material.html",materiales=diccionarioMateriales)
+            if (session['tipo'] == "tecnico"):
+                return render_template("materialtecnico.html",materiales=diccionarioMateriales)
+            else:
+                return render_template("material.html",materiales=diccionarioMateriales)
+
     else:
         return redirect(url_for('home_page'))
 
@@ -163,7 +170,11 @@ def tecnico():
                 return redirect(url_for('tecnico'))
         else:
             diccionarioTecnicos = mongo.db.tecnico.find({})
-            return render_template("tecnico.html", tecnicos=diccionarioTecnicos)
+            if (session['tipo'] != "tecnico"):
+                return render_template("tecnico.html", tecnicos=diccionarioTecnicos)
+            else:
+                return redirect(url_for('home_page'))
+
     else:
         return redirect(url_for('home_page'))
 
@@ -198,8 +209,13 @@ def inventario():
             for element in diccionarioMateriales:
                 diccionarioMaterialesArray.append([element["nombre"],str(element["_id"])])
 
-            return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
-                                   materiales=diccionarioMaterialesArray)
+            if (session['tipo'] != "tecnico"):
+                return render_template("inventarios.html", diccRela=arrTemp, tecnicos=diccionarioTecnicos,
+                                       materiales=diccionarioMaterialesArray)
+            else:
+                return redirect(url_for('home_page'))
+
+
     else:
         return redirect(url_for('home_page'))
 
@@ -265,7 +281,11 @@ def claves():
                 return redirect(url_for('claves'))
         else:
             diccionarioClaves = mongo.db.clave.find({})
-            return render_template("clave.html", claves=diccionarioClaves)
+            if (session['tipo'] == "tecnico"):
+                return render_template("conceptotecnico.html", claves=diccionarioClaves)
+            else:
+                return render_template("clave.html", claves=diccionarioClaves)
+
     else:
         return redirect(url_for('home_page'))
 
@@ -288,7 +308,11 @@ def sucursales():
             return redirect(url_for('sucursales'))
         else:
             diccionarioSucursales = mongo.db.sucursal.find({})
-            return render_template("empresa.html", sucursales=diccionarioSucursales)
+            if (session['tipo'] != "tecnico"):
+                return render_template("empresa.html", sucursales=diccionarioSucursales)
+            else:
+                return redirect(url_for('home_page'))
+
     else:
         return redirect(url_for('home_page'))
 
@@ -438,9 +462,13 @@ def servicios():
                 for element in diccionarioTecnicos:
                     diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
 
+                if (session['tipo'] == "tecnico"):
+                    return render_template("serviciotecnico.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                           tecnicos=diccionarioTecnicosArray)
+                else:
+                    return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                           tecnicos=diccionarioTecnicosArray)
 
-                return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
-                                       tecnicos=diccionarioTecnicosArray)
             else:
                 diccionarioSucursales = mongo.db.sucursal.find({})
                 tempID = ObjectId(session['tecnicoID'])
@@ -466,8 +494,13 @@ def servicios():
                 for element in diccionarioTecnicos:
                     diccionarioTecnicosArray.append([element["nombre"], element["_id"]])
 
-                return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
-                                       tecnicos=diccionarioTecnicosArray)
+                if (session['tipo'] == "tecnico"):
+                    return render_template("serviciotecnico.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                           tecnicos=diccionarioTecnicosArray)
+                else:
+                    return render_template("servicio.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                           tecnicos=diccionarioTecnicosArray)
+
     else:
         return redirect(url_for('home_page'))
 
@@ -489,7 +522,12 @@ def empresas():
             return redirect(url_for('empresas'))
         else:
             diccionarioSucursales = mongo.db.sucursal.find({})
-            return render_template("empresa.html", sucursales=diccionarioSucursales)
+
+            if (session['tipo'] != "tecnico"):
+                return render_template("empresa.html", sucursales=diccionarioSucursales)
+            else:
+                return redirect(url_for('home_page'))
+
     else:
         return redirect(url_for('home_page'))
 
@@ -793,8 +831,14 @@ def reportes():
                 for element in diccionarioClaves:
                     diccionarioClavesArray.append([element["_id"], element["codigo"], element["concepto"]])
 
-                return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
-                                       tecnicos=diccionarioTecnicosArray, claves=diccionarioClavesArray)
+                if (session['tipo'] == "tecnico"):
+                    return render_template("reportetecnico.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                           tecnicos=diccionarioTecnicosArray, claves=diccionarioClavesArray)
+                else:
+                    return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                           tecnicos=diccionarioTecnicosArray, claves=diccionarioClavesArray)
+
+
             else:
                 diccionarioSucursales = mongo.db.sucursal.find({})
                 diccionarioClaves = mongo.db.clave.find({})
@@ -826,8 +870,13 @@ def reportes():
                 for element in diccionarioClaves:
                     diccionarioClavesArray.append([element["_id"], element["codigo"], element["concepto"]])
 
-                return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
-                                       tecnicos=diccionarioTecnicosArray, claves=diccionarioClavesArray)
+                if (session['tipo'] == "tecnico"):
+                    return render_template("reportetecnico.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                           tecnicos=diccionarioTecnicosArray, claves=diccionarioClavesArray)
+                else:
+                    return render_template("reporte.html", servicios=arrTemp, sucursales=diccionarioSucursalesArray,
+                                           tecnicos=diccionarioTecnicosArray, claves=diccionarioClavesArray)
+
     else:
         return redirect(url_for('home_page'))
 
@@ -875,7 +924,11 @@ def nominas():
             diccionarioTecnicosArray = []
             for doc in diccionarioTecnicos:
                 diccionarioTecnicosArray.append(doc)
-            return render_template("nomina.html", tecnicos=diccionarioTecnicosArray, nominas=diccionarioNominas, fecha=metaData['fecha'])
+            if (session['tipo'] == "tecnico"):
+                return render_template("nominatecnico.html", tecnicos=diccionarioTecnicosArray, nominas=diccionarioNominas, fecha=metaData['fecha'])
+            else:
+                return render_template("nomina.html", tecnicos=diccionarioTecnicosArray, nominas=diccionarioNominas, fecha=metaData['fecha'])
+
     else:
         return redirect(url_for('home_page'))
 
@@ -898,6 +951,10 @@ def usuarios():
         else:
             diccionarioTecnicos = mongo.db.tecnico.find({'estado': 'Activo'})
 
-            return render_template("usuario.html", tecnicos = diccionarioTecnicos)
+            if (session['tipo'] == "superadmin"):
+                return render_template("usuario.html", tecnicos = diccionarioTecnicos)
+            else:
+                return redirect(url_for('home_page'))
+
     else:
         return redirect(url_for('home_page'))
